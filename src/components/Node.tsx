@@ -12,8 +12,8 @@ import "./ui/Card.css";
 interface NodeProps {
   node: NodeDataObject;
   allNodes: Array<NodeDataObject>;
-  synth: InternalObject;
-  allSynths: Array<InternalObject>;
+  internal: InternalObject;
+  allInternals: Array<InternalObject>;
   tryToConnect: any;
   tryToConnectTo: any;
   canConnect: boolean;
@@ -37,45 +37,36 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
   constructor(props: NodeProps) {
     super(props);
 
-    // this.analyser = this.props.ctx.createAnalyser();
-    // this.analyser.fftSize = 2048;
-
     this.state = {
-      oscRunning: true,
+      oscRunning: false,
       connected: false
     };
   }
   toggleOsc = () => {
     if (!this.state.oscRunning) {
-      // this.oscillatorNode.connect(this.props.osc.ctx.destination);
-      this.props.synth.gain.gain.value = 1;
-      this.props.synth.gain.connect(this.props.node.output as AudioParam);
-      this.props.synth.gain.connect(this.props.synth.analyser);
+      this.props.internal.gain.gain.value = 1;
       this.setState({
         oscRunning: true
       });
+      this.props.updateNode({
+        ...this.props.node,
+        running: true
+      });
     } else {
-      // this.oscillatorNode.disconnect(this.props.osc.ctx.destination);
-      this.props.synth.gain.gain.value = 0;
-      this.props.synth.gain.disconnect();
+      this.props.internal.gain.gain.value = 0;
+      this.props.internal.gain.disconnect();
       this.setState({
         oscRunning: false
+      });
+      this.props.updateNode({
+        ...this.props.node,
+        running: false
       });
     }
   };
 
   connectToGain = () => {
     if (this.props.canConnect && !this.state.connected) {
-      // update store
-      // this.props.node.output = this.props.allSynths[1].gain.gain;
-      // this.props.updateNode(this.props.node.id, this.props.node);
-      // this.props.allSynths[0].gain.disconnect();
-      // this.props.allSynths[0].gain.connect(this.props.synth.gain.gain);
-
-      // this.props.connect(
-      //   this.props.allSynths[1].output,
-      //   this.props.synth.gain.gain
-      // );
       this.setState({
         connected: true
       });
@@ -86,11 +77,13 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
     let ctx = this.analyserCanvas.getContext("2d") as CanvasRenderingContext2D;
     let width = ctx.canvas.width;
     let height = ctx.canvas.height;
-    let timeData = new Uint8Array(this.props.synth.analyser.frequencyBinCount);
+    let timeData = new Uint8Array(
+      this.props.internal.analyser.frequencyBinCount
+    );
     let scaling = height / 256;
     let risingEdge = 0;
 
-    this.props.synth.analyser.getByteTimeDomainData(timeData);
+    this.props.internal.analyser.getByteTimeDomainData(timeData);
 
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, width, height);
@@ -118,7 +111,7 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
   }
   handleChange = () => {
     // set change here so it is instant
-    this.props.synth.oscillator.frequency.setValueAtTime(
+    this.props.internal.oscillator.frequency.setValueAtTime(
       this.freqInput.valueAsNumber,
       0
     );
@@ -135,7 +128,7 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
     if (!this.state.connected) {
       this.props.tryToConnect(
         this.props.node,
-        this.props.synth,
+        this.props.internal,
         this.outputElement.getBoundingClientRect()
       );
     }
@@ -144,14 +137,13 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
   tryToConnectTo = () => {
     this.props.tryToConnectTo(
       this.props.node,
-      this.props.synth.gain.gain,
+      this.props.internal.gain.gain,
       this.gainInputElement.getBoundingClientRect()
     );
   };
   onDragHandler = () => {
     // determine if output and/or input is connected
     if (this.props.node.hasInputFrom !== undefined) {
-      window.console.log("HASINPUT YEAH", this.props.node.hasInputFrom);
       const inputFromNode = this.props.allNodes[this.props.node.hasInputFrom];
       const updatedNode: NodeDataObject = {
         ...inputFromNode,
