@@ -1,13 +1,14 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
 import Switch from "material-ui/Switch";
-import Button from "material-ui/Button";
+import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
 import { NodeDataObject } from "../models/nodeObject";
 import { InternalObject } from "../models/internalObject";
 
 import "./ui/Card.css";
+import "./Node.css";
 
 interface NodeProps {
   node: NodeDataObject;
@@ -21,7 +22,6 @@ interface NodeProps {
 }
 interface NodeState {
   oscRunning: boolean;
-  connected: boolean;
 }
 
 class CurveNode extends React.Component<NodeProps, NodeState> {
@@ -38,8 +38,7 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
     super(props);
 
     this.state = {
-      oscRunning: false,
-      connected: false
+      oscRunning: false
     };
   }
   toggleOsc = () => {
@@ -65,14 +64,6 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
     }
   };
 
-  connectToGain = () => {
-    if (this.props.canConnect && !this.state.connected) {
-      this.setState({
-        connected: true
-      });
-    }
-  };
-
   drawScope = () => {
     let ctx = this.analyserCanvas.getContext("2d") as CanvasRenderingContext2D;
     let width = ctx.canvas.width;
@@ -85,7 +76,7 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
 
     this.props.internal.analyser.getByteTimeDomainData(timeData);
 
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "#f8f8f8";
     ctx.fillRect(0, 0, width, height);
 
     ctx.lineWidth = 2;
@@ -109,23 +100,9 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
   componentDidMount() {
     this.draw();
   }
-  handleChange = () => {
-    // set change here so it is instant
-    this.props.internal.oscillator.frequency.setValueAtTime(
-      this.freqInput.valueAsNumber,
-      0
-    );
-
-    // update node info in store
-    const updatedNode: NodeDataObject = {
-      ...this.props.node,
-      freq: this.freqInput.valueAsNumber
-    };
-    this.props.updateNode(updatedNode);
-  };
 
   tryToConnect = () => {
-    if (!this.state.connected) {
+    if (!this.props.node.connected) {
       this.props.tryToConnect(
         this.props.node,
         this.props.internal,
@@ -157,52 +134,93 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
     };
     this.props.updateNode(nodeToUpdate);
   };
+  handleFreqChange = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // set change here so it is instant
+    this.props.internal.oscillator.frequency.setValueAtTime(e.target.value, 0);
+
+    // update node info in store
+    const updatedNode: NodeDataObject = {
+      ...this.props.node,
+      freq: e.target.value
+    };
+    this.props.updateNode(updatedNode);
+  };
+  handleTypeChange = (e: any) => {
+    // set change here so it is instant
+    this.props.internal.oscillator.type = e.target.value;
+
+    // update node info in store
+    const updatedNode: NodeDataObject = {
+      ...this.props.node,
+      type: e.target.value
+    };
+    this.props.updateNode(updatedNode);
+  };
+  preventBubble = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.console.log(e);
+  };
   render() {
     return (
-      <Draggable onDrag={this.onDragHandler}>
+      <Draggable onDrag={this.onDragHandler} cancel="input">
         <div className="card">
-          <div className="card-content">
-            <Button onClick={this.tryToConnectTo}>
-              Input Gain
-              <span
-                ref={ref => {
-                  this.gainInputElement = ref as HTMLSpanElement;
-                }}
-              />
-            </Button>
+          <div
+            className={
+              this.props.node.hasInput
+                ? "io-element io-element--active"
+                : "io-element"
+            }
+            onClick={this.tryToConnectTo}
+          >
+            <span
+              ref={ref => {
+                this.gainInputElement = ref as HTMLSpanElement;
+              }}
+            />
           </div>
           <div className="card-content">
             <Switch checked={this.state.oscRunning} onClick={this.toggleOsc}>
               {this.state.oscRunning ? "Stop" : "Start"}
             </Switch>
-            <form onChange={this.handleChange}>
-              <input
-                type="number"
-                ref={input => {
-                  this.freqInput = input as HTMLInputElement;
-                }}
-                defaultValue={this.props.node.freq.toString()}
+            <form>
+              <TextField
+                id="freq"
+                label="Frequency"
+                defaultValue={this.props.node.freq}
+                onChange={this.handleFreqChange}
+                className="input"
+                onFocus={this.preventBubble}
               />
-              {this.props.node.type}
+              <TextField
+                id="type"
+                label="Type"
+                defaultValue={this.props.node.type}
+                onChange={this.handleTypeChange}
+                className="input"
+              />
             </form>
             <canvas
               ref={canvasElement => {
                 this.analyserCanvas = canvasElement as HTMLCanvasElement;
               }}
-              width={180}
-              height={50}
+              width={160}
+              height={80}
             />
           </div>
-          <div className="card-content">
-            <Button onClick={this.tryToConnect}>
-              Output
-              <span
-                ref={ref => {
-                  this.outputElement = ref as HTMLSpanElement;
-                }}
-              />
-            </Button>
-          </div>
+          <div
+            className={
+              this.props.node.connected
+                ? "io-element io-element--right io-element--active"
+                : "io-element io-element--right"
+            }
+            onClick={this.tryToConnect}
+            ref={ref => {
+              this.outputElement = ref as HTMLSpanElement;
+            }}
+          />
         </div>
       </Draggable>
     );

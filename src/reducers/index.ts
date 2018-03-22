@@ -9,6 +9,7 @@ const initialState = {
       output: undefined,
       running: false,
       connected: false,
+      hasInput: false,
       hasInputFrom: undefined,
       connectedToEl: undefined,
       connectedFromEl: undefined
@@ -19,6 +20,7 @@ const initialState = {
       freq: 330,
       output: undefined,
       running: false,
+      hasInput: false,
       hasInputFrom: undefined,
       connected: false,
       connectedToEl: undefined,

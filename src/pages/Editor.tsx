@@ -98,8 +98,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.props.nodeData.map(node => {
       if (node.connected && node.connectedFromEl && node.connectedToEl) {
         newLineCoords = {
-          x1: node.connectedFromEl.x,
-          y1: node.connectedFromEl.y,
+          x1: node.connectedFromEl.x + node.connectedFromEl.width / 2,
+          y1: node.connectedFromEl.y + node.connectedFromEl.height / 2,
           x2: node.connectedToEl.x,
           y2: node.connectedToEl.y
         };
@@ -137,6 +137,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       // specifying it has an input from updatedNode
       const updatedNodeTo: NodeDataObject = {
         ...nodeToConnectTo,
+        hasInput: true,
         hasInputFrom: updatedNode.id
       };
       this.props.updateNode(updatedNodeTo);
@@ -201,7 +202,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
             y1={line.y1}
             x2={line.x2}
             y2={line.y2}
-            stroke="red"
+            stroke="#f50057"
             strokeWidth={4}
             strokeDasharray="4, 4"
           />

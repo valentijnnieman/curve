@@ -4,6 +4,7 @@ export interface NodeDataObject {
   freq: number;
   output?: AudioDestinationNode | AudioParam;
   running: boolean;
+  hasInput: boolean;
   hasInputFrom?: number;
   connected: boolean;
   connectedToEl?: DOMRect;
