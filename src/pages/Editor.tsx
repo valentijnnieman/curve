@@ -1,20 +1,22 @@
 import * as React from "react";
 import "./Editor.css";
-import CurveNode from "../components/Node";
-import { Grid, Row } from "react-bootstrap";
-import { InternalObject } from "../models/internalObject";
-import { NodeDataObject } from "../models/nodeObject";
-import { StoreState } from "../models/storeState";
+import OscNode from "../components/OscNode";
+import GainNode from "../components/GainNode";
+import { Grid } from "react-bootstrap";
+import { InternalObject, InternalGainObject } from "../types/internalObject";
+import { NodeDataObject, GainDataObject } from "../types/nodeObject";
+import { StoreState } from "../types/storeState";
 
 import { connect } from "react-redux";
 
 import { updateNode } from "../actions/node";
 
 const _AUDIOCTX = new AudioContext(); // define audio context
-const _INTERNALS: Array<InternalObject> = [];
+const _INTERNALS: Array<InternalObject | InternalGainObject> = [];
 
 interface EditorProps {
   nodeData: Array<NodeDataObject>;
+  outputData: GainDataObject;
   updateNode: (node: NodeDataObject) => void;
 }
 
@@ -24,6 +26,7 @@ interface Line {
   x2: number;
   y2: number;
 }
+
 interface EditorState {
   wantsToConnect: boolean;
   nodeToConnect?: NodeDataObject;
@@ -36,6 +39,7 @@ interface EditorState {
 }
 
 class Editor extends React.Component<EditorProps, EditorState> {
+  output: InternalGainObject;
   constructor(props: EditorProps) {
     super(props);
     this.state = {
@@ -43,6 +47,21 @@ class Editor extends React.Component<EditorProps, EditorState> {
       lines: []
     };
     this.buildInternals();
+
+    // create Output (speakers)
+    let outGain = _AUDIOCTX.createGain();
+    outGain.gain.value = this.props.outputData.gain;
+    let outAnalyser = _AUDIOCTX.createAnalyser();
+    outAnalyser.fftSize = 2048;
+    const internalForOutput = {
+      id: 999,
+      gain: outGain,
+      analyser: outAnalyser
+    };
+
+    this.output = internalForOutput;
+
+    // this.reConnectInternals();
   }
   buildInternals = () => {
     // builds internal objects used with web audio api
@@ -50,44 +69,30 @@ class Editor extends React.Component<EditorProps, EditorState> {
       if (node.running) {
         // node is already running - no need to create new internals
       } else {
-        let oscillator = _AUDIOCTX.createOscillator();
-        oscillator.type = node.type;
-        oscillator.frequency.setValueAtTime(node.freq, _AUDIOCTX.currentTime);
         let gain = _AUDIOCTX.createGain();
         gain.gain.value = 1;
         let analyser = _AUDIOCTX.createAnalyser();
         analyser.fftSize = 2048;
-
-        const newInternal = {
-          id: index,
-          oscillator,
-          gain,
-          analyser
-        };
-        _INTERNALS.push(newInternal);
-      }
-    });
-  };
-  reConnectInternals = () => {
-    // reconnect the internals after nodeData has been updated through redux store
-    this.props.nodeData.map((node, index) => {
-      if (node.running) {
-        const internal = _INTERNALS[index];
-        try {
-          internal.oscillator.start();
-        } catch (e) {
-          window.console.log(e);
+        if ("freq" in node) {
+          let oscillator;
+          oscillator = _AUDIOCTX.createOscillator();
+          oscillator.type = node.type;
+          oscillator.frequency.setValueAtTime(node.freq, _AUDIOCTX.currentTime);
+          const newOscInternal = {
+            id: index,
+            oscillator,
+            gain,
+            analyser
+          };
+          _INTERNALS.push(newOscInternal);
+        } else if ("gain" in node) {
+          const newGainInternal = {
+            id: index,
+            gain,
+            analyser
+          };
+          _INTERNALS.push(newGainInternal);
         }
-
-        internal.oscillator.connect(internal.gain);
-
-        internal.gain.disconnect();
-        if (node.output !== undefined) {
-          internal.gain.connect(node.output as AudioParam);
-        } else {
-          internal.gain.connect(_AUDIOCTX.destination);
-        }
-        internal.gain.connect(internal.analyser);
       }
     });
   };
@@ -101,7 +106,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
           x1: node.connectedFromEl.x + node.connectedFromEl.width / 2,
           y1: node.connectedFromEl.y + node.connectedFromEl.height / 2,
           x2: node.connectedToEl.x,
-          y2: node.connectedToEl.y
+          y2: node.connectedToEl.y + 12 // .height not picked up here for some reason
         };
         allNewLines.push(newLineCoords);
       }
@@ -111,23 +116,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
     });
   };
   testConnect = () => {
-    const {
-      nodeToConnect,
-      nodeToConnectTo,
-      synthToConnect,
-      outputToConnectTo
-    } = this.state;
-    if (
-      nodeToConnect &&
-      nodeToConnectTo &&
-      synthToConnect &&
-      outputToConnectTo
-    ) {
+    const { nodeToConnect, nodeToConnectTo, outputToConnectTo } = this.state;
+    if (nodeToConnect && nodeToConnectTo && outputToConnectTo) {
       // update node info in store
       const updatedNode: NodeDataObject = {
         ...nodeToConnect,
         output: outputToConnectTo,
         connected: true,
+        isConnectedTo: nodeToConnectTo.id,
         connectedToEl: this.state.lineTo,
         connectedFromEl: this.state.lineFrom
       };
@@ -138,17 +134,51 @@ class Editor extends React.Component<EditorProps, EditorState> {
       const updatedNodeTo: NodeDataObject = {
         ...nodeToConnectTo,
         hasInput: true,
-        hasInputFrom: updatedNode.id
+        hasInputFrom: [...nodeToConnectTo.hasInputFrom, nodeToConnect.id]
       };
       this.props.updateNode(updatedNodeTo);
     }
     // we're done connecting!
     this.setState({
-      wantsToConnect: false
+      wantsToConnect: false,
+      nodeToConnect: undefined,
+      synthToConnect: undefined,
+      lineFrom: undefined,
+      lineTo: undefined
     });
+  };
+  disconnect = (node: NodeDataObject, internal: InternalObject) => {
+    // update node info in store
+    const updatedNode: NodeDataObject = {
+      ...node,
+      connected: false,
+      isConnectedTo: undefined,
+      connectedToEl: undefined,
+      connectedFromEl: undefined
+    };
+    this.props.updateNode(updatedNode);
+
+    // update node that recieves input
+    const nodeToUpdate = this.props.nodeData[node.isConnectedTo as number];
+    const updatedInputNode: NodeDataObject = {
+      ...nodeToUpdate,
+      hasInput: false,
+      hasInputFrom: [
+        ...nodeToUpdate.hasInputFrom.filter(input => input !== updatedNode.id)
+      ]
+    };
+    this.props.updateNode(updatedInputNode);
+
+    // disconnect internal
+    internal.gain.disconnect();
   };
   tryToConnect = (node: NodeDataObject, synth: InternalObject, el: DOMRect) => {
     // called from node that wants to connect it's output
+
+    // if it's already connected, disconnect it!
+    if (node.connected) {
+      this.disconnect(node, synth);
+    }
     this.setState({
       wantsToConnect: true,
       nodeToConnect: node,
@@ -172,26 +202,42 @@ class Editor extends React.Component<EditorProps, EditorState> {
   };
   componentWillReceiveProps(nextProps: EditorProps) {
     this.props = nextProps;
-    this.reConnectInternals();
-    // draw lines
     this.drawConnectionLine();
   }
   render() {
     const synthElements = this.props.nodeData.map(
-      (node: NodeDataObject, index: number) => {
-        return (
-          <CurveNode
-            key={index}
-            node={node}
-            allNodes={this.props.nodeData}
-            internal={_INTERNALS[index]}
-            allInternals={_INTERNALS}
-            tryToConnect={this.tryToConnect}
-            tryToConnectTo={this.tryToConnectTo}
-            canConnect={this.state.wantsToConnect}
-            updateNode={this.props.updateNode}
-          />
-        );
+      (node: NodeDataObject | GainDataObject, index: number) => {
+        if ("freq" in node) {
+          return (
+            <OscNode
+              key={index}
+              node={node}
+              allNodes={this.props.nodeData}
+              internal={_INTERNALS[index] as InternalObject}
+              allInternals={_INTERNALS}
+              tryToConnect={this.tryToConnect}
+              tryToConnectTo={this.tryToConnectTo}
+              canConnect={this.state.wantsToConnect}
+              updateNode={this.props.updateNode}
+              audioCtx={_AUDIOCTX}
+            />
+          );
+        } else {
+          return (
+            <GainNode
+              key={index}
+              node={node}
+              allNodes={this.props.nodeData}
+              internal={_INTERNALS[index] as InternalGainObject}
+              allInternals={_INTERNALS}
+              tryToConnect={this.tryToConnect}
+              tryToConnectTo={this.tryToConnectTo}
+              canConnect={this.state.wantsToConnect}
+              updateNode={this.props.updateNode}
+              audioCtx={_AUDIOCTX}
+            />
+          );
+        }
       }
     );
     const lineElements = this.state.lines.map((line, index) => {
@@ -212,15 +258,26 @@ class Editor extends React.Component<EditorProps, EditorState> {
     return (
       <Grid>
         <svg className="grid-svg">{lineElements}</svg>
-        <Row>{synthElements}</Row>
+        {synthElements}
+        {/* <GainNode
+          node={this.props.outputData}
+          allNodes={this.props.nodeData}
+          internal={this.output}
+          allInternals={_INTERNALS}
+          tryToConnect={this.tryToConnect}
+          tryToConnectTo={this.tryToConnectTo}
+          canConnect={this.state.wantsToConnect}
+          updateNode={this.props.updateNode}
+        /> */}
       </Grid>
     );
   }
 }
 
-const mapStateToProps = ({ nodeData }: StoreState) => {
+const mapStateToProps = ({ nodeData, outputData }: StoreState) => {
   return {
-    nodeData
+    nodeData,
+    outputData
   };
 };
 

@@ -1,4 +1,4 @@
-import { NodeDataObject } from "../models/nodeObject";
+import { NodeDataObject, GainDataObject } from "../types/nodeObject";
 
 // export interface CreateSynthAction {
 //   type: "CREATE_SYNTH";
@@ -7,7 +7,7 @@ import { NodeDataObject } from "../models/nodeObject";
 
 export interface UpdateNodeAction {
   type: "UPDATE_NODE";
-  node: NodeDataObject;
+  node: NodeDataObject | GainDataObject;
 }
 
 // export function createSynth(newSynth: SynthObject): CreateSynthAction {
@@ -16,7 +16,9 @@ export interface UpdateNodeAction {
 //     newSynth
 //   };
 // }
-export function updateNode(node: NodeDataObject): UpdateNodeAction {
+export function updateNode(
+  node: NodeDataObject | GainDataObject
+): UpdateNodeAction {
   return {
     type: "UPDATE_NODE",
     node

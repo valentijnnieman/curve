@@ -1,30 +1,27 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
-import Switch from "material-ui/Switch";
 import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
-import { NodeDataObject } from "../models/nodeObject";
-import { InternalObject } from "../models/internalObject";
+import { NodeDataObject, GainDataObject } from "../types/nodeObject";
+import { InternalObject, InternalGainObject } from "../types/internalObject";
 
 import "./ui/Card.css";
 import "./Node.css";
 
 interface NodeProps {
-  node: NodeDataObject;
-  allNodes: Array<NodeDataObject>;
-  internal: InternalObject;
-  allInternals: Array<InternalObject>;
+  node: GainDataObject;
+  allNodes: Array<NodeDataObject | GainDataObject>;
+  internal: InternalGainObject;
+  allInternals: Array<InternalObject | InternalGainObject>;
   tryToConnect: any;
   tryToConnectTo: any;
   canConnect: boolean;
-  updateNode: (node: NodeDataObject) => void;
-}
-interface NodeState {
-  oscRunning: boolean;
+  updateNode: (node: NodeDataObject | GainDataObject) => void;
+  audioCtx: AudioContext;
 }
 
-class CurveNode extends React.Component<NodeProps, NodeState> {
+class GainNode extends React.Component<NodeProps> {
   analyser: AnalyserNode;
   analyserCanvas: HTMLCanvasElement;
 
@@ -36,34 +33,8 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
 
   constructor(props: NodeProps) {
     super(props);
-
-    this.state = {
-      oscRunning: false
-    };
+    this.connectInternal();
   }
-  toggleOsc = () => {
-    if (!this.state.oscRunning) {
-      this.props.internal.gain.gain.value = 1;
-      this.setState({
-        oscRunning: true
-      });
-      this.props.updateNode({
-        ...this.props.node,
-        running: true
-      });
-    } else {
-      this.props.internal.gain.gain.value = 0;
-      this.props.internal.gain.disconnect();
-      this.setState({
-        oscRunning: false
-      });
-      this.props.updateNode({
-        ...this.props.node,
-        running: false
-      });
-    }
-  };
-
   drawScope = () => {
     let ctx = this.analyserCanvas.getContext("2d") as CanvasRenderingContext2D;
     let width = ctx.canvas.width;
@@ -114,54 +85,55 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
   tryToConnectTo = () => {
     this.props.tryToConnectTo(
       this.props.node,
-      this.props.internal.gain.gain,
+      this.props.internal.gain,
       this.gainInputElement.getBoundingClientRect()
     );
   };
+  connectInternal = () => {
+    const node = this.props.node;
+    const internal = this.props.allInternals[node.id];
+
+    internal.gain.disconnect();
+
+    if (node.output !== undefined) {
+      internal.gain.connect(node.output as AudioParam);
+    } else {
+      internal.gain.connect(this.props.audioCtx.destination);
+    }
+    internal.gain.connect(internal.analyser);
+  };
   onDragHandler = () => {
     // determine if output and/or input is connected
-    if (this.props.node.hasInputFrom !== undefined) {
-      const inputFromNode = this.props.allNodes[this.props.node.hasInputFrom];
-      const updatedNode: NodeDataObject = {
-        ...inputFromNode,
-        connectedToEl: this.gainInputElement.getBoundingClientRect() as DOMRect
-      };
-      this.props.updateNode(updatedNode);
+    if (this.props.node.hasInputFrom.length > 0) {
+      this.props.node.hasInputFrom.map(input => {
+        // the node that receives data
+        const inputFromNode = this.props.allNodes[input];
+        const updatedNode: GainDataObject | NodeDataObject = {
+          ...inputFromNode,
+          connectedToEl: this.gainInputElement.getBoundingClientRect() as DOMRect
+        };
+        this.props.updateNode(updatedNode);
+      });
     }
-    const nodeToUpdate: NodeDataObject = {
+
+    const updateSelf: GainDataObject = {
       ...this.props.node,
       connectedFromEl: this.outputElement.getBoundingClientRect() as DOMRect
     };
-    this.props.updateNode(nodeToUpdate);
+    this.props.updateNode(updateSelf);
   };
-  handleFreqChange = (e: any) => {
+  handleGainChange = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
     // set change here so it is instant
-    this.props.internal.oscillator.frequency.setValueAtTime(e.target.value, 0);
+    this.props.internal.gain.gain.value = e.target.value;
 
     // update node info in store
-    const updatedNode: NodeDataObject = {
+    const updatedNode: GainDataObject = {
       ...this.props.node,
-      freq: e.target.value
+      gain: e.target.value
     };
     this.props.updateNode(updatedNode);
-  };
-  handleTypeChange = (e: any) => {
-    // set change here so it is instant
-    this.props.internal.oscillator.type = e.target.value;
-
-    // update node info in store
-    const updatedNode: NodeDataObject = {
-      ...this.props.node,
-      type: e.target.value
-    };
-    this.props.updateNode(updatedNode);
-  };
-  preventBubble = (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.console.log(e);
   };
   render() {
     return (
@@ -182,23 +154,12 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
             />
           </div>
           <div className="card-content">
-            <Switch checked={this.state.oscRunning} onClick={this.toggleOsc}>
-              {this.state.oscRunning ? "Stop" : "Start"}
-            </Switch>
+            <h6>Gain</h6>
             <form>
               <TextField
-                id="freq"
-                label="Frequency"
-                defaultValue={this.props.node.freq}
-                onChange={this.handleFreqChange}
-                className="input"
-                onFocus={this.preventBubble}
-              />
-              <TextField
-                id="type"
-                label="Type"
-                defaultValue={this.props.node.type}
-                onChange={this.handleTypeChange}
+                label="Gain"
+                defaultValue={this.props.node.gain}
+                onChange={this.handleGainChange}
                 className="input"
               />
             </form>
@@ -227,4 +188,4 @@ class CurveNode extends React.Component<NodeProps, NodeState> {
   }
 }
 
-export default CurveNode;
+export default GainNode;

@@ -1,6 +1,6 @@
 import { createStore } from "redux";
 import rootReducer from "./reducers/index";
-import { StoreState } from "./models/storeState";
+import { StoreState } from "./types/storeState";
 
 // if (process.env.NODE_ENV === "development") {
 //   const devToolsExtension = window.devToolsExtension;

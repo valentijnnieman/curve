@@ -1,4 +1,4 @@
-import { StoreState } from "../models/storeState";
+import { StoreState } from "../types/storeState";
 
 const initialState = {
   nodeData: [
@@ -10,7 +10,8 @@ const initialState = {
       running: false,
       connected: false,
       hasInput: false,
-      hasInputFrom: undefined,
+      hasInputFrom: [],
+      isConnectedTo: undefined,
       connectedToEl: undefined,
       connectedFromEl: undefined
     },
@@ -21,12 +22,34 @@ const initialState = {
       output: undefined,
       running: false,
       hasInput: false,
-      hasInputFrom: undefined,
+      hasInputFrom: [],
+      isConnectedTo: undefined,
+      connected: false,
+      connectedToEl: undefined,
+      connectedFromEl: undefined
+    },
+    {
+      id: 2,
+      gain: 1,
+      output: undefined,
+      hasInput: false,
+      hasInputFrom: [],
+      isConnectedTo: undefined,
       connected: false,
       connectedToEl: undefined,
       connectedFromEl: undefined
     }
-  ]
+  ],
+  outputData: {
+    id: 999,
+    gain: 1,
+    output: undefined,
+    hasInput: false,
+    hasInputFrom: [],
+    connected: false,
+    connectedToEl: undefined,
+    connectedFromEl: undefined
+  }
 };
 
 export default (state: StoreState = initialState, action: any): StoreState => {

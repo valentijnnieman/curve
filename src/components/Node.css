@@ -4,7 +4,7 @@
   height: 24px;
   padding: 2px;
   /* border-top-left-radius: 110px; 100px of height + 10px of border */
-  border: 1px solid #e2e2e2;
+  border: 1px solid transparent;
   background-color: #e2e2e2;
   border-left: 0;
   position: absolute;
@@ -16,7 +16,7 @@
   transform: scale(1.5, 1);
 }
 .io-element--right {
-  border-left: 1px solid #e2e2e2;
+  border-left: 1px solid transparent;
   border-right: 0;
   right: 0;
 }
