@@ -12,6 +12,7 @@ const initialState = {
       connected: false,
       hasInput: false,
       hasInputFrom: [],
+      isConnectedToOutput: false,
       isConnectedTo: undefined,
       connectedToEl: undefined,
       connectedFromEl: undefined
@@ -25,6 +26,7 @@ const initialState = {
       running: false,
       hasInput: false,
       hasInputFrom: [],
+      isConnectedToOutput: false,
       isConnectedTo: undefined,
       connected: false,
       connectedToEl: undefined,
@@ -37,23 +39,13 @@ const initialState = {
       hasInternal: false,
       hasInput: false,
       hasInputFrom: [],
+      isConnectedToOutput: false,
       isConnectedTo: undefined,
       connected: false,
       connectedToEl: undefined,
       connectedFromEl: undefined
     }
-  ],
-  outputData: {
-    id: 999,
-    gain: 1,
-    output: undefined,
-    hasInternal: false,
-    hasInput: false,
-    hasInputFrom: [],
-    connected: false,
-    connectedToEl: undefined,
-    connectedFromEl: undefined
-  }
+  ]
 };
 
 export default (state: StoreState = initialState, action: any): StoreState => {

@@ -6,3 +6,19 @@
   width: 100%;
   height: 100%;
 }
+
+.speakers {
+  position: absolute;
+  top: 33vh;
+  left: 25vw;
+  display: flex;
+  justify-content: center;
+}
+.speakers-content {
+  width: 100%;
+}
+.speakers-svg {
+  opacity: 0.2;
+  margin: 32px;
+  margin-top: 0px;
+}

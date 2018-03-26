@@ -97,8 +97,6 @@ class GainNode extends React.Component<NodeProps> {
     window.console.log("GAIN OUTPUT", node.output);
     if (node.output !== undefined) {
       internal.gain.connect(node.output as AudioParam);
-    } else {
-      internal.gain.connect(this.props.audioCtx.destination);
     }
     internal.gain.connect(internal.analyser);
   };

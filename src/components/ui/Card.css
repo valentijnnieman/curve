@@ -8,6 +8,7 @@
   display: inline-flex;
   margin: 32px;
   justify-content: space-between;
+  position: relative;
 }
 .card-content {
   border-radius: 0 0 2px 2px;

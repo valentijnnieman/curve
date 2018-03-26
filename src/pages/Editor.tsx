@@ -12,13 +12,14 @@ import { connect } from "react-redux";
 
 import { updateNode } from "../actions/node";
 
+const SpeakerSVG = require("../speakers.svg");
+
 const _AUDIOCTX = new AudioContext(); // define audio context
 const _INTERNALS: Array<InternalObject | InternalGainObject> = [];
 
 interface EditorProps {
-  nodeData: Array<NodeDataObject>;
-  outputData: GainDataObject;
-  updateNode: (node: NodeDataObject) => void;
+  nodeData: Array<NodeDataObject | GainDataObject>;
+  updateNode: (node: NodeDataObject | GainDataObject) => void;
 }
 
 interface Line {
@@ -30,13 +31,14 @@ interface Line {
 
 interface EditorState {
   wantsToConnect: boolean;
-  nodeToConnect?: NodeDataObject;
-  nodeToConnectTo?: NodeDataObject;
-  synthToConnect?: InternalObject;
-  outputToConnectTo?: AudioParam;
+  nodeToConnect?: NodeDataObject | GainDataObject;
+  nodeToConnectTo?: NodeDataObject | GainDataObject;
+  internalToConnect?: InternalObject | InternalGainObject;
+  outputToConnectTo?: AudioParam | AudioDestinationNode;
   lineFrom?: DOMRect;
   lineTo?: DOMRect;
   lines: Array<Line>;
+  speakersAreConnected: boolean;
 }
 
 class Editor extends React.Component<EditorProps, EditorState> {
@@ -45,7 +47,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     super(props);
     this.state = {
       wantsToConnect: false,
-      lines: []
+      lines: [],
+      speakersAreConnected: false
     };
     this.buildInternals();
   }
@@ -110,7 +113,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     const { nodeToConnect, nodeToConnectTo, outputToConnectTo } = this.state;
     if (nodeToConnect && nodeToConnectTo && outputToConnectTo) {
       // update node info in store
-      const updatedNode: NodeDataObject = {
+      const updatedNode: NodeDataObject | GainDataObject = {
         ...nodeToConnect,
         output: outputToConnectTo,
         connected: true,
@@ -122,7 +125,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
       // update the node we're connecting to
       // specifying it has an input from updatedNode
-      const updatedNodeTo: NodeDataObject = {
+      const updatedNodeTo: NodeDataObject | GainDataObject = {
         ...nodeToConnectTo,
         hasInput: true,
         hasInputFrom: [...nodeToConnectTo.hasInputFrom, nodeToConnect.id]
@@ -133,14 +136,17 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.setState({
       wantsToConnect: false,
       nodeToConnect: undefined,
-      synthToConnect: undefined,
+      internalToConnect: undefined,
       lineFrom: undefined,
       lineTo: undefined
     });
   };
-  disconnect = (node: NodeDataObject, internal: InternalObject) => {
+  disconnect = (
+    node: NodeDataObject | GainDataObject,
+    internal: InternalObject
+  ) => {
     // update node info in store
-    const updatedNode: NodeDataObject = {
+    const updatedNode: NodeDataObject | GainDataObject = {
       ...node,
       connected: false,
       isConnectedTo: undefined,
@@ -149,35 +155,46 @@ class Editor extends React.Component<EditorProps, EditorState> {
     };
     this.props.updateNode(updatedNode);
 
-    // update node that recieves input
-    const nodeToUpdate = this.props.nodeData[node.isConnectedTo as number];
-    const updatedInputNode: NodeDataObject = {
-      ...nodeToUpdate,
-      hasInput: false,
-      hasInputFrom: [
-        ...nodeToUpdate.hasInputFrom.filter(input => input !== updatedNode.id)
-      ]
-    };
-    this.props.updateNode(updatedInputNode);
+    // if node is connected to output, there's no node to update (output is not a node)
+    if (!node.isConnectedToOutput) {
+      // update node that recieves input
+      const nodeToUpdate = this.props.nodeData[node.isConnectedTo as number];
+      const updatedInputNode: NodeDataObject | GainDataObject = {
+        ...nodeToUpdate,
+        hasInput: false,
+        hasInputFrom: [
+          ...nodeToUpdate.hasInputFrom.filter(input => input !== updatedNode.id)
+        ]
+      };
+      this.props.updateNode(updatedInputNode);
+    }
 
     // disconnect internal
     internal.gain.disconnect();
   };
-  tryToConnect = (node: NodeDataObject, synth: InternalObject, el: DOMRect) => {
+  tryToConnect = (
+    node: NodeDataObject | GainDataObject,
+    internal: InternalObject,
+    el: DOMRect
+  ) => {
     // called from node that wants to connect it's output
 
     // if it's already connected, disconnect it!
     if (node.connected) {
-      this.disconnect(node, synth);
+      this.disconnect(node, internal);
     }
     this.setState({
       wantsToConnect: true,
       nodeToConnect: node,
-      synthToConnect: synth,
+      internalToConnect: internal,
       lineFrom: el
     });
   };
-  tryToConnectTo = (node: NodeDataObject, output: AudioParam, el: DOMRect) => {
+  tryToConnectTo = (
+    node: NodeDataObject | GainDataObject,
+    output: AudioParam,
+    el: DOMRect
+  ) => {
     // called form node that wants to be connected to (only gain for now)
     this.setState(
       {
@@ -190,6 +207,23 @@ class Editor extends React.Component<EditorProps, EditorState> {
         this.testConnect();
       }
     );
+  };
+  connectToSpeakers = (e: any) => {
+    const { nodeToConnect } = this.state;
+    this.setState({
+      lineTo: e.target.getBoundingClientRect(),
+      outputToConnectTo: _AUDIOCTX.destination,
+      speakersAreConnected: true
+    });
+    const updatedNode: NodeDataObject | GainDataObject = {
+      ...(nodeToConnect as NodeDataObject | GainDataObject),
+      output: _AUDIOCTX.destination,
+      connected: true,
+      isConnectedToOutput: true,
+      connectedToEl: e.target.getBoundingClientRect(),
+      connectedFromEl: this.state.lineFrom
+    };
+    this.props.updateNode(updatedNode);
   };
   componentWillReceiveProps(nextProps: EditorProps) {
     this.props = nextProps;
@@ -251,31 +285,37 @@ class Editor extends React.Component<EditorProps, EditorState> {
       <Grid>
         <svg className="grid-svg">{lineElements}</svg>
         {synthElements}
-        {/* <GainNode
-          node={this.props.outputData}
-          allNodes={this.props.nodeData}
-          internal={this.output}
-          allInternals={_INTERNALS}
-          tryToConnect={this.tryToConnect}
-          tryToConnectTo={this.tryToConnectTo}
-          canConnect={this.state.wantsToConnect}
-          updateNode={this.props.updateNode}
-        /> */}
+        <div className="card speakers">
+          <div className="card-content speakers-content">
+            <h6>Speakers</h6>
+            <img className="speakers-svg" src={SpeakerSVG} width={100} />
+          </div>
+          <div
+            className={
+              this.state.speakersAreConnected
+                ? "io-element io-element--active"
+                : "io-element"
+            }
+            onClick={e => {
+              this.connectToSpeakers(e);
+            }}
+          />
+        </div>
       </Grid>
     );
   }
 }
 
-const mapStateToProps = ({ nodeData, outputData }: StoreState) => {
+const mapStateToProps = ({ nodeData }: StoreState) => {
   return {
-    nodeData,
-    outputData
+    nodeData
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateNode: (node: NodeDataObject) => dispatch(updateNode(node))
+    updateNode: (node: NodeDataObject | GainDataObject) =>
+      dispatch(updateNode(node))
   };
 };
 

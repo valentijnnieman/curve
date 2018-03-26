@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
-import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, MenuItem } from "react-bootstrap";
 import "./Topbar.css";
 
 import { connect } from "react-redux";
@@ -18,15 +17,12 @@ class Topbar extends React.Component<TopbarProps> {
       <Navbar className="topbar" inverse={true} collapseOnSelect={true}>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#brand">Curve</a>
+            <a>Curve</a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem>
-              <Link to="/editor">Editor</Link>
-            </NavItem>
             <NavDropdown eventKey={3} title="Create" id="basic-nav-dropdown">
               <MenuItem
                 onClick={() => {
@@ -39,6 +35,7 @@ class Topbar extends React.Component<TopbarProps> {
                     running: false,
                     hasInput: false,
                     hasInputFrom: [],
+                    isConnectedToOutput: false,
                     isConnectedTo: undefined,
                     connected: false,
                     connectedToEl: undefined,
@@ -58,6 +55,7 @@ class Topbar extends React.Component<TopbarProps> {
                     hasInternal: false,
                     hasInput: false,
                     hasInputFrom: [],
+                    isConnectedToOutput: false,
                     isConnectedTo: undefined,
                     connected: false,
                     connectedToEl: undefined,

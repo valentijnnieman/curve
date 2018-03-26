@@ -7,6 +7,7 @@ export interface NodeDataObject {
   running: boolean;
   hasInput: boolean;
   hasInputFrom: Array<number>;
+  isConnectedToOutput: boolean;
   isConnectedTo?: number;
   connected: boolean;
   connectedToEl?: DOMRect;
@@ -20,6 +21,7 @@ export interface GainDataObject {
   gain: number;
   hasInput: boolean;
   hasInputFrom: Array<number>;
+  isConnectedToOutput: boolean;
   isConnectedTo?: number;
   connected: boolean;
   connectedToEl?: DOMRect;

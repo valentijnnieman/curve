@@ -105,8 +105,6 @@ class OscNode extends React.Component<NodeProps> {
     this.connectToAnalyser();
     if (node.output !== undefined) {
       internal.gain.connect(node.output as AudioParam);
-    } else {
-      internal.gain.connect(this.props.audioCtx.destination);
     }
   };
   tryToConnect = () => {
@@ -197,7 +195,6 @@ class OscNode extends React.Component<NodeProps> {
             <Switch checked={this.props.node.running} onClick={this.toggleOsc}>
               {this.props.node.running ? "Stop" : "Start"}
             </Switch>
-            <h6>{this.props.node.id}</h6>
             <form>
               <TextField
                 id="freq"

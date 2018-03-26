@@ -10,7 +10,7 @@ class App extends React.Component {
       <Router>
         <div>
           <Topbar />
-          <Route path="/editor" component={Editor} />
+          <Route path="/" component={Editor} />
         </div>
       </Router>
     );
