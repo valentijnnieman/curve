@@ -1,6 +1,5 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
-import Switch from "material-ui/Switch";
 import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
@@ -11,9 +10,9 @@ import "./ui/Card.css";
 import "./Node.css";
 
 interface NodeProps {
-  node: NodeDataObject;
+  node: GainDataObject;
   allNodes: Array<NodeDataObject | GainDataObject>;
-  internal: InternalObject;
+  internal: InternalGainObject;
   allInternals: Array<InternalObject | InternalGainObject>;
   tryToConnect: any;
   tryToConnectTo: any;
@@ -21,48 +20,18 @@ interface NodeProps {
   updateNode: (node: NodeDataObject | GainDataObject) => void;
   audioCtx: AudioContext;
 }
-class OscNode extends React.Component<NodeProps> {
+
+class GainNode extends React.Component<NodeProps> {
   analyser: AnalyserNode;
   analyserCanvas: HTMLCanvasElement;
-
-  freqInput: HTMLInputElement;
-  typeInput: HTMLInputElement;
 
   gainInputElement: HTMLSpanElement;
   outputElement: HTMLSpanElement;
 
   constructor(props: NodeProps) {
     super(props);
-
-    this.props.internal.oscillator.connect(this.props.internal.gain);
+    this.connectInternal();
   }
-  toggleOsc = () => {
-    const internal = this.props.internal;
-    if (!this.props.node.running) {
-      try {
-        this.props.internal.oscillator.start();
-      } catch (e) {
-        window.console.log(e);
-      }
-      internal.gain.gain.value = 1;
-      this.connectInternal();
-      this.props.updateNode({
-        ...this.props.node,
-        running: true
-      });
-    } else {
-      internal.gain.gain.value = 0;
-      this.props.internal.gain.disconnect();
-      this.props.updateNode({
-        ...this.props.node,
-        running: false
-      });
-    }
-  };
-  connectToAnalyser = () => {
-    this.props.internal.gain.connect(this.props.internal.analyser);
-  };
-
   drawScope = () => {
     let ctx = this.analyserCanvas.getContext("2d") as CanvasRenderingContext2D;
     let width = ctx.canvas.width;
@@ -99,35 +68,42 @@ class OscNode extends React.Component<NodeProps> {
   componentDidMount() {
     this.draw();
   }
-  connectInternal = () => {
-    const { node, internal } = this.props;
-    internal.gain.disconnect();
-    this.connectToAnalyser();
-    if (node.output !== undefined) {
-      internal.gain.connect(node.output as AudioParam);
-    } else {
-      internal.gain.connect(this.props.audioCtx.destination);
-    }
-  };
+
   tryToConnect = () => {
-    this.props.tryToConnect(
-      this.props.node,
-      this.props.internal,
-      this.outputElement.getBoundingClientRect()
-    );
+    if (!this.props.node.connected) {
+      this.props.tryToConnect(
+        this.props.node,
+        this.props.internal,
+        this.outputElement.getBoundingClientRect()
+      );
+    }
   };
 
   tryToConnectTo = () => {
     this.props.tryToConnectTo(
       this.props.node,
-      this.props.internal.gain.gain,
+      this.props.internal.gain,
       this.gainInputElement.getBoundingClientRect()
     );
+  };
+  connectInternal = () => {
+    const node = this.props.node;
+    const internal = this.props.allInternals[node.id];
+
+    internal.gain.disconnect();
+
+    if (node.output !== undefined) {
+      internal.gain.connect(node.output as AudioParam);
+    } else {
+      internal.gain.connect(this.props.audioCtx.destination);
+    }
+    internal.gain.connect(internal.analyser);
   };
   onDragHandler = () => {
     // determine if output and/or input is connected
     if (this.props.node.hasInputFrom.length > 0) {
       this.props.node.hasInputFrom.map(input => {
+        // the node that receives data
         const inputFromNode = this.props.allNodes[input];
         const updatedNode: GainDataObject | NodeDataObject = {
           ...inputFromNode,
@@ -137,44 +113,25 @@ class OscNode extends React.Component<NodeProps> {
       });
     }
 
-    const updateSelf: NodeDataObject = {
+    const updateSelf: GainDataObject = {
       ...this.props.node,
       connectedFromEl: this.outputElement.getBoundingClientRect() as DOMRect
     };
     this.props.updateNode(updateSelf);
   };
-  handleFreqChange = (e: any) => {
+  handleGainChange = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
     // set change here so it is instant
-    this.props.internal.oscillator.frequency.setValueAtTime(e.target.value, 0);
+    this.props.internal.gain.gain.value = e.target.value;
 
     // update node info in store
-    const updatedNode: NodeDataObject = {
+    const updatedNode: GainDataObject = {
       ...this.props.node,
-      freq: e.target.value
+      gain: e.target.value
     };
     this.props.updateNode(updatedNode);
   };
-  handleTypeChange = (e: any) => {
-    // set change here so it is instant
-    this.props.internal.oscillator.type = e.target.value;
-
-    // update node info in store
-    const updatedNode: NodeDataObject = {
-      ...this.props.node,
-      type: e.target.value
-    };
-    this.props.updateNode(updatedNode);
-  };
-  componentWillReceiveProps(nextProps: NodeProps) {
-    if (this.props.node.output !== nextProps.node.output) {
-      this.props = nextProps;
-      this.connectInternal();
-    } else {
-      this.props = nextProps;
-    }
-  }
   render() {
     return (
       <Draggable onDrag={this.onDragHandler} cancel="input">
@@ -194,23 +151,12 @@ class OscNode extends React.Component<NodeProps> {
             />
           </div>
           <div className="card-content">
-            <Switch checked={this.props.node.running} onClick={this.toggleOsc}>
-              {this.props.node.running ? "Stop" : "Start"}
-            </Switch>
-            <h6>{this.props.node.id}</h6>
+            <h6>Speakers</h6>
             <form>
               <TextField
-                id="freq"
-                label="Frequency"
-                defaultValue={this.props.node.freq}
-                onChange={this.handleFreqChange}
-                className="input"
-              />
-              <TextField
-                id="type"
-                label="Type"
-                defaultValue={this.props.node.type}
-                onChange={this.handleTypeChange}
+                label="Gain"
+                defaultValue={this.props.node.gain}
+                onChange={this.handleGainChange}
                 className="input"
               />
             </form>
@@ -222,21 +168,10 @@ class OscNode extends React.Component<NodeProps> {
               height={80}
             />
           </div>
-          <div
-            className={
-              this.props.node.connected
-                ? "io-element io-element--right io-element--active"
-                : "io-element io-element--right"
-            }
-            onClick={this.tryToConnect}
-            ref={ref => {
-              this.outputElement = ref as HTMLSpanElement;
-            }}
-          />
         </div>
       </Draggable>
     );
   }
 }
 
-export default OscNode;
+export default GainNode;

@@ -2,6 +2,7 @@ import * as React from "react";
 import "./Editor.css";
 import OscNode from "../components/OscNode";
 import GainNode from "../components/GainNode";
+// import OutputNode from "../components/OutputNode";
 import { Grid } from "react-bootstrap";
 import { InternalObject, InternalGainObject } from "../types/internalObject";
 import { NodeDataObject, GainDataObject } from "../types/nodeObject";
@@ -47,27 +48,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
       lines: []
     };
     this.buildInternals();
-
-    // create Output (speakers)
-    let outGain = _AUDIOCTX.createGain();
-    outGain.gain.value = this.props.outputData.gain;
-    let outAnalyser = _AUDIOCTX.createAnalyser();
-    outAnalyser.fftSize = 2048;
-    const internalForOutput = {
-      id: 999,
-      gain: outGain,
-      analyser: outAnalyser
-    };
-
-    this.output = internalForOutput;
-
-    // this.reConnectInternals();
   }
   buildInternals = () => {
     // builds internal objects used with web audio api
     this.props.nodeData.map((node, index) => {
-      if (node.running) {
-        // node is already running - no need to create new internals
+      if (node.hasInternal) {
+        // node already has an internal - no need to create new internals
       } else {
         let gain = _AUDIOCTX.createGain();
         gain.gain.value = 1;
@@ -93,6 +79,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
           };
           _INTERNALS.push(newGainInternal);
         }
+        // update the nodeData object now that we build an internal
+        this.props.updateNode({
+          ...node,
+          hasInternal: true
+        });
       }
     });
   };
@@ -202,6 +193,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   };
   componentWillReceiveProps(nextProps: EditorProps) {
     this.props = nextProps;
+    this.buildInternals();
     this.drawConnectionLine();
   }
   render() {

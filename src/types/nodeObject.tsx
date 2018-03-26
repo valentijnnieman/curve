@@ -3,6 +3,7 @@ export interface NodeDataObject {
   type: OscillatorType;
   freq: number;
   output?: AudioDestinationNode | AudioParam;
+  hasInternal: boolean;
   running: boolean;
   hasInput: boolean;
   hasInputFrom: Array<number>;
@@ -15,6 +16,7 @@ export interface NodeDataObject {
 export interface GainDataObject {
   id: number;
   output?: AudioDestinationNode | AudioParam;
+  hasInternal: boolean;
   gain: number;
   hasInput: boolean;
   hasInputFrom: Array<number>;

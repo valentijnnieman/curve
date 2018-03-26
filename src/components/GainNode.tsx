@@ -25,9 +25,6 @@ class GainNode extends React.Component<NodeProps> {
   analyser: AnalyserNode;
   analyserCanvas: HTMLCanvasElement;
 
-  freqInput: HTMLInputElement;
-  typeInput: HTMLInputElement;
-
   gainInputElement: HTMLSpanElement;
   outputElement: HTMLSpanElement;
 
@@ -35,6 +32,9 @@ class GainNode extends React.Component<NodeProps> {
     super(props);
     this.connectInternal();
   }
+  connectToAnalyser = () => {
+    this.props.internal.gain.connect(this.props.internal.analyser);
+  };
   drawScope = () => {
     let ctx = this.analyserCanvas.getContext("2d") as CanvasRenderingContext2D;
     let width = ctx.canvas.width;
@@ -71,7 +71,6 @@ class GainNode extends React.Component<NodeProps> {
   componentDidMount() {
     this.draw();
   }
-
   tryToConnect = () => {
     if (!this.props.node.connected) {
       this.props.tryToConnect(
@@ -95,6 +94,7 @@ class GainNode extends React.Component<NodeProps> {
 
     internal.gain.disconnect();
 
+    window.console.log("GAIN OUTPUT", node.output);
     if (node.output !== undefined) {
       internal.gain.connect(node.output as AudioParam);
     } else {
@@ -135,6 +135,14 @@ class GainNode extends React.Component<NodeProps> {
     };
     this.props.updateNode(updatedNode);
   };
+  componentWillReceiveProps(nextProps: NodeProps) {
+    if (this.props.node.output !== nextProps.node.output) {
+      this.props = nextProps;
+      this.connectInternal();
+    } else {
+      this.props = nextProps;
+    }
+  }
   render() {
     return (
       <Draggable onDrag={this.onDragHandler} cancel="input">

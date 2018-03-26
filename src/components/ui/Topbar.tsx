@@ -3,25 +3,84 @@ import { Link } from "react-router-dom";
 import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from "react-bootstrap";
 import "./Topbar.css";
 
-const Topbar: React.SFC = ({ children }) => (
-  <Navbar className="topbar" inverse={true} collapseOnSelect={true}>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="#brand">Curve</a>
-      </Navbar.Brand>
-      <Navbar.Toggle />
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Nav>
-        <NavItem>
-          <Link to="/editor">Editor</Link>
-        </NavItem>
-        <NavDropdown eventKey={3} title="Create" id="basic-nav-dropdown">
-          <MenuItem eventKey={3.1}>Osc</MenuItem>
-        </NavDropdown>
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
-);
+import { connect } from "react-redux";
 
-export default Topbar;
+import { NodeDataObject, GainDataObject } from "../../types/nodeObject";
+import { createNode } from "../../actions/node";
+
+interface TopbarProps {
+  createNode: (node: NodeDataObject | GainDataObject) => void;
+}
+
+class Topbar extends React.Component<TopbarProps> {
+  render() {
+    return (
+      <Navbar className="topbar" inverse={true} collapseOnSelect={true}>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <a href="#brand">Curve</a>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+          <Nav>
+            <NavItem>
+              <Link to="/editor">Editor</Link>
+            </NavItem>
+            <NavDropdown eventKey={3} title="Create" id="basic-nav-dropdown">
+              <MenuItem
+                onClick={() => {
+                  const newOscNode = {
+                    id: 999,
+                    type: "square" as OscillatorType,
+                    freq: 330,
+                    output: undefined,
+                    hasInternal: false,
+                    running: false,
+                    hasInput: false,
+                    hasInputFrom: [],
+                    isConnectedTo: undefined,
+                    connected: false,
+                    connectedToEl: undefined,
+                    connectedFromEl: undefined
+                  };
+                  this.props.createNode(newOscNode);
+                }}
+              >
+                Oscillator
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  const newOscNode = {
+                    id: 999,
+                    gain: 1,
+                    output: undefined,
+                    hasInternal: false,
+                    hasInput: false,
+                    hasInputFrom: [],
+                    isConnectedTo: undefined,
+                    connected: false,
+                    connectedToEl: undefined,
+                    connectedFromEl: undefined
+                  };
+                  this.props.createNode(newOscNode);
+                }}
+              >
+                Gain
+              </MenuItem>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    );
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    createNode: (node: NodeDataObject | GainDataObject) =>
+      dispatch(createNode(node))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Topbar);

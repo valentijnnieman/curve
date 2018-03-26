@@ -7,6 +7,7 @@ const initialState = {
       type: "sine" as OscillatorType,
       freq: 4,
       output: undefined,
+      hasInternal: false,
       running: false,
       connected: false,
       hasInput: false,
@@ -20,6 +21,7 @@ const initialState = {
       type: "square" as OscillatorType,
       freq: 330,
       output: undefined,
+      hasInternal: false,
       running: false,
       hasInput: false,
       hasInputFrom: [],
@@ -32,6 +34,7 @@ const initialState = {
       id: 2,
       gain: 1,
       output: undefined,
+      hasInternal: false,
       hasInput: false,
       hasInputFrom: [],
       isConnectedTo: undefined,
@@ -44,6 +47,7 @@ const initialState = {
     id: 999,
     gain: 1,
     output: undefined,
+    hasInternal: false,
     hasInput: false,
     hasInputFrom: [],
     connected: false,
@@ -63,6 +67,14 @@ export default (state: StoreState = initialState, action: any): StoreState => {
           }
           return node;
         })
+      };
+    case "CREATE_NODE":
+      return {
+        ...state,
+        nodeData: [
+          ...state.nodeData,
+          { ...action.node, id: state.nodeData.length }
+        ]
       };
     default:
       return state;
