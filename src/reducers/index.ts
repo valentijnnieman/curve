@@ -5,7 +5,7 @@ const initialState = {
     {
       id: 0,
       type: "sine" as OscillatorType,
-      freq: 4,
+      freq: 220,
       output: undefined,
       hasInternal: false,
       running: false,
