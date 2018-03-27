@@ -3,15 +3,16 @@ import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Editor from "./pages/Editor";
 import Topbar from "./components/ui/Topbar";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 class App extends React.Component {
   render() {
     return (
       <Router>
-        <div>
+        <MuiThemeProvider>
           <Topbar />
           <Route path="/" component={Editor} />
-        </div>
+        </MuiThemeProvider>
       </Router>
     );
   }

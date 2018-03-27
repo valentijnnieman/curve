@@ -47,6 +47,7 @@ class GainNode extends React.Component<NodeProps> {
     this.props.tryToConnectTo(
       this.props.node,
       this.props.internal.gain,
+      "gain",
       this.gainInputElement.getBoundingClientRect()
     );
   };
@@ -108,7 +109,7 @@ class GainNode extends React.Component<NodeProps> {
         <div className="card">
           <div
             className={
-              this.props.node.hasInput
+              this.props.node.hasGainInput
                 ? "io-element io-element--active"
                 : "io-element"
             }
@@ -121,10 +122,9 @@ class GainNode extends React.Component<NodeProps> {
             />
           </div>
           <div className="card-content">
-            <h6>Gain</h6>
             <form>
               <TextField
-                label="Gain"
+                floatingLabelText="Gain"
                 defaultValue={this.props.node.gain}
                 onChange={this.handleGainChange}
                 className="input"

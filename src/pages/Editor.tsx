@@ -3,7 +3,6 @@ import "./Editor.css";
 import OscNode from "../components/OscNode";
 import GainNode from "../components/GainNode";
 // import OutputNode from "../components/OutputNode";
-import { Grid } from "react-bootstrap";
 import { InternalObject, InternalGainObject } from "../types/internalObject";
 import { NodeDataObject, GainDataObject } from "../types/nodeObject";
 import { Line } from "../types/lineObject";
@@ -30,6 +29,7 @@ interface EditorState {
   nodeToConnectTo?: NodeDataObject | GainDataObject;
   internalToConnect?: InternalObject | InternalGainObject;
   outputToConnectTo?: AudioParam | AudioDestinationNode;
+  outputType?: string;
   lineFrom?: DOMRect;
   lineTo?: DOMRect;
   speakersAreConnected: boolean;
@@ -58,15 +58,33 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this._INTERNALS
     );
   }
+  checkGain = (outputType: string) => {
+    if (outputType === "gain") {
+      return true;
+    }
+    return false;
+  };
+  checkFreq = (outputType: string) => {
+    if (outputType === "freq") {
+      return true;
+    }
+    return false;
+  };
   testConnect = () => {
     // checks if connection can be made & updates nodeData info
-    const { nodeToConnect, nodeToConnectTo, outputToConnectTo } = this.state;
+    const {
+      nodeToConnect,
+      nodeToConnectTo,
+      outputToConnectTo,
+      outputType
+    } = this.state;
     if (nodeToConnect && nodeToConnectTo && outputToConnectTo) {
       // update node info in store
       const updatedNode: NodeDataObject | GainDataObject = {
         ...nodeToConnect,
         output: outputToConnectTo,
         connected: true,
+        connectedToType: outputType,
         isConnectedTo: nodeToConnectTo.id,
         connectedToEl: this.state.lineTo,
         connectedFromEl: this.state.lineFrom
@@ -77,7 +95,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
       // specifying it has an input from updatedNode
       const updatedNodeTo: NodeDataObject | GainDataObject = {
         ...nodeToConnectTo,
-        hasInput: true,
+        hasGainInput: this.checkGain(outputType as string),
+        hasFreqInput: this.checkFreq(outputType as string),
         hasInputFrom: [...nodeToConnectTo.hasInputFrom, nodeToConnect.id]
       };
       this.props.updateNode(updatedNodeTo);
@@ -102,6 +121,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       ...node,
       connected: false,
       isConnectedTo: undefined,
+      connectedToType: undefined,
       connectedToEl: undefined,
       connectedFromEl: undefined,
       isConnectedToOutput: false,
@@ -113,14 +133,29 @@ class Editor extends React.Component<EditorProps, EditorState> {
     if (!node.isConnectedToOutput) {
       // update node that recieves input
       const nodeToUpdate = this.props.nodeData[node.isConnectedTo as number];
-      const updatedInputNode: NodeDataObject | GainDataObject = {
-        ...nodeToUpdate,
-        hasInput: false,
-        hasInputFrom: [
-          ...nodeToUpdate.hasInputFrom.filter(input => input !== updatedNode.id)
-        ]
-      };
-      this.props.updateNode(updatedInputNode);
+      if (node.connectedToType === "gain") {
+        const updatedInputNode: NodeDataObject | GainDataObject = {
+          ...nodeToUpdate,
+          hasGainInput: false,
+          hasInputFrom: [
+            ...nodeToUpdate.hasInputFrom.filter(
+              input => input !== updatedNode.id
+            )
+          ]
+        };
+        this.props.updateNode(updatedInputNode);
+      } else if (node.connectedToType === "freq") {
+        const updatedInputNode: NodeDataObject | GainDataObject = {
+          ...nodeToUpdate,
+          hasFreqInput: false,
+          hasInputFrom: [
+            ...nodeToUpdate.hasInputFrom.filter(
+              input => input !== updatedNode.id
+            )
+          ]
+        };
+        this.props.updateNode(updatedInputNode);
+      }
     }
 
     // disconnect internal
@@ -147,13 +182,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
   tryToConnectTo = (
     node: NodeDataObject | GainDataObject,
     output: AudioParam,
+    outputType: string,
     el: DOMRect
   ) => {
+    window.console.log(outputType);
     // called form node that wants to be connected to (only gain for now)
     this.setState(
       {
         nodeToConnectTo: node,
         outputToConnectTo: output,
+        outputType: outputType,
         lineTo: el
       },
       () => {
@@ -263,7 +301,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       );
     }
     return (
-      <Grid>
+      <div>
         <svg className="grid-svg" onMouseMove={e => this.onMouseMove(e)}>
           {lineElements}
           {lineToMouse}
@@ -285,7 +323,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
             }}
           />
         </div>
-      </Grid>
+      </div>
     );
   }
 }

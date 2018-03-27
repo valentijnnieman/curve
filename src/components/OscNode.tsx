@@ -1,6 +1,7 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
-import Switch from "material-ui/Switch";
+import Toggle from "material-ui/Toggle";
+
 import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
@@ -29,6 +30,7 @@ class OscNode extends React.Component<NodeProps> {
   typeInput: HTMLInputElement;
 
   gainInputElement: HTMLSpanElement;
+  freqInputElement: HTMLSpanElement;
   outputElement: HTMLSpanElement;
 
   constructor(props: NodeProps) {
@@ -79,11 +81,26 @@ class OscNode extends React.Component<NodeProps> {
     );
   };
 
-  tryToConnectTo = () => {
+  tryToConnectTo = (outputType: string) => {
+    let outputToConnectTo, inputElement;
+    switch (outputType) {
+      case "gain":
+        outputToConnectTo = this.props.internal.gain;
+        inputElement = this.gainInputElement.getBoundingClientRect();
+        break;
+      case "freq":
+        outputToConnectTo = this.props.internal.oscillator.frequency;
+        inputElement = this.freqInputElement.getBoundingClientRect();
+        break;
+      default:
+        outputToConnectTo = this.props.internal.gain;
+        inputElement = this.gainInputElement.getBoundingClientRect();
+    }
     this.props.tryToConnectTo(
       this.props.node,
-      this.props.internal.gain.gain,
-      this.gainInputElement.getBoundingClientRect()
+      outputToConnectTo,
+      outputType,
+      inputElement
     );
   };
   onDragHandler = () => {
@@ -91,11 +108,19 @@ class OscNode extends React.Component<NodeProps> {
     if (this.props.node.hasInputFrom.length > 0) {
       this.props.node.hasInputFrom.map(input => {
         const inputFromNode = this.props.allNodes[input];
-        const updatedNode: GainDataObject | NodeDataObject = {
-          ...inputFromNode,
-          connectedToEl: this.gainInputElement.getBoundingClientRect() as DOMRect
-        };
-        this.props.updateNode(updatedNode);
+        if (inputFromNode.connectedToType === "gain") {
+          const updatedNode: GainDataObject | NodeDataObject = {
+            ...inputFromNode,
+            connectedToEl: this.gainInputElement.getBoundingClientRect() as DOMRect
+          };
+          this.props.updateNode(updatedNode);
+        } else if (inputFromNode.connectedToType === "freq") {
+          const updatedNode: GainDataObject | NodeDataObject = {
+            ...inputFromNode,
+            connectedToEl: this.freqInputElement.getBoundingClientRect() as DOMRect
+          };
+          this.props.updateNode(updatedNode);
+        }
       });
     }
 
@@ -143,11 +168,11 @@ class OscNode extends React.Component<NodeProps> {
         <div className="card">
           <div
             className={
-              this.props.node.hasInput
+              this.props.node.hasGainInput
                 ? "io-element io-element--active"
                 : "io-element"
             }
-            onClick={this.tryToConnectTo}
+            onClick={() => this.tryToConnectTo("gain")}
           >
             <span
               ref={ref => {
@@ -155,21 +180,33 @@ class OscNode extends React.Component<NodeProps> {
               }}
             />
           </div>
+          <div
+            className={
+              this.props.node.hasFreqInput
+                ? "io-element io-element--freq io-element--active"
+                : "io-element io-element--freq"
+            }
+            onClick={() => this.tryToConnectTo("freq")}
+          >
+            <span
+              ref={ref => {
+                this.freqInputElement = ref as HTMLSpanElement;
+              }}
+            />
+          </div>
           <div className="card-content">
-            <Switch checked={this.props.node.running} onClick={this.toggleOsc}>
-              {this.props.node.running ? "Stop" : "Start"}
-            </Switch>
+            <Toggle onClick={this.toggleOsc} className="toggle" />
             <form>
               <TextField
                 id="freq"
-                label="Frequency"
+                floatingLabelText="Frequency"
                 defaultValue={this.props.node.freq}
                 onChange={this.handleFreqChange}
                 className="input"
               />
               <TextField
                 id="type"
-                label="Type"
+                floatingLabelText="Type"
                 defaultValue={this.props.node.type}
                 onChange={this.handleTypeChange}
                 className="input"

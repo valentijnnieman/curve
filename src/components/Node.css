@@ -1,7 +1,7 @@
 .io-element {
   display: block;
-  width: 8px;
-  height: 24px;
+  width: 4px;
+  height: 20px;
   padding: 2px;
   /* border-top-left-radius: 110px; 100px of height + 10px of border */
   opacity: 0.8;
@@ -15,6 +15,9 @@
 .io-element:hover {
   cursor: pointer;
   transform: scale(2, 1);
+}
+.io-element--freq {
+  top: 48px;
 }
 .io-element--right {
   border-left: 1px solid transparent;
@@ -32,4 +35,10 @@ form {
 
 .input {
   z-index: 90;
+  font-size: 12px !important;
+  width: 100% !important;
+}
+
+.toggle {
+  width: 50px !important;
 }

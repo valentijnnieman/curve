@@ -5,11 +5,13 @@ export interface NodeDataObject {
   output?: AudioDestinationNode | AudioParam;
   hasInternal: boolean;
   running: boolean;
-  hasInput: boolean;
+  hasGainInput: boolean;
+  hasFreqInput: boolean;
   hasInputFrom: Array<number>;
   isConnectedToOutput: boolean;
   isConnectedTo?: number;
   connected: boolean;
+  connectedToType?: string;
   connectedToEl?: DOMRect;
   connectedFromEl?: DOMRect;
 }
@@ -19,11 +21,12 @@ export interface GainDataObject {
   output?: AudioDestinationNode | AudioParam;
   hasInternal: boolean;
   gain: number;
-  hasInput: boolean;
+  hasGainInput: boolean;
   hasInputFrom: Array<number>;
   isConnectedToOutput: boolean;
   isConnectedTo?: number;
   connected: boolean;
+  connectedToType?: string;
   connectedToEl?: DOMRect;
   connectedFromEl?: DOMRect;
 }
