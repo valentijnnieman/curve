@@ -8,9 +8,10 @@
   display: inline-flex;
   margin: 32px;
   justify-content: space-between;
-  position: relative;
+  overflow: hidden;
 }
 .card-content {
+  background-color: white;
   border-radius: 0 0 2px 2px;
   display: flex;
   justify-content: center;

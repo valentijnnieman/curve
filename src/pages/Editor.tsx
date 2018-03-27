@@ -6,27 +6,22 @@ import GainNode from "../components/GainNode";
 import { Grid } from "react-bootstrap";
 import { InternalObject, InternalGainObject } from "../types/internalObject";
 import { NodeDataObject, GainDataObject } from "../types/nodeObject";
+import { Line } from "../types/lineObject";
 import { StoreState } from "../types/storeState";
 
 import { connect } from "react-redux";
 
 import { updateNode } from "../actions/node";
 
-const SpeakerSVG = require("../speakers.svg");
+// helpers
+import { buildInternals } from "../lib/helpers/Editor";
+import { drawConnectionLines } from "../lib/helpers/Editor";
 
-const _AUDIOCTX = new AudioContext(); // define audio context
-const _INTERNALS: Array<InternalObject | InternalGainObject> = [];
+const SpeakerSVG = require("../speakers.svg");
 
 interface EditorProps {
   nodeData: Array<NodeDataObject | GainDataObject>;
   updateNode: (node: NodeDataObject | GainDataObject) => void;
-}
-
-interface Line {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
 }
 
 interface EditorState {
@@ -37,79 +32,34 @@ interface EditorState {
   outputToConnectTo?: AudioParam | AudioDestinationNode;
   lineFrom?: DOMRect;
   lineTo?: DOMRect;
-  lines: Array<Line>;
   speakersAreConnected: boolean;
+  mouseX?: number;
+  mouseY?: number;
 }
 
 class Editor extends React.Component<EditorProps, EditorState> {
   output: InternalGainObject;
+  _AUDIOCTX: AudioContext;
+  _INTERNALS: Array<InternalObject | InternalGainObject> = [];
+  lines: Array<Line> = [];
   constructor(props: EditorProps) {
     super(props);
+    this._AUDIOCTX = new AudioContext(); // define audio context
+
     this.state = {
       wantsToConnect: false,
-      lines: [],
       speakersAreConnected: false
     };
-    this.buildInternals();
+    // Build internal objects from nodeData used with web audio
+    this._INTERNALS = buildInternals(
+      this.props.nodeData,
+      this._AUDIOCTX,
+      this.props.updateNode,
+      this._INTERNALS
+    );
   }
-  buildInternals = () => {
-    // builds internal objects used with web audio api
-    this.props.nodeData.map((node, index) => {
-      if (node.hasInternal) {
-        // node already has an internal - no need to create new internals
-      } else {
-        let gain = _AUDIOCTX.createGain();
-        gain.gain.value = 1;
-        let analyser = _AUDIOCTX.createAnalyser();
-        analyser.fftSize = 2048;
-        if ("freq" in node) {
-          let oscillator;
-          oscillator = _AUDIOCTX.createOscillator();
-          oscillator.type = node.type;
-          oscillator.frequency.setValueAtTime(node.freq, _AUDIOCTX.currentTime);
-          const newOscInternal = {
-            id: index,
-            oscillator,
-            gain,
-            analyser
-          };
-          _INTERNALS.push(newOscInternal);
-        } else if ("gain" in node) {
-          const newGainInternal = {
-            id: index,
-            gain,
-            analyser
-          };
-          _INTERNALS.push(newGainInternal);
-        }
-        // update the nodeData object now that we build an internal
-        this.props.updateNode({
-          ...node,
-          hasInternal: true
-        });
-      }
-    });
-  };
-  drawConnectionLine = () => {
-    // draws lines between connected nodes
-    let newLineCoords;
-    let allNewLines: Array<Line> = [];
-    this.props.nodeData.map(node => {
-      if (node.connected && node.connectedFromEl && node.connectedToEl) {
-        newLineCoords = {
-          x1: node.connectedFromEl.x + node.connectedFromEl.width / 2,
-          y1: node.connectedFromEl.y + node.connectedFromEl.height / 2,
-          x2: node.connectedToEl.x,
-          y2: node.connectedToEl.y + 12 // .height not picked up here for some reason
-        };
-        allNewLines.push(newLineCoords);
-      }
-    });
-    this.setState({
-      lines: allNewLines
-    });
-  };
   testConnect = () => {
+    // checks if connection can be made & updates nodeData info
     const { nodeToConnect, nodeToConnectTo, outputToConnectTo } = this.state;
     if (nodeToConnect && nodeToConnectTo && outputToConnectTo) {
       // update node info in store
@@ -136,7 +86,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.setState({
       wantsToConnect: false,
       nodeToConnect: undefined,
+      nodeToConnectTo: undefined,
       internalToConnect: undefined,
+      outputToConnectTo: undefined,
       lineFrom: undefined,
       lineTo: undefined
     });
@@ -151,7 +103,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       connected: false,
       isConnectedTo: undefined,
       connectedToEl: undefined,
-      connectedFromEl: undefined
+      connectedFromEl: undefined,
+      isConnectedToOutput: false,
+      output: undefined
     };
     this.props.updateNode(updatedNode);
 
@@ -212,24 +166,37 @@ class Editor extends React.Component<EditorProps, EditorState> {
     const { nodeToConnect } = this.state;
     this.setState({
       lineTo: e.target.getBoundingClientRect(),
-      outputToConnectTo: _AUDIOCTX.destination,
+      outputToConnectTo: this._AUDIOCTX.destination,
       speakersAreConnected: true
     });
     const updatedNode: NodeDataObject | GainDataObject = {
       ...(nodeToConnect as NodeDataObject | GainDataObject),
-      output: _AUDIOCTX.destination,
+      output: this._AUDIOCTX.destination,
       connected: true,
       isConnectedToOutput: true,
       connectedToEl: e.target.getBoundingClientRect(),
       connectedFromEl: this.state.lineFrom
     };
     this.props.updateNode(updatedNode);
+    this.testConnect();
   };
   componentWillReceiveProps(nextProps: EditorProps) {
     this.props = nextProps;
-    this.buildInternals();
-    this.drawConnectionLine();
+    // rebuild internals
+    this._INTERNALS = buildInternals(
+      this.props.nodeData,
+      this._AUDIOCTX,
+      this.props.updateNode,
+      this._INTERNALS
+    );
+    this.lines = drawConnectionLines(this.props.nodeData);
   }
+  onMouseMove = (e: React.MouseEvent<SVGGElement>) => {
+    this.setState({
+      mouseX: e.screenX,
+      mouseY: e.pageY
+    });
+  };
   render() {
     const synthElements = this.props.nodeData.map(
       (node: NodeDataObject | GainDataObject, index: number) => {
@@ -239,13 +206,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
               key={index}
               node={node}
               allNodes={this.props.nodeData}
-              internal={_INTERNALS[index] as InternalObject}
-              allInternals={_INTERNALS}
+              internal={this._INTERNALS[index] as InternalObject}
+              allInternals={this._INTERNALS}
               tryToConnect={this.tryToConnect}
               tryToConnectTo={this.tryToConnectTo}
               canConnect={this.state.wantsToConnect}
               updateNode={this.props.updateNode}
-              audioCtx={_AUDIOCTX}
+              audioCtx={this._AUDIOCTX}
             />
           );
         } else {
@@ -254,19 +221,19 @@ class Editor extends React.Component<EditorProps, EditorState> {
               key={index}
               node={node}
               allNodes={this.props.nodeData}
-              internal={_INTERNALS[index] as InternalGainObject}
-              allInternals={_INTERNALS}
+              internal={this._INTERNALS[index] as InternalGainObject}
+              allInternals={this._INTERNALS}
               tryToConnect={this.tryToConnect}
               tryToConnectTo={this.tryToConnectTo}
               canConnect={this.state.wantsToConnect}
               updateNode={this.props.updateNode}
-              audioCtx={_AUDIOCTX}
+              audioCtx={this._AUDIOCTX}
             />
           );
         }
       }
     );
-    const lineElements = this.state.lines.map((line, index) => {
+    const lineElements = this.lines.map((line, index) => {
       return (
         <g key={index}>
           <line
@@ -281,9 +248,26 @@ class Editor extends React.Component<EditorProps, EditorState> {
         </g>
       );
     });
+    let lineToMouse;
+    if (this.state.wantsToConnect && this.state.lineFrom) {
+      lineToMouse = (
+        <line
+          x1={this.state.lineFrom.x}
+          y1={this.state.lineFrom.y + 12}
+          x2={this.state.mouseX}
+          y2={this.state.mouseY}
+          stroke="#f50057"
+          strokeWidth={4}
+          strokeDasharray="4, 4"
+        />
+      );
+    }
     return (
       <Grid>
-        <svg className="grid-svg">{lineElements}</svg>
+        <svg className="grid-svg" onMouseMove={e => this.onMouseMove(e)}>
+          {lineElements}
+          {lineToMouse}
+        </svg>
         {synthElements}
         <div className="card speakers">
           <div className="card-content speakers-content">

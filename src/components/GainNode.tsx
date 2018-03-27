@@ -8,6 +8,7 @@ import { InternalObject, InternalGainObject } from "../types/internalObject";
 
 import "./ui/Card.css";
 import "./Node.css";
+import { Analyser } from "./Analyser";
 
 interface NodeProps {
   node: GainDataObject;
@@ -23,62 +24,23 @@ interface NodeProps {
 
 class GainNode extends React.Component<NodeProps> {
   analyser: AnalyserNode;
-  analyserCanvas: HTMLCanvasElement;
 
   gainInputElement: HTMLSpanElement;
   outputElement: HTMLSpanElement;
 
   constructor(props: NodeProps) {
     super(props);
-    this.connectInternal();
+    // this.connectInternal();
   }
   connectToAnalyser = () => {
     this.props.internal.gain.connect(this.props.internal.analyser);
   };
-  drawScope = () => {
-    let ctx = this.analyserCanvas.getContext("2d") as CanvasRenderingContext2D;
-    let width = ctx.canvas.width;
-    let height = ctx.canvas.height;
-    let timeData = new Uint8Array(
-      this.props.internal.analyser.frequencyBinCount
-    );
-    let scaling = height / 256;
-    let risingEdge = 0;
-
-    this.props.internal.analyser.getByteTimeDomainData(timeData);
-
-    ctx.fillStyle = "#f8f8f8";
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "#337ab7";
-    ctx.beginPath();
-
-    for (
-      let x = risingEdge;
-      x < timeData.length && x - risingEdge < width;
-      x++
-    ) {
-      ctx.lineTo(x - risingEdge, height - timeData[x] * scaling);
-    }
-
-    ctx.stroke();
-  };
-  draw = () => {
-    this.drawScope();
-    requestAnimationFrame(this.draw);
-  };
-  componentDidMount() {
-    this.draw();
-  }
   tryToConnect = () => {
-    if (!this.props.node.connected) {
-      this.props.tryToConnect(
-        this.props.node,
-        this.props.internal,
-        this.outputElement.getBoundingClientRect()
-      );
-    }
+    this.props.tryToConnect(
+      this.props.node,
+      this.props.internal,
+      this.outputElement.getBoundingClientRect()
+    );
   };
 
   tryToConnectTo = () => {
@@ -94,7 +56,6 @@ class GainNode extends React.Component<NodeProps> {
 
     internal.gain.disconnect();
 
-    window.console.log("GAIN OUTPUT", node.output);
     if (node.output !== undefined) {
       internal.gain.connect(node.output as AudioParam);
     }
@@ -169,12 +130,10 @@ class GainNode extends React.Component<NodeProps> {
                 className="input"
               />
             </form>
-            <canvas
-              ref={canvasElement => {
-                this.analyserCanvas = canvasElement as HTMLCanvasElement;
-              }}
-              width={160}
-              height={80}
+            <Analyser
+              analyser={this.props.internal.analyser}
+              backgroundColor="#337ab7"
+              lineColor="#f8f8f8"
             />
           </div>
           <div
