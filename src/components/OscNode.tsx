@@ -127,11 +127,13 @@ class OscNode extends React.Component<NodeProps> {
       });
     }
 
-    const updateSelf: NodeDataObject = {
-      ...this.props.node,
-      connectedFromEl: this.outputElement.getBoundingClientRect() as DOMRect
-    };
-    this.props.updateNode(updateSelf);
+    if (this.props.node.connected) {
+      const updateSelf: NodeDataObject = {
+        ...this.props.node,
+        connectedFromEl: this.outputElement.getBoundingClientRect() as DOMRect
+      };
+      this.props.updateNode(updateSelf);
+    }
   };
   handleFreqChange = (e: any) => {
     e.preventDefault();

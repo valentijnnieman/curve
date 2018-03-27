@@ -75,12 +75,13 @@ class GainNode extends React.Component<NodeProps> {
         this.props.updateNode(updatedNode);
       });
     }
-
-    const updateSelf: GainDataObject = {
-      ...this.props.node,
-      connectedFromEl: this.outputElement.getBoundingClientRect() as DOMRect
-    };
-    this.props.updateNode(updateSelf);
+    if (this.props.node.connected) {
+      const updateSelf: GainDataObject = {
+        ...this.props.node,
+        connectedFromEl: this.outputElement.getBoundingClientRect() as DOMRect
+      };
+      this.props.updateNode(updateSelf);
+    }
   };
   handleGainChange = (e: any) => {
     e.preventDefault();
