@@ -8,6 +8,9 @@ import Draggable from "react-draggable";
 import { NodeDataObject, GainDataObject } from "../types/nodeObject";
 import { InternalObject, InternalGainObject } from "../types/internalObject";
 
+import DropDownMenu from "material-ui/DropDownMenu";
+import MenuItem from "material-ui/MenuItem";
+
 import "./ui/Card.css";
 import "./Node.css";
 import { Analyser } from "./Analyser";
@@ -143,14 +146,14 @@ class OscNode extends React.Component<NodeProps> {
     };
     this.props.updateNode(updatedNode);
   };
-  handleTypeChange = (e: any) => {
+  handleTypeChange = (e: any, index: any, value: any) => {
     // set change here so it is instant
-    this.props.internal.oscillator.type = e.target.value;
+    this.props.internal.oscillator.type = value;
 
     // update node info in store
     const updatedNode: NodeDataObject = {
       ...this.props.node,
-      type: e.target.value
+      type: value
     };
     this.props.updateNode(updatedNode);
   };
@@ -209,13 +212,22 @@ class OscNode extends React.Component<NodeProps> {
                 onChange={this.handleFreqChange}
                 className="input"
               />
-              <TextField
+              {/* <TextField
                 id="type"
                 floatingLabelText="Type"
                 defaultValue={this.props.node.type}
                 onChange={this.handleTypeChange}
                 className="input"
-              />
+              /> */}
+              <DropDownMenu
+                value={this.props.node.type}
+                onChange={this.handleTypeChange}
+              >
+                <MenuItem value="sine" primaryText="Sine" />
+                <MenuItem value="square" primaryText="Square" />
+                <MenuItem value="triangle" primaryText="Triangle" />
+                <MenuItem value="sawtooth" primaryText="Sawtooth" />
+              </DropDownMenu>
             </form>
             <Analyser
               analyser={this.props.internal.analyser}
