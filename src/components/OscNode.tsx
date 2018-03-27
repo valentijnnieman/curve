@@ -195,7 +195,12 @@ class OscNode extends React.Component<NodeProps> {
             />
           </div>
           <div className="card-content">
-            <Toggle onClick={this.toggleOsc} className="toggle" />
+            <Toggle
+              onClick={this.toggleOsc}
+              className="toggle"
+              thumbSwitchedStyle={{ backgroundColor: "#f50057" }}
+              trackSwitchedStyle={{ backgroundColor: "#ff9d9d" }}
+            />
             <form>
               <TextField
                 id="freq"
