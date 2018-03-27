@@ -8,6 +8,8 @@ import { NodeDataObject, GainDataObject } from "../../types/nodeObject";
 import { createNode } from "../../actions/node";
 import { Dropdown } from "./Dropdown";
 
+const CurveSVG = require("../../curve.svg");
+
 interface TopbarProps {
   createNode: (node: NodeDataObject | GainDataObject) => void;
 }
@@ -15,7 +17,11 @@ interface TopbarProps {
 class Topbar extends React.Component<TopbarProps> {
   render() {
     return (
-      <AppBar title="Curve" className="topbar">
+      <AppBar
+        title="Curve"
+        className="topbar"
+        iconElementLeft={<img src={CurveSVG} width={48} className="logo" />}
+      >
         <Dropdown createNode={this.props.createNode} />
       </AppBar>
     );

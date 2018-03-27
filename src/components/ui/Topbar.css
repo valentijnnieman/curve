@@ -10,3 +10,8 @@
 .topbar h1 {
   font-weight: 100 !important;
 }
+
+.logo {
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+}
