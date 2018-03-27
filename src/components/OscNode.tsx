@@ -214,13 +214,6 @@ class OscNode extends React.Component<NodeProps> {
                 onChange={this.handleFreqChange}
                 className="input"
               />
-              {/* <TextField
-                id="type"
-                floatingLabelText="Type"
-                defaultValue={this.props.node.type}
-                onChange={this.handleTypeChange}
-                className="input"
-              /> */}
               <DropDownMenu
                 value={this.props.node.type}
                 onChange={this.handleTypeChange}

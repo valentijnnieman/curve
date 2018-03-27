@@ -114,7 +114,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   };
   disconnect = (
     node: NodeDataObject | GainDataObject,
-    internal: InternalObject
+    internal: InternalObject | InternalGainObject
   ) => {
     // update node info in store
     const updatedNode: NodeDataObject | GainDataObject = {
@@ -185,8 +185,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     outputType: string,
     el: DOMRect
   ) => {
-    window.console.log(outputType);
-    // called form node that wants to be connected to (only gain for now)
+    // called form node that wants to be connected to
     this.setState(
       {
         nodeToConnectTo: node,
@@ -196,7 +195,23 @@ class Editor extends React.Component<EditorProps, EditorState> {
       },
       () => {
         // when done setting state
-        this.testConnect();
+        if (
+          (this.state.nodeToConnect as NodeDataObject | GainDataObject).id ===
+          (this.state.nodeToConnectTo as NodeDataObject | GainDataObject).id
+        ) {
+          // let's not connect output to input!
+          this.setState({
+            wantsToConnect: false,
+            nodeToConnect: undefined,
+            nodeToConnectTo: undefined,
+            internalToConnect: undefined,
+            outputToConnectTo: undefined,
+            lineFrom: undefined,
+            lineTo: undefined
+          });
+        } else {
+          this.testConnect();
+        }
       }
     );
   };
