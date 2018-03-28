@@ -4,7 +4,7 @@ A visual programming language for Web Audio!
 
 [Play around with it here!](https://curve-visual.herokuapp.com/)
 
-<!-- ![alt text](https://raw.githubusercontent.com/valentijnnieman/curve/master/public/screenie.png) -->
+![alt text](https://raw.githubusercontent.com/valentijnnieman/curve/master/src/curve.svg =48x48)
 
 # What is this?
 
