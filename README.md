@@ -16,12 +16,14 @@ You can create oscillator or gain blocks by clicking the '+' button in the botto
 
 # WIP
 
-This is still very much work in progress! :) I use Typescript with create-react-app to build the editor, and Redux to keep state. Pull the project, run `npm start` or `yarn start` and go to `/editor` to mess about with it.
+This is still very much work in progress! :) I use Typescript with create-react-app to build the editor, and Redux to keep state. Pull the project, and run `npm start` or `yarn start`.
 
 ## Roadmap
 
 Here is some stuff I would love to implement next:
-[] Better performance! The drawing of the connection lines is quite slow.
-[] Filter blocks
-[] Saving a 'project'
-[] A tutorial
+
+* [] A tutorial/walkthrough explaining what does what
+* [] Filter blocks
+* [] Saving a 'project'
+* [] Cookbook recipes showing off cool synth ideas
+* [] Better performance! The drawing of the connection lines is quite slow.
