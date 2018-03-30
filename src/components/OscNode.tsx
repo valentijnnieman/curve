@@ -179,6 +179,9 @@ class OscNode extends React.Component<NodeProps> {
             }
             onClick={() => this.tryToConnectTo("gain")}
           >
+            <div style={{ position: "relative" }}>
+              <span className="tooltip">Input: gain</span>
+            </div>
             <span
               ref={ref => {
                 this.gainInputElement = ref as HTMLSpanElement;
@@ -206,7 +209,7 @@ class OscNode extends React.Component<NodeProps> {
               thumbSwitchedStyle={{ backgroundColor: "#f50057" }}
               trackSwitchedStyle={{ backgroundColor: "#ff9d9d" }}
             />
-            <form>
+            <form className="node-controls">
               <TextField
                 id="freq"
                 floatingLabelText="Frequency"

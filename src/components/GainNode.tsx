@@ -107,7 +107,7 @@ class GainNode extends React.Component<NodeProps> {
   render() {
     return (
       <Draggable onDrag={this.onDragHandler} cancel="input">
-        <div className="card">
+        <div className="card" id="gain-block">
           <div
             className={
               this.props.node.hasGainInput

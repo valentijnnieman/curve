@@ -1,3 +1,5 @@
+@import "../node_modules/react-joyride/lib/react-joyride-compiled.css";
+
 .App {
   text-align: center;
 }
