@@ -96,8 +96,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
       // specifying it has an input from updatedNode
       const updatedNodeTo: NodeDataObject | GainDataObject = {
         ...nodeToConnectTo,
-        hasGainInput: this.checkGain(outputType as string),
-        hasFreqInput: this.checkFreq(outputType as string),
+        hasGainInput: nodeToConnectTo.hasGainInput
+          ? true
+          : this.checkGain(outputType as string),
+        hasFreqInput: nodeToConnectTo.hasGainInput
+          ? true
+          : this.checkFreq(outputType as string),
         hasInputFrom: [...nodeToConnectTo.hasInputFrom, nodeToConnect.id]
       };
       this.props.updateNode(updatedNodeTo);
