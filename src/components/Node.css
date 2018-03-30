@@ -16,6 +16,10 @@
   cursor: pointer;
   transform: scale(2, 1);
 }
+.io-element:hover .tooltip {
+  visibility: visible;
+  transform: scale(0.5, 1);
+}
 .io-element--freq {
   top: 48px;
 }
@@ -27,6 +31,21 @@
 
 .io-element--active {
   background-color: #f50057;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  right: 0;
+  z-index: 999999;
 }
 
 form {

@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import "./Editor.css";
 import OscNode from "../components/OscNode";
 import GainNode from "../components/GainNode";
@@ -250,6 +251,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       mouseY: e.pageY
     });
   };
+
   render() {
     const synthElements = this.props.nodeData.map(
       (node: NodeDataObject | GainDataObject, index: number) => {

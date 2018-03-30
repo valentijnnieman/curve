@@ -22,8 +22,8 @@ This is still very much work in progress! :) I use Typescript with create-react-
 
 Here is some stuff I would love to implement next:
 
-* [] A tutorial/walkthrough explaining what does what
-* [] Filter blocks
-* [] Saving a 'project'
-* [] Cookbook recipes showing off cool synth ideas
-* [] Better performance! The drawing of the connection lines is quite slow.
+- [x] A tutorial/walkthrough explaining what does what
+- [ ] Filter blocks
+- [ ] Saving a 'project'
+- [ ] Cookbook recipes showing off cool synth ideas
+- [ ] Better performance! The drawing of the connection lines is quite slow.
