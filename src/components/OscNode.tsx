@@ -218,6 +218,7 @@ class OscNode extends React.Component<NodeProps> {
                 className="input"
               />
               <DropDownMenu
+                className="input"
                 value={this.props.node.type}
                 onChange={this.handleTypeChange}
               >
