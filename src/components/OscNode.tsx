@@ -88,7 +88,7 @@ class OscNode extends React.Component<NodeProps> {
     let outputToConnectTo, inputElement;
     switch (outputType) {
       case "gain":
-        outputToConnectTo = this.props.internal.gain;
+        outputToConnectTo = this.props.internal.gain.gain;
         inputElement = this.gainInputElement.getBoundingClientRect();
         break;
       case "freq":
@@ -96,7 +96,7 @@ class OscNode extends React.Component<NodeProps> {
         inputElement = this.freqInputElement.getBoundingClientRect();
         break;
       default:
-        outputToConnectTo = this.props.internal.gain;
+        outputToConnectTo = this.props.internal.gain.gain;
         inputElement = this.gainInputElement.getBoundingClientRect();
     }
     this.props.tryToConnectTo(
