@@ -65,3 +65,75 @@ export const drawConnectionLines = (
   });
   return allNewLines;
 };
+
+// Generates web audio code from internals (experimental)
+export const genWACode = (
+  nodeData: Array<NodeDataObject | GainDataObject>,
+  internals: Array<InternalObject | InternalGainObject>
+) => {
+  let jsString: string =
+      "const audioCtx = new AudioContext(); // define audio context\n\n",
+    connects: string = "";
+  internals.map((internal, index) => {
+    // get nodeData object for more info like output
+    let node = nodeData[index];
+    window.console.log(internal);
+    if ("oscillator" in internal && "freq" in node) {
+      jsString += `// Creating oscillator node
+let osc${index} = audioCtx.createOscillator();
+osc${index}.type = "${internal.oscillator.type}";
+osc${index}.frequency.setValueAtTime(${node.freq}, audioCtx.currentTime);
+// create a internal gain used with oscillator object
+let gain${index} = audioCtx.createGain();
+gain${index}.gain.value = 1;
+osc${index}.connect(gain${index});
+osc${index}.start();`;
+      if (node.connected) {
+        if (node.isConnectedToOutput) {
+          // connected to speakers
+          connects += `gain${index}.connect(audioCtx.destination);\n`;
+        } else {
+          if (node.connectedToType === "gain" && node.isConnectedTo) {
+            if ("gain" in nodeData[node.isConnectedTo]) {
+              connects += `gain${index}.connect(gain${node.isConnectedTo});\n`;
+            } else {
+              connects += `gain${index}.connect(gain${
+                node.isConnectedTo
+              }.gain);\n`;
+            }
+          } else if (node.connectedToType === "freq") {
+            connects += `gain${index}.connect(osc${
+              node.isConnectedTo
+            }.frequency);\n`;
+          }
+        }
+      }
+      jsString += "\n\n";
+    } else if ("gain" in internal && "gain" in node) {
+      jsString += `let gain${index} = audioCtx.createGain();
+gain${index}.gain.value = ${node.gain};`;
+      if (node.connected) {
+        if (node.isConnectedToOutput) {
+          // connected to speakers
+          connects += `gain${index}.connect(audioCtx.destination);\n`;
+        } else {
+          if (node.connectedToType === "gain" && node.isConnectedTo) {
+            if ("gain" in nodeData[node.isConnectedTo]) {
+              connects += `gain${index}.connect(gain${node.isConnectedTo});\n`;
+            } else {
+              connects += `gain${index}.connect(gain${
+                node.isConnectedTo
+              }.gain);\n`;
+            }
+          } else if (node.connectedToType === "freq") {
+            connects += `gain${index}.connect(osc${
+              node.isConnectedTo
+            }.frequency);\n`;
+          }
+        }
+      }
+      jsString += "\n\n";
+    }
+  });
+  return (jsString += connects);
+};

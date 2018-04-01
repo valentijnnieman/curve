@@ -47,7 +47,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
         <Joyride
           ref={c => (this.joyride = c as Joyride)}
           run={this.state.joyrideIsRunning} // or some other boolean for when you want to start it
-          debug={true}
+          debug={false}
           steps={joyrideSteps as Step[]}
           type="continuous"
           autoStart={true}
