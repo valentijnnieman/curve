@@ -39,7 +39,7 @@ export const joyrideSteps = [
     text:
       "To hear their output, try connecting the output of a block to the input of the speakers, here!",
     selector: ".speakers-content",
-    position: "bottom-left",
+    position: "bottom-right",
     type: "hover",
     isFixed: true
   },
@@ -73,6 +73,15 @@ export const joyrideSteps = [
     text: "With this button you can create new blocks!",
     selector: ".dropdown-button",
     position: "bottom-left",
+    type: "hover",
+    isFixed: true
+  },
+  {
+    title: "Generating Web Audio code",
+    text:
+      "Click here to view the generated Web Audio code! You can save the code and run it in your own apps!",
+    selector: ".code-dialog-button",
+    position: "bottom",
     type: "hover",
     isFixed: true
   },

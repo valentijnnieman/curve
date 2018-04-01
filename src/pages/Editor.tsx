@@ -3,6 +3,7 @@ import * as React from "react";
 import "./Editor.css";
 import OscNode from "../components/OscNode";
 import GainNode from "../components/GainNode";
+import { Code } from "../components/ui/Code";
 // import OutputNode from "../components/OutputNode";
 import { InternalObject, InternalGainObject } from "../types/internalObject";
 import { NodeDataObject, GainDataObject } from "../types/nodeObject";
@@ -14,8 +15,11 @@ import { connect } from "react-redux";
 import { updateNode } from "../actions/node";
 
 // helpers
-import { buildInternals } from "../lib/helpers/Editor";
-import { drawConnectionLines } from "../lib/helpers/Editor";
+import {
+  buildInternals,
+  drawConnectionLines,
+  genWACode
+} from "../lib/helpers/Editor";
 
 const SpeakerSVG = require("../speakers.svg");
 
@@ -40,6 +44,7 @@ interface EditorState {
 
 class Editor extends React.Component<EditorProps, EditorState> {
   output: InternalGainObject;
+  code: string;
   _AUDIOCTX: AudioContext;
   _INTERNALS: Array<InternalObject | InternalGainObject> = [];
   lines: Array<Line> = [];
@@ -58,6 +63,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this.props.updateNode,
       this._INTERNALS
     );
+    this.code = genWACode(this.props.nodeData, this._INTERNALS);
   }
   checkGain = (outputType: string) => {
     if (outputType === "gain") {
@@ -248,6 +254,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this._INTERNALS
     );
     this.lines = drawConnectionLines(this.props.nodeData);
+    this.code = genWACode(this.props.nodeData, this._INTERNALS);
   }
   onMouseMove = (e: React.MouseEvent<SVGGElement>) => {
     this.setState({
@@ -328,6 +335,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
           {lineToMouse}
         </svg>
         {synthElements}
+        <Code code={this.code} />
         <div className="card speakers">
           <div className="card-content speakers-content">
             <h6>Speakers</h6>
