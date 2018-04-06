@@ -1,4 +1,3 @@
-import * as React from "react";
 import "./Editor";
 import "web-audio-test-api";
 import { buildInternals, drawConnectionLines, genWACode } from "./Editor";
@@ -25,14 +24,18 @@ describe("buildInternals()", () => {
   test("internal oscillators set correctly", () => {
     const internalToTest: InternalObject = builtInternals[0] as InternalObject;
 
-    expect(internalToTest.oscillator.type).toEqual(mockNodeData[0].type);
+    expect(internalToTest.oscillator.type).toEqual(
+      (mockNodeData[0] as NodeDataObject).type
+    );
     expect(internalToTest.oscillator.frequency.value).toEqual(
-      mockNodeData[0].freq
+      (mockNodeData[0] as NodeDataObject).freq
     );
   });
   test("internal gain objects set correctly", () => {
     const internalToTest = builtInternals[1] as InternalGainObject;
-    expect(internalToTest.gain.gain.value).toEqual(mockNodeData[1].gain);
+    expect(internalToTest.gain.gain.value).toEqual(
+      (mockNodeData[1] as GainDataObject).gain
+    );
   });
   test("internals have analyser", () => {
     const internalWithOscillator: InternalObject = builtInternals[0] as InternalObject;

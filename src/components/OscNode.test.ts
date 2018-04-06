@@ -1,4 +1,3 @@
-import * as React from "react";
 import OscNode from "./OscNode";
 import "web-audio-test-api";
 import { audioCtx, mockNodeData } from "../lib/helpers/Mocks";
