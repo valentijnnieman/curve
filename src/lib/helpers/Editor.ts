@@ -58,7 +58,7 @@ export const drawConnectionLines = (
         x1: node.connectedFromEl.x + node.connectedFromEl.width / 2,
         y1: node.connectedFromEl.y + node.connectedFromEl.height / 2,
         x2: node.connectedToEl.x,
-        y2: node.connectedToEl.y + 12 // .height not picked up here for some reason
+        y2: node.connectedToEl.y + node.connectedToEl.height / 2 // .height not picked up here for some reason
       };
       allNewLines.push(newLineCoords);
     }
