@@ -5,43 +5,8 @@ import { buildInternals, drawConnectionLines, genWACode } from "./Editor";
 import { NodeDataObject, GainDataObject } from "../../types/nodeObject";
 import { InternalObject, InternalGainObject } from "../../types/internalObject";
 import { Line } from "../../types/lineObject";
+import { audioCtx, mockNodeData } from "./Mocks";
 
-const audioCtx = new AudioContext();
-const outputDOMRect = { x: 100, y: 100, width: 100, height: 100 } as DOMRect;
-
-const inputDOMRect = { x: 200, y: 200, width: 200, height: 200 } as DOMRect;
-const mockNodeData = [
-  {
-    id: 0,
-    type: "sine" as OscillatorType,
-    freq: 220,
-    output: undefined,
-    hasInternal: false,
-    running: false,
-    connected: true,
-    hasGainInput: false,
-    hasFreqInput: false,
-    hasInputFrom: [],
-    isConnectedToOutput: false,
-    isConnectedTo: 1,
-    connectedToType: undefined,
-    connectedToEl: inputDOMRect,
-    connectedFromEl: outputDOMRect
-  },
-  {
-    id: 1,
-    gain: 1,
-    output: undefined,
-    hasInternal: false,
-    hasGainInput: false,
-    hasInputFrom: [],
-    isConnectedToOutput: false,
-    isConnectedTo: undefined,
-    connected: false,
-    connectedToEl: undefined,
-    connectedFromEl: undefined
-  }
-];
 describe("buildInternals()", () => {
   const internals: Array<InternalObject | InternalGainObject> = [];
   const builtInternals = buildInternals(

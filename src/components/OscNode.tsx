@@ -47,7 +47,7 @@ class OscNode extends React.Component<NodeProps> {
       try {
         this.props.internal.oscillator.start();
       } catch (e) {
-        window.console.log(e);
+        // window.console.log(e);
       }
       internal.gain.gain.value = 1;
       this.connectInternal();

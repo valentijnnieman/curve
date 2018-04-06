@@ -77,7 +77,6 @@ export const genWACode = (
   internals.map((internal, index) => {
     // get nodeData object for more info like output
     let node = nodeData[index];
-    window.console.log(internal);
     if ("oscillator" in internal && "freq" in node) {
       jsString += `// Creating oscillator node
 let osc${index} = audioCtx.createOscillator();
