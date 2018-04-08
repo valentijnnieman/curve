@@ -1,7 +1,6 @@
 # Curve
 
 [![Build](https://travis-ci.org/valentijnnieman/curve.svg?branch=master)](https://travis-ci.org/valentijnnieman/curve)
-[![codecov.io](https://codecov.io/github/valentijnnieman/curve/coverage.svg?branch=master)](https://codecov.io/github/valentijnnieman/curve?branch=master)
 
 <img src="https://raw.githubusercontent.com/valentijnnieman/curve/master/src/curve.svg?sanitize=true" width="48" />
 
