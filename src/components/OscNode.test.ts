@@ -32,11 +32,40 @@ describe("OscNode", () => {
     allNodes: mockNodeData,
     internal: builtInternals[0],
     allInternals: builtInternals,
-    tryToConnect: () => {
-      window.console.log("mock tryToConnect");
+    tryToConnect: (
+      node: NodeDataObject,
+      internal: InternalObject | InternalGainObject,
+      el: DOMRect
+    ) => {
+      expect(node).toBeDefined();
+      expect(internal).toBeDefined();
+      expect(el).toBeDefined();
     },
-    tryToConnectTo: () => {
-      window.console.log("mock tryToConnectTo");
+    tryToConnectTo: (
+      node: NodeDataObject,
+      outputToConnectTo: AudioParam,
+      outputType: string,
+      inputElement: DOMRect
+    ) => {
+      expect(node).toBeDefined();
+      expect(outputToConnectTo).toBeDefined();
+      expect(outputType).toBeDefined();
+      expect(inputElement).toBeDefined();
+
+      expect(node).toEqual(oscNode.props.node);
+      switch (outputType) {
+        case "gain":
+          expect(outputToConnectTo).toEqual(oscNode.props.internal.gain.gain);
+          break;
+        case "freq":
+          expect(outputToConnectTo).toEqual(
+            oscNode.props.internal.oscillator.frequency
+          );
+          break;
+        default:
+          expect(outputToConnectTo).toEqual(oscNode.props.internal.gain.gain);
+          break;
+      }
     },
     canConnect: false,
     updateNode: (node: NodeDataObject | GainDataObject) => {
@@ -45,6 +74,12 @@ describe("OscNode", () => {
     },
     audioCtx
   } as NodeProps);
+
+  // mock refs here
+  oscNode.gainInputElement = document.createElement("div");
+  oscNode.freqInputElement = document.createElement("div");
+  oscNode.outputElement = document.createElement("div");
+
   test("toggleOsc()", () => {
     expect(oscNode.props.node.running).toBe(false);
     oscNode.toggleOsc();
@@ -59,5 +94,17 @@ describe("OscNode", () => {
     oscNode.connectInternal();
     expect(oscNode.props.internal.gain.numberOfOutputs).toEqual(1);
     // not much else to test here, there's no (easy) way of testing if the internal Web Audio node is connected
+  });
+  test("tryToConnect()", () => {
+    expect(oscNode.props.node).toBeDefined();
+    expect(oscNode.props.internal).toBeDefined();
+  });
+  test("tryToConnectTo()", () => {
+    oscNode.tryToConnectTo("gain");
+    oscNode.tryToConnectTo("freq");
+    oscNode.tryToConnectTo("default");
+  });
+  test("onDragHandler()", () => {
+    oscNode.onDragHandler();
   });
 });

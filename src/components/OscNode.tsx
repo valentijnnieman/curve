@@ -32,9 +32,9 @@ class OscNode extends React.Component<NodeProps> {
   freqInput: HTMLInputElement;
   typeInput: HTMLInputElement;
 
-  gainInputElement: HTMLSpanElement;
-  freqInputElement: HTMLSpanElement;
-  outputElement: HTMLSpanElement;
+  gainInputElement: HTMLDivElement;
+  freqInputElement: HTMLDivElement;
+  outputElement: HTMLDivElement;
 
   constructor(props: NodeProps) {
     super(props);
@@ -178,15 +178,13 @@ class OscNode extends React.Component<NodeProps> {
                 : "io-element"
             }
             onClick={() => this.tryToConnectTo("gain")}
+            ref={ref => {
+              this.gainInputElement = ref as HTMLDivElement;
+            }}
           >
             <div style={{ position: "relative" }}>
               <span className="tooltip">Input: gain</span>
             </div>
-            <span
-              ref={ref => {
-                this.gainInputElement = ref as HTMLSpanElement;
-              }}
-            />
           </div>
           <div
             className={
@@ -195,13 +193,10 @@ class OscNode extends React.Component<NodeProps> {
                 : "io-element io-element--freq"
             }
             onClick={() => this.tryToConnectTo("freq")}
-          >
-            <span
-              ref={ref => {
-                this.freqInputElement = ref as HTMLSpanElement;
-              }}
-            />
-          </div>
+            ref={ref => {
+              this.freqInputElement = ref as HTMLDivElement;
+            }}
+          />
           <div className="card-content">
             <Toggle
               onClick={this.toggleOsc}
@@ -242,7 +237,7 @@ class OscNode extends React.Component<NodeProps> {
             }
             onClick={this.tryToConnect}
             ref={ref => {
-              this.outputElement = ref as HTMLSpanElement;
+              this.outputElement = ref as HTMLDivElement;
             }}
           />
         </div>
