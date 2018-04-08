@@ -1,0 +1,13 @@
+sudo: false
+language: node_js
+node_js:
+  - stable
+script: 
+  - npm test
+after_success:
+  - npm run report-coverage
+deploy:
+  provider: heroku
+  api_key:
+    secure: "7b168d9e-4dfa-4514-ad23-b666661c5d89"
+  app: curve-visual

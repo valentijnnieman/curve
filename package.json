@@ -29,8 +29,10 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "test": "nyc ./node_modules/.bin/ava -v",
+    "eject": "react-scripts-ts eject",
+    "report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
+    "standard": "standard index.js"
   },
   "devDependencies": {
     "@types/jest": "^22.2.0",
@@ -43,6 +45,17 @@
     "redux-mock-store": "^1.5.1",
     "tslint-config-prettier": "^1.10.0",
     "typescript": "^2.7.2",
-    "web-audio-test-api": "^0.5.2"
+    "web-audio-test-api": "^0.5.2",
+    "ava": "^0.16.0",
+    "co-exec": "^1.0",
+    "codecov": "^1.0.1",
+    "ghooks": "^1.2.4",
+    "nyc": "^10.0.0",
+    "standard": "^8.4.0"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run standard"
+    }
   }
 }
