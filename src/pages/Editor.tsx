@@ -169,12 +169,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
       }
     }
 
-    // disconnect internal
     internal.gain.disconnect();
   };
   tryToConnect = (
     node: NodeDataObject | GainDataObject,
-    internal: InternalObject,
+    internal: InternalObject | InternalGainObject,
     el: DOMRect
   ) => {
     // called from node that wants to connect it's output
@@ -197,34 +196,36 @@ class Editor extends React.Component<EditorProps, EditorState> {
     el: DOMRect
   ) => {
     // called form node that wants to be connected to
-    this.setState(
-      {
-        nodeToConnectTo: node,
-        outputToConnectTo: output,
-        outputType: outputType,
-        lineTo: el
-      },
-      () => {
-        // when done setting state
-        if (
-          (this.state.nodeToConnect as NodeDataObject | GainDataObject).id ===
-          (this.state.nodeToConnectTo as NodeDataObject | GainDataObject).id
-        ) {
-          // let's not connect output to input!
-          this.setState({
-            wantsToConnect: false,
-            nodeToConnect: undefined,
-            nodeToConnectTo: undefined,
-            internalToConnect: undefined,
-            outputToConnectTo: undefined,
-            lineFrom: undefined,
-            lineTo: undefined
-          });
-        } else {
-          this.testConnect();
+    if (this.state.wantsToConnect) {
+      this.setState(
+        {
+          nodeToConnectTo: node,
+          outputToConnectTo: output,
+          outputType: outputType,
+          lineTo: el
+        },
+        () => {
+          // when done setting state
+          if (
+            (this.state.nodeToConnect as NodeDataObject | GainDataObject).id ===
+            (this.state.nodeToConnectTo as NodeDataObject | GainDataObject).id
+          ) {
+            // let's not connect output to input!
+            this.setState({
+              wantsToConnect: false,
+              nodeToConnect: undefined,
+              nodeToConnectTo: undefined,
+              internalToConnect: undefined,
+              outputToConnectTo: undefined,
+              lineFrom: undefined,
+              lineTo: undefined
+            });
+          } else {
+            this.testConnect();
+          }
         }
-      }
-    );
+      );
+    }
   };
   connectToSpeakers = (e: any) => {
     const { nodeToConnect } = this.state;
