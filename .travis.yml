@@ -1,11 +1,11 @@
 sudo: false
 language: node_js
 node_js:
-  - stable
-script: 
-  - npm test
+- stable
+script:
+- npm test
 deploy:
   provider: heroku
-  api_key:
-    secure: "7b168d9e-4dfa-4514-ad23-b666661c5d89"
   app: curve-visual
+  api_key:
+    secure: M5ohXbkdKg29wE+zmCqWo4Z/2mEStD/H3fVD+pAqs/GqaZC+awsCholf9VIP+uxJm28/UGPsq0uwwVaqP0pOwNxdBAtg03zbw0HBnLIo4KkrWflSFuwCa0NvjUjjo17ChxqQWlYX1BAAIEKG4238c5UuvBw6WXOYZgx8vZSQ7grrsg5HMbyE/hvW6oBRAeDokcbvZeQEUzWf5ixTwQTwpH+KChLOWjJi8UaMaYzwkqiVgeiXY+6wF4E7CTLPGuLjJCXYr47W+kw6xlkD6WLlUz26RT+V6m3fWapEilK9PU98fXfnp0YU8D9Q8r10IFpylnVRxVC5X+keUEhsSm4Q4RNkk5Fl4leMrTtca0fVD6/u7W5jzaLdoGxCFEZPXk1HJRJ6k8BnecGqt2LqLPjJDImtsAdU6zNQ6pTtx4nqrI3R0Y3ABA9I+ZjyObX8k3J6b4UBGA0sHI4KXmTQLPNLA8htN9g1F+Keaul1xoNtEYIuKBKx/YzjhT1mqw2IJFKppyJlvBrxyG2/lGDyri/Eo8xqQO0OpXnF+NExYZ8hCRKv27lS+a3NsSJlWb3WzHsVOGWDVeEv23m/y8qf2ND1/rOSlwh5w5Iui2r1Qst3X8VSWyIsaLqhISHxnLTWOUyG4qyWqAMORdz34tSSK6v+WRbe6zoUY5nRBQTXiUUqvD0=
