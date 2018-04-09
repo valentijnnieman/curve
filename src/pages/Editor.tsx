@@ -113,6 +113,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this.props.updateNode(updatedNodeTo);
     }
     // we're done connecting!
+    this.stopTryingToConnect();
+  };
+  stopTryingToConnect = () => {
     this.setState({
       wantsToConnect: false,
       nodeToConnect: undefined,
@@ -211,15 +214,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
             (this.state.nodeToConnectTo as NodeDataObject | GainDataObject).id
           ) {
             // let's not connect output to input!
-            this.setState({
-              wantsToConnect: false,
-              nodeToConnect: undefined,
-              nodeToConnectTo: undefined,
-              internalToConnect: undefined,
-              outputToConnectTo: undefined,
-              lineFrom: undefined,
-              lineTo: undefined
-            });
+            this.stopTryingToConnect();
           } else {
             this.testConnect();
           }
@@ -257,11 +252,17 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.lines = drawConnectionLines(this.props.nodeData);
     this.code = genWACode(this.props.nodeData, this._INTERNALS);
   }
-  onMouseMove = (e: React.MouseEvent<SVGGElement>) => {
+  onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     this.setState({
-      mouseX: e.screenX,
+      mouseX: e.pageX,
       mouseY: e.pageY
     });
+  };
+  stopMouseLine = (e: React.MouseEvent<SVGElement>) => {
+    if (this.state.wantsToConnect) {
+      // if we click anywhere that's not an input, we stop trying to connect
+      this.stopTryingToConnect();
+    }
   };
 
   render() {
@@ -330,8 +331,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
       );
     }
     return (
-      <div>
-        <svg className="grid-svg" onMouseMove={e => this.onMouseMove(e)}>
+      <div onMouseMove={e => this.onMouseMove(e)}>
+        <svg className="grid-svg" onClick={e => this.stopMouseLine(e)}>
           {lineElements}
           {lineToMouse}
         </svg>

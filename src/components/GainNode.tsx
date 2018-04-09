@@ -115,13 +115,10 @@ class GainNode extends React.Component<NodeProps> {
                 : "io-element"
             }
             onClick={this.tryToConnectTo}
-          >
-            <span
-              ref={ref => {
-                this.gainInputElement = ref as HTMLSpanElement;
-              }}
-            />
-          </div>
+            ref={ref => {
+              this.gainInputElement = ref as HTMLDivElement;
+            }}
+          />
           <div className="card-content">
             <form>
               <TextField

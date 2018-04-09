@@ -181,11 +181,7 @@ class OscNode extends React.Component<NodeProps> {
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
             }}
-          >
-            <div style={{ position: "relative" }}>
-              <span className="tooltip">Input: gain</span>
-            </div>
-          </div>
+          />
           <div
             className={
               this.props.node.hasFreqInput
