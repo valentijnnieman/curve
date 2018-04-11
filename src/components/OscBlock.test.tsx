@@ -5,8 +5,8 @@ import * as Adapter from "enzyme-adapter-react-16";
 import "web-audio-test-api";
 import { audioCtx, mockNodeData } from "../lib/helpers/Mocks";
 import { buildInternals } from "../lib/helpers/Editor";
-import { NodeDataObject, GainDataObject } from "../types/nodeObject";
-import { InternalObject, InternalGainObject } from "../types/internalObject";
+import { OscDataObject, GainDataObject } from "../types/nodeObject";
+import { InternalOscObject, InternalGainObject } from "../types/internalObject";
 // import ComposedOscBlock from "./OscBlock";
 import { OscBlock } from "./OscBlock";
 // import { BlockProps } from "../types/blockProps";
@@ -16,17 +16,17 @@ import { MuiThemeProvider } from "material-ui/styles";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("<OscBlock />", () => {
-  const internals: Array<InternalObject | InternalGainObject> = [];
+  const internals: Array<InternalOscObject | InternalGainObject> = [];
   const builtInternals = buildInternals(
     mockNodeData,
     audioCtx,
-    (node: NodeDataObject | GainDataObject) => {
+    (node: OscDataObject | GainDataObject) => {
       mockNodeData[node.id] = node;
     },
     internals
   );
-  const nodeInstance = mockNodeData[0] as NodeDataObject;
-  const internalInstance = builtInternals[0] as InternalObject;
+  const nodeInstance = mockNodeData[0] as OscDataObject;
+  const internalInstance = builtInternals[0] as InternalOscObject;
   const MockBlock = mount(
     <MuiThemeProvider>
       <OscBlock
@@ -35,7 +35,7 @@ describe("<OscBlock />", () => {
         internal={internalInstance}
         allInternals={builtInternals}
         tryToConnectTo={(
-          node: NodeDataObject,
+          node: OscDataObject,
           outputToConnectTo: AudioParam,
           outputType: string,
           inputElement: DOMRect
@@ -59,12 +59,12 @@ describe("<OscBlock />", () => {
           }
         }}
         canConnect={false}
-        updateNode={(node: NodeDataObject | GainDataObject) => {
+        updateNode={(node: OscDataObject | GainDataObject) => {
           // We're testing the actual redux action elsewhere
           // const store = mockStore(mockNodeData);
           // mockStore.dispatch(updateNode(node));
-          nodeInstance.running = (node as NodeDataObject).running;
-          nodeInstance.freq = (node as NodeDataObject).freq;
+          nodeInstance.running = (node as OscDataObject).running;
+          nodeInstance.freq = (node as OscDataObject).freq;
         }}
         audioCtx={audioCtx}
         connectToAnalyser={jest.fn()}

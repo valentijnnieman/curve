@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { NodeDataObject, GainDataObject } from "../../types/nodeObject";
+import { OscDataObject, GainDataObject } from "../../types/nodeObject";
 import {
   BlockProps,
   OscBlockProps,
@@ -35,13 +35,13 @@ export const composedBlock = (
         this.props.node.hasInputFrom.map(input => {
           const inputFromNode = this.props.allNodes[input];
           if (inputFromNode.connectedToType === "gain") {
-            const updatedNode: GainDataObject | NodeDataObject = {
+            const updatedNode: GainDataObject | OscDataObject = {
               ...inputFromNode,
               connectedToEl: gainInputElement
             };
             this.props.updateNode(updatedNode);
           } else if (inputFromNode.connectedToType === "freq") {
-            const updatedNode: GainDataObject | NodeDataObject = {
+            const updatedNode: GainDataObject | OscDataObject = {
               ...inputFromNode,
               connectedToEl: freqInputElement
             };
@@ -51,7 +51,7 @@ export const composedBlock = (
       }
 
       if (this.props.node.connected) {
-        const updateSelf: NodeDataObject | GainDataObject = {
+        const updateSelf: OscDataObject | GainDataObject = {
           ...this.props.node,
           connectedFromEl: outputElement
         };

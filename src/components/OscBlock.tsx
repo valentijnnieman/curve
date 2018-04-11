@@ -5,13 +5,13 @@ import Toggle from "material-ui/Toggle";
 import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
-import { NodeDataObject } from "../types/nodeObject";
+import { OscDataObject } from "../types/nodeObject";
 
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
 
 import "./ui/Card.css";
-import "./Node.css";
+import "./Block.css";
 import { Analyser } from "./Analyser";
 
 import { OscBlockProps } from "../types/blockProps";
@@ -84,10 +84,10 @@ export class OscBlock extends React.Component<OscBlockProps> {
     this.props.internal.oscillator.frequency.setValueAtTime(e.target.value, 0);
 
     // update node info in store
-    const updatedNode: NodeDataObject = {
+    const updatedNode: OscDataObject = {
       ...this.props.node,
       freq: e.target.value
-    } as NodeDataObject;
+    } as OscDataObject;
     this.props.updateNode(updatedNode);
   };
   handleTypeChange = (e: any, index: any, value: any) => {
@@ -95,10 +95,10 @@ export class OscBlock extends React.Component<OscBlockProps> {
     this.props.internal.oscillator.type = value;
 
     // update node info in store
-    const updatedNode: NodeDataObject = {
+    const updatedNode: OscDataObject = {
       ...this.props.node,
       type: value
-    } as NodeDataObject;
+    } as OscDataObject;
     this.props.updateNode(updatedNode);
   };
   render() {

@@ -1,4 +1,4 @@
-import { NodeDataObject, GainDataObject } from "../../types/nodeObject";
+import { OscDataObject, GainDataObject } from "../../types/nodeObject";
 
 const configureMockStore = require("redux-mock-store"); // Prevent Ts warning.
 
@@ -17,7 +17,7 @@ export const inputDOMRect = {
   width: 200,
   height: 200
 } as DOMRect;
-export const mockNodeData: Array<NodeDataObject | GainDataObject> = [
+export const mockNodeData: Array<OscDataObject | GainDataObject> = [
   {
     id: 0,
     type: "sine" as OscillatorType,

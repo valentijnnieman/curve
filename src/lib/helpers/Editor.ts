@@ -1,13 +1,16 @@
-import { NodeDataObject, GainDataObject } from "../../types/nodeObject";
-import { InternalObject, InternalGainObject } from "../../types/internalObject";
+import { OscDataObject, GainDataObject } from "../../types/nodeObject";
+import {
+  InternalOscObject,
+  InternalGainObject
+} from "../../types/internalObject";
 import { Line } from "../../types/lineObject";
 
 // builds internal objects from nodeData used with web audio api
 export const buildInternals = (
-  nodeData: Array<NodeDataObject | GainDataObject>,
+  nodeData: Array<OscDataObject | GainDataObject>,
   audioCtx: AudioContext,
-  updateNode: (node: NodeDataObject | GainDataObject) => void,
-  internals: Array<InternalObject | InternalGainObject>
+  updateNode: (node: OscDataObject | GainDataObject) => void,
+  internals: Array<InternalOscObject | InternalGainObject>
 ) => {
   nodeData.map((node, index) => {
     if (node.hasInternal) {
@@ -49,7 +52,7 @@ export const buildInternals = (
 
 // draws lines between connected nodes
 export const drawConnectionLines = (
-  nodeData: Array<NodeDataObject | GainDataObject>
+  nodeData: Array<OscDataObject | GainDataObject>
 ) => {
   let allNewLines: Array<Line> = [];
   nodeData.map(node => {
@@ -68,8 +71,8 @@ export const drawConnectionLines = (
 
 // Generates web audio code from internals (experimental)
 export const genWACode = (
-  nodeData: Array<NodeDataObject | GainDataObject>,
-  internals: Array<InternalObject | InternalGainObject>
+  nodeData: Array<OscDataObject | GainDataObject>,
+  internals: Array<InternalOscObject | InternalGainObject>
 ) => {
   let jsString: string =
       "const audioCtx = new AudioContext(); // define audio context\n\n",

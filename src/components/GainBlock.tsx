@@ -5,7 +5,7 @@ import TextField from "material-ui/TextField";
 import Draggable from "react-draggable";
 
 import "./ui/Card.css";
-import "./Node.css";
+import "./Block.css";
 import { Analyser } from "./Analyser";
 
 import { GainDataObject } from "../types/nodeObject";

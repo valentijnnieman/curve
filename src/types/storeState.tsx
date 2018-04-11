@@ -1,5 +1,5 @@
-import { NodeDataObject, GainDataObject } from "../types/nodeObject";
+import { OscDataObject, GainDataObject } from "../types/nodeObject";
 
 export interface StoreState {
-  nodeData: Array<NodeDataObject | GainDataObject>;
+  nodeData: Array<OscDataObject | GainDataObject>;
 }

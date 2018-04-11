@@ -1,4 +1,4 @@
-export interface NodeDataObject {
+export interface OscDataObject {
   id: number;
   type: OscillatorType;
   freq: number;
