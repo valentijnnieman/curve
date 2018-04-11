@@ -189,7 +189,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       wantsToConnect: true,
       nodeToConnect: node,
       internalToConnect: internal,
-      lineFrom: el
+      lineFrom: el,
+      mouseX: el.x,
+      mouseY: el.y
     });
   };
   tryToConnectTo = (
