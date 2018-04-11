@@ -1,4 +1,4 @@
-export interface InternalObject {
+export interface InternalOscObject {
   oscillator: OscillatorNode;
   gain: GainNode;
   analyser: AnalyserNode;

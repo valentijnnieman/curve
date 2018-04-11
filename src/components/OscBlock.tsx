@@ -5,30 +5,19 @@ import Toggle from "material-ui/Toggle";
 import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
-import { NodeDataObject, GainDataObject } from "../types/nodeObject";
-import { InternalObject, InternalGainObject } from "../types/internalObject";
+import { OscDataObject } from "../types/nodeObject";
 
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
 
 import "./ui/Card.css";
-import "./Node.css";
+import "./Block.css";
 import { Analyser } from "./Analyser";
 
-interface NodeProps {
-  node: NodeDataObject;
-  allNodes: Array<NodeDataObject | GainDataObject>;
-  internal: InternalObject;
-  allInternals: Array<InternalObject | InternalGainObject>;
-  tryToConnect: any;
-  tryToConnectTo: any;
-  canConnect: boolean;
-  updateNode: (node: NodeDataObject | GainDataObject) => void;
-  audioCtx: AudioContext;
-}
-class OscNode extends React.Component<NodeProps> {
-  analyser: AnalyserNode;
+import { OscBlockProps } from "../types/blockProps";
+import { composedBlock } from "../lib/hoc/Block";
 
+export class OscBlock extends React.Component<OscBlockProps> {
   freqInput: HTMLInputElement;
   typeInput: HTMLInputElement;
 
@@ -36,7 +25,7 @@ class OscNode extends React.Component<NodeProps> {
   freqInputElement: HTMLDivElement;
   outputElement: HTMLDivElement;
 
-  constructor(props: NodeProps) {
+  constructor(props: OscBlockProps) {
     super(props);
 
     this.props.internal.oscillator.connect(this.props.internal.gain);
@@ -50,7 +39,7 @@ class OscNode extends React.Component<NodeProps> {
         // window.console.log(e);
       }
       internal.gain.gain.value = 1;
-      this.connectInternal();
+      this.props.connectInternal();
       this.props.updateNode({
         ...this.props.node,
         running: true
@@ -63,25 +52,6 @@ class OscNode extends React.Component<NodeProps> {
         running: false
       });
     }
-  };
-  connectToAnalyser = () => {
-    this.props.internal.gain.connect(this.props.internal.analyser);
-  };
-
-  connectInternal = () => {
-    const { node, internal } = this.props;
-    internal.gain.disconnect();
-    this.connectToAnalyser();
-    if (node.output !== undefined) {
-      internal.gain.connect(node.output as AudioParam);
-    }
-  };
-  tryToConnect = () => {
-    this.props.tryToConnect(
-      this.props.node,
-      this.props.internal,
-      this.outputElement.getBoundingClientRect()
-    );
   };
 
   tryToConnectTo = (outputType: string) => {
@@ -106,35 +76,7 @@ class OscNode extends React.Component<NodeProps> {
       inputElement
     );
   };
-  onDragHandler = () => {
-    // determine if output and/or input is connected
-    if (this.props.node.hasInputFrom.length > 0) {
-      this.props.node.hasInputFrom.map(input => {
-        const inputFromNode = this.props.allNodes[input];
-        if (inputFromNode.connectedToType === "gain") {
-          const updatedNode: GainDataObject | NodeDataObject = {
-            ...inputFromNode,
-            connectedToEl: this.gainInputElement.getBoundingClientRect() as DOMRect
-          };
-          this.props.updateNode(updatedNode);
-        } else if (inputFromNode.connectedToType === "freq") {
-          const updatedNode: GainDataObject | NodeDataObject = {
-            ...inputFromNode,
-            connectedToEl: this.freqInputElement.getBoundingClientRect() as DOMRect
-          };
-          this.props.updateNode(updatedNode);
-        }
-      });
-    }
 
-    if (this.props.node.connected) {
-      const updateSelf: NodeDataObject = {
-        ...this.props.node,
-        connectedFromEl: this.outputElement.getBoundingClientRect() as DOMRect
-      };
-      this.props.updateNode(updateSelf);
-    }
-  };
   handleFreqChange = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
@@ -142,10 +84,10 @@ class OscNode extends React.Component<NodeProps> {
     this.props.internal.oscillator.frequency.setValueAtTime(e.target.value, 0);
 
     // update node info in store
-    const updatedNode: NodeDataObject = {
+    const updatedNode: OscDataObject = {
       ...this.props.node,
       freq: e.target.value
-    };
+    } as OscDataObject;
     this.props.updateNode(updatedNode);
   };
   handleTypeChange = (e: any, index: any, value: any) => {
@@ -153,23 +95,24 @@ class OscNode extends React.Component<NodeProps> {
     this.props.internal.oscillator.type = value;
 
     // update node info in store
-    const updatedNode: NodeDataObject = {
+    const updatedNode: OscDataObject = {
       ...this.props.node,
       type: value
-    };
+    } as OscDataObject;
     this.props.updateNode(updatedNode);
   };
-  componentWillReceiveProps(nextProps: NodeProps) {
-    if (this.props.node.output !== nextProps.node.output) {
-      this.props = nextProps;
-      this.connectInternal();
-    } else {
-      this.props = nextProps;
-    }
-  }
   render() {
     return (
-      <Draggable onDrag={this.onDragHandler} cancel="input">
+      <Draggable
+        onDrag={() => {
+          this.props.onDragHandler(
+            this.gainInputElement.getBoundingClientRect() as DOMRect,
+            this.outputElement.getBoundingClientRect() as DOMRect,
+            this.freqInputElement.getBoundingClientRect() as DOMRect
+          );
+        }}
+        cancel="input"
+      >
         <div className="card">
           <div
             className={
@@ -231,7 +174,11 @@ class OscNode extends React.Component<NodeProps> {
                 ? "io-element io-element--right io-element--active"
                 : "io-element io-element--right"
             }
-            onClick={this.tryToConnect}
+            onClick={() =>
+              this.props.tryToConnect(
+                this.outputElement.getBoundingClientRect() as DOMRect
+              )
+            }
             ref={ref => {
               this.outputElement = ref as HTMLDivElement;
             }}
@@ -242,4 +189,4 @@ class OscNode extends React.Component<NodeProps> {
   }
 }
 
-export default OscNode;
+export default composedBlock(OscBlock);

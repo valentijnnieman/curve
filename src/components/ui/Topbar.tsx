@@ -7,7 +7,7 @@ import { joyrideSteps } from "../../lib/joyrideSteps";
 
 import { connect } from "react-redux";
 
-import { NodeDataObject, GainDataObject } from "../../types/nodeObject";
+import { OscDataObject, GainDataObject } from "../../types/nodeObject";
 import { createNode } from "../../actions/node";
 import { Dropdown } from "./Dropdown";
 
@@ -20,7 +20,7 @@ interface TopbarState {
 }
 
 interface TopbarProps {
-  createNode: (node: NodeDataObject | GainDataObject) => void;
+  createNode: (node: OscDataObject | GainDataObject) => void;
 }
 
 class Topbar extends React.Component<TopbarProps, TopbarState> {
@@ -60,7 +60,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    createNode: (node: NodeDataObject | GainDataObject) =>
+    createNode: (node: OscDataObject | GainDataObject) =>
       dispatch(createNode(node))
   };
 };
