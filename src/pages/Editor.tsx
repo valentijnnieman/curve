@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import "./Editor.css";
-import OscNode from "../components/OscNode";
+import OscBlock from "../components/OscBlock";
 import GainNode from "../components/GainNode";
 import { Code } from "../components/ui/Code";
 // import OutputNode from "../components/OutputNode";
@@ -253,10 +253,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.code = genWACode(this.props.nodeData, this._INTERNALS);
   }
   onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    this.setState({
-      mouseX: e.pageX,
-      mouseY: e.pageY
-    });
+    if (this.state.wantsToConnect) {
+      this.setState({
+        mouseX: e.pageX,
+        mouseY: e.pageY
+      });
+    }
   };
   stopMouseLine = (e: React.MouseEvent<SVGElement>) => {
     if (this.state.wantsToConnect) {
@@ -270,7 +272,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       (node: NodeDataObject | GainDataObject, index: number) => {
         if ("freq" in node) {
           return (
-            <OscNode
+            <OscBlock
               key={index}
               node={node}
               allNodes={this.props.nodeData}
