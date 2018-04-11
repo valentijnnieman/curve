@@ -7,10 +7,6 @@ export const composedBlock = (
   BlockToCompose: React.ComponentClass<ComposedBlockProps>
 ) => {
   return class extends React.Component<BlockProps> {
-    gainInputElement: HTMLDivElement;
-    freqInputElement: HTMLDivElement;
-    outputElement: HTMLDivElement;
-
     constructor(props: BlockProps) {
       super(props);
     }
@@ -55,10 +51,17 @@ export const composedBlock = (
       if (this.props.node.connected) {
         const updateSelf: NodeDataObject = {
           ...this.props.node,
-          connectedFromEl: this.outputElement.getBoundingClientRect() as DOMRect
+          connectedFromEl: outputElement
         };
         this.props.updateNode(updateSelf);
       }
+    };
+    tryToConnect = (outputElement: DOMRect) => {
+      this.props.tryToConnect(
+        this.props.node,
+        this.props.internal,
+        outputElement
+      );
     };
     componentWillReceiveProps(nextProps: BlockProps) {
       if (this.props.node.output !== nextProps.node.output) {
@@ -71,17 +74,10 @@ export const composedBlock = (
     render() {
       return (
         <BlockToCompose
-          node={this.props.node}
-          allNodes={this.props.allNodes}
-          internal={this.props.internal}
-          allInternals={this.props.allInternals}
-          tryToConnect={this.props.tryToConnect}
-          tryToConnectTo={this.props.tryToConnectTo}
-          canConnect={this.props.canConnect}
-          updateNode={this.props.updateNode}
-          audioCtx={this.props.audioCtx}
+          {...this.props}
           connectToAnalyser={this.connectToAnalyser}
           connectInternal={this.connectInternal}
+          tryToConnect={this.tryToConnect}
           onDragHandler={this.onDragHandler}
         />
       );

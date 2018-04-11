@@ -31,7 +31,6 @@ export class OscBlock extends React.Component<ComposedBlockProps> {
     this.props.internal.oscillator.connect(this.props.internal.gain);
   }
   toggleOsc = () => {
-    window.console.log("gotcha", this.props);
     const internal = this.props.internal;
     if (!this.props.node.running) {
       try {
@@ -54,13 +53,6 @@ export class OscBlock extends React.Component<ComposedBlockProps> {
       });
     }
   };
-  tryToConnect = () => {
-    this.props.tryToConnect(
-      this.props.node,
-      this.props.internal,
-      this.outputElement.getBoundingClientRect()
-    );
-  };
 
   tryToConnectTo = (outputType: string) => {
     let outputToConnectTo, inputElement;
@@ -77,6 +69,7 @@ export class OscBlock extends React.Component<ComposedBlockProps> {
         outputToConnectTo = this.props.internal.gain.gain;
         inputElement = this.gainInputElement.getBoundingClientRect();
     }
+    window.console.log("outputToConnectoTo in OscBlock: ", outputToConnectTo);
     this.props.tryToConnectTo(
       this.props.node,
       outputToConnectTo,
@@ -182,7 +175,11 @@ export class OscBlock extends React.Component<ComposedBlockProps> {
                 ? "io-element io-element--right io-element--active"
                 : "io-element io-element--right"
             }
-            onClick={this.tryToConnect}
+            onClick={() =>
+              this.props.tryToConnect(
+                this.outputElement.getBoundingClientRect() as DOMRect
+              )
+            }
             ref={ref => {
               this.outputElement = ref as HTMLDivElement;
             }}

@@ -2,9 +2,6 @@ import { NodeDataObject, GainDataObject } from "../../types/nodeObject";
 
 const configureMockStore = require("redux-mock-store"); // Prevent Ts warning.
 
-const middleWare: any = [];
-export const mockStore = configureMockStore(middleWare);
-
 export const audioCtx = new AudioContext();
 
 const outputDOMRect = { x: 100, y: 100, width: 100, height: 100 } as DOMRect;
@@ -42,3 +39,8 @@ export const mockNodeData: Array<NodeDataObject | GainDataObject> = [
     connectedFromEl: undefined
   }
 ];
+
+const middleWare: any = [];
+export const mockStore = configureMockStore(middleWare, {
+  nodeData: mockNodeData
+});

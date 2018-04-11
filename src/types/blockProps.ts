@@ -16,6 +16,7 @@ export interface BlockProps {
 export interface ComposedBlockProps extends BlockProps {
   connectToAnalyser: () => void;
   connectInternal: () => void;
+  tryToConnect: (outputElement: DOMRect) => void;
   onDragHandler: (
     gainInputElement: DOMRect,
     outputElement: DOMRect,
