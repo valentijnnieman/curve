@@ -74,7 +74,6 @@ export const composedBlock = (
       }
     }
     render() {
-      window.console.log(typeof BlockToCompose.propTypes);
       return (
         <BlockToCompose
           {...this.props as OscBlockProps | GainBlockProps}
