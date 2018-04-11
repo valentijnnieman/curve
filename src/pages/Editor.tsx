@@ -1,10 +1,10 @@
 import * as React from "react";
 
 import "./Editor.css";
-import OscBlock from "../components/OscBlock";
-import GainBlock from "../components/GainBlock";
+import OscBlock from "../components/block/OscBlock";
+import GainBlock from "../components/block/GainBlock";
 import { Code } from "../components/ui/Code";
-// import OutputNode from "../components/OutputNode";
+// import OutputNode from "../components/block/OutputNode";
 import { InternalOscObject, InternalGainObject } from "../types/internalObject";
 import { OscDataObject, GainDataObject } from "../types/nodeObject";
 import { Line } from "../types/lineObject";

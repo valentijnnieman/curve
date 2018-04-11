@@ -5,17 +5,17 @@ import Toggle from "material-ui/Toggle";
 import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
-import { OscDataObject } from "../types/nodeObject";
+import { OscDataObject } from "../../types/nodeObject";
 
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
 
-import "./ui/Card.css";
+import "../ui/Card.css";
 import "./Block.css";
-import { Analyser } from "./Analyser";
+import { Analyser } from "../Analyser";
 
-import { OscBlockProps } from "../types/blockProps";
-import { composedBlock } from "../lib/hoc/Block";
+import { OscBlockProps } from "../../types/blockProps";
+import { composedBlock } from "../../lib/hoc/Block";
 
 export class OscBlock extends React.Component<OscBlockProps> {
   freqInput: HTMLInputElement;
@@ -81,14 +81,20 @@ export class OscBlock extends React.Component<OscBlockProps> {
     e.preventDefault();
     e.stopPropagation();
     // set change here so it is instant
-    this.props.internal.oscillator.frequency.setValueAtTime(e.target.value, 0);
+    const newFreq = Number(e.target.value);
+    if (newFreq >= 0 && typeof newFreq === "number") {
+      this.props.internal.oscillator.frequency.setValueAtTime(
+        e.target.value,
+        0
+      );
 
-    // update node info in store
-    const updatedNode: OscDataObject = {
-      ...this.props.node,
-      freq: e.target.value
-    } as OscDataObject;
-    this.props.updateNode(updatedNode);
+      // update node info in store
+      const updatedNode: OscDataObject = {
+        ...this.props.node,
+        freq: e.target.value
+      } as OscDataObject;
+      this.props.updateNode(updatedNode);
+    }
   };
   handleTypeChange = (e: any, index: any, value: any) => {
     // set change here so it is instant
@@ -143,13 +149,14 @@ export class OscBlock extends React.Component<OscBlockProps> {
               thumbSwitchedStyle={{ backgroundColor: "#f50057" }}
               trackSwitchedStyle={{ backgroundColor: "#ff9d9d" }}
             />
-            <form className="node-controls">
+            <form onSubmit={e => e.preventDefault()} className="node-controls">
               <TextField
                 id="freq"
                 floatingLabelText="Frequency"
                 defaultValue={this.props.node.freq}
                 onChange={this.handleFreqChange}
                 className="input"
+                type="number"
               />
               <DropDownMenu
                 className="input"

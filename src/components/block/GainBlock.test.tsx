@@ -3,10 +3,13 @@ import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 
 import "web-audio-test-api";
-import { audioCtx, mockNodeData } from "../lib/helpers/Mocks";
-import { buildInternals } from "../lib/helpers/Editor";
-import { OscDataObject, GainDataObject } from "../types/nodeObject";
-import { InternalOscObject, InternalGainObject } from "../types/internalObject";
+import { audioCtx, mockNodeData } from "../../lib/helpers/Mocks";
+import { buildInternals } from "../../lib/helpers/Editor";
+import { OscDataObject, GainDataObject } from "../../types/nodeObject";
+import {
+  InternalOscObject,
+  InternalGainObject
+} from "../../types/internalObject";
 // import ComposedOscBlock from "./OscBlock";
 import { GainBlock } from "./GainBlock";
 // import { BlockProps } from "../types/blockProps";

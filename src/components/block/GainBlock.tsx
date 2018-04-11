@@ -4,14 +4,14 @@ import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
 
-import "./ui/Card.css";
+import "../ui/Card.css";
 import "./Block.css";
-import { Analyser } from "./Analyser";
+import { Analyser } from "../Analyser";
 
-import { GainDataObject } from "../types/nodeObject";
+import { GainDataObject } from "../../types/nodeObject";
 
-import { GainBlockProps } from "../types/blockProps";
-import { composedBlock } from "../lib/hoc/Block";
+import { GainBlockProps } from "../../types/blockProps";
+import { composedBlock } from "../../lib/hoc/Block";
 
 export class GainBlock extends React.Component<GainBlockProps> {
   analyser: AnalyserNode;
@@ -34,15 +34,18 @@ export class GainBlock extends React.Component<GainBlockProps> {
   handleGainChange = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
-    // set change here so it is instant
-    this.props.internal.gain.gain.value = e.target.value;
+    const newGain = Number(e.target.value);
+    if (newGain >= 0 && typeof newGain === "number") {
+      // set change here so it is instant
+      this.props.internal.gain.gain.value = newGain;
 
-    // update node info in store
-    const updatedNode: GainDataObject = {
-      ...this.props.node,
-      gain: e.target.value
-    };
-    this.props.updateNode(updatedNode);
+      // update node info in store
+      const updatedNode: GainDataObject = {
+        ...this.props.node,
+        gain: e.target.value
+      };
+      this.props.updateNode(updatedNode);
+    }
   };
   render() {
     return (
@@ -68,11 +71,13 @@ export class GainBlock extends React.Component<GainBlockProps> {
             }}
           />
           <div className="card-content">
-            <form>
+            <form onSubmit={e => e.preventDefault()}>
               <TextField
                 floatingLabelText="Gain"
                 defaultValue={this.props.node.gain}
                 onChange={this.handleGainChange}
+                type="number"
+                step={0.1}
                 className="input"
               />
             </form>
