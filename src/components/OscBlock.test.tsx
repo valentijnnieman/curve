@@ -25,12 +25,14 @@ describe("<OscBlock />", () => {
     },
     internals
   );
+  const nodeInstance = mockNodeData[0] as NodeDataObject;
+  const internalInstance = builtInternals[0] as InternalObject;
   const MockBlock = mount(
     <MuiThemeProvider>
       <OscBlock
-        node={mockNodeData[0] as NodeDataObject}
+        node={nodeInstance}
         allNodes={mockNodeData}
-        internal={builtInternals[0] as InternalObject}
+        internal={internalInstance}
         allInternals={builtInternals}
         tryToConnectTo={(
           node: NodeDataObject,
@@ -38,7 +40,6 @@ describe("<OscBlock />", () => {
           outputType: string,
           inputElement: DOMRect
         ) => {
-          window.console.log("outputToConnectoTo in Test: ", outputToConnectTo);
           expect(outputToConnectTo).toBeDefined();
           expect(outputType).toBeDefined();
           expect(inputElement).toBeDefined();
@@ -49,18 +50,21 @@ describe("<OscBlock />", () => {
               break;
             case "freq":
               expect(outputToConnectTo).toEqual(
-                (builtInternals[0] as InternalObject).oscillator.frequency
+                internalInstance.oscillator.frequency
               );
               break;
             default:
-              expect(outputToConnectTo).toEqual(builtInternals[0].gain.gain);
+              expect(outputToConnectTo).toEqual(internalInstance.gain.gain);
               break;
           }
         }}
         canConnect={false}
         updateNode={(node: NodeDataObject | GainDataObject) => {
           // We're testing the actual redux action elsewhere
-          (mockNodeData[0] as NodeDataObject).running = (node as NodeDataObject).running;
+          // const store = mockStore(mockNodeData);
+          // mockStore.dispatch(updateNode(node));
+          nodeInstance.running = (node as NodeDataObject).running;
+          nodeInstance.freq = (node as NodeDataObject).freq;
         }}
         audioCtx={audioCtx}
         connectToAnalyser={jest.fn()}
@@ -71,8 +75,8 @@ describe("<OscBlock />", () => {
     </MuiThemeProvider>
   );
 
-  const MockBlockInstance = MockBlock.instance() as OscBlock;
-  const MockBlockProps = MockBlockInstance.props;
+  const MockBlockInstance = MockBlock.children().instance() as OscBlock;
+  const MockBlockProps = MockBlock.props().children.props;
   test("toggleOsc()", () => {
     expect(MockBlockProps.node.running).toBe(false);
     MockBlockInstance.toggleOsc();
@@ -82,22 +86,13 @@ describe("<OscBlock />", () => {
     expect(MockBlockProps.internal.gain.gain.value).toEqual(0);
     expect(MockBlockProps.node.running).toBe(false);
   });
-  test("connectInternal()", () => {
-    MockBlockProps.node.output = builtInternals[1].gain.gain as AudioParam;
-    MockBlockProps.connectInternal();
-    expect(MockBlockProps.internal.gain.numberOfOutputs).toEqual(1);
-    // not much else to test here, there's no (easy) way of testing if the internal Web Audio node is connected
-  });
-  test("tryToConnect()", () => {
-    expect(MockBlockProps.node).toBeDefined();
-    expect(MockBlockProps.internal).toBeDefined();
-  });
   test("tryToConnectTo()", () => {
     MockBlockInstance.tryToConnectTo("gain");
     MockBlockInstance.tryToConnectTo("freq");
     MockBlockInstance.tryToConnectTo("default");
   });
-  test("onDragHandler()", () => {
-    // expect(MockBlockInstance.gainInputElement).toEqual(1);
+  test("handleFreqChange()", () => {
+    // MockBlockInstance.handleFreqChange(999);
+    // expect(MockBlockInstance.props.node.freq).toEqual(999);
   });
 });

@@ -1,22 +1,24 @@
 import * as React from "react";
 
 import { NodeDataObject, GainDataObject } from "../../types/nodeObject";
-import { BlockProps, ComposedBlockProps } from "../../types/blockProps";
+import {
+  BlockProps,
+  OscBlockProps,
+  GainBlockProps
+} from "../../types/blockProps";
 
 export const composedBlock = (
-  BlockToCompose: React.ComponentClass<ComposedBlockProps>
+  BlockToCompose: React.ComponentClass<OscBlockProps | GainBlockProps>
 ) => {
   return class extends React.Component<BlockProps> {
     constructor(props: BlockProps) {
       super(props);
     }
     connectToAnalyser = () => {
-      window.console.log("connectTOAnalyaser", this.props.internal.analyser);
       this.props.internal.gain.connect(this.props.internal.analyser);
     };
     connectInternal = () => {
       const { node, internal } = this.props;
-      window.console.log("connectinternal", internal);
       internal.gain.disconnect();
       this.connectToAnalyser();
       if (node.output !== undefined) {
@@ -49,7 +51,7 @@ export const composedBlock = (
       }
 
       if (this.props.node.connected) {
-        const updateSelf: NodeDataObject = {
+        const updateSelf: NodeDataObject | GainDataObject = {
           ...this.props.node,
           connectedFromEl: outputElement
         };
@@ -72,9 +74,10 @@ export const composedBlock = (
       }
     }
     render() {
+      window.console.log(typeof BlockToCompose.propTypes);
       return (
         <BlockToCompose
-          {...this.props}
+          {...this.props as OscBlockProps | GainBlockProps}
           connectToAnalyser={this.connectToAnalyser}
           connectInternal={this.connectInternal}
           tryToConnect={this.tryToConnect}

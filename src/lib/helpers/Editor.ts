@@ -54,7 +54,6 @@ export const drawConnectionLines = (
   let allNewLines: Array<Line> = [];
   nodeData.map(node => {
     if (node.connected && node.connectedFromEl && node.connectedToEl) {
-      window.console.log(node.connectedFromEl, node.connectedToEl);
       const newLineCoords = {
         x1: node.connectedFromEl.x + node.connectedFromEl.width / 2,
         y1: node.connectedFromEl.y + node.connectedFromEl.height / 2,

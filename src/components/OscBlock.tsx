@@ -14,10 +14,10 @@ import "./ui/Card.css";
 import "./Node.css";
 import { Analyser } from "./Analyser";
 
-import { ComposedBlockProps } from "../types/blockProps";
+import { OscBlockProps } from "../types/blockProps";
 import { composedBlock } from "../lib/hoc/Block";
 
-export class OscBlock extends React.Component<ComposedBlockProps> {
+export class OscBlock extends React.Component<OscBlockProps> {
   freqInput: HTMLInputElement;
   typeInput: HTMLInputElement;
 
@@ -25,7 +25,7 @@ export class OscBlock extends React.Component<ComposedBlockProps> {
   freqInputElement: HTMLDivElement;
   outputElement: HTMLDivElement;
 
-  constructor(props: ComposedBlockProps) {
+  constructor(props: OscBlockProps) {
     super(props);
 
     this.props.internal.oscillator.connect(this.props.internal.gain);
@@ -69,7 +69,6 @@ export class OscBlock extends React.Component<ComposedBlockProps> {
         outputToConnectTo = this.props.internal.gain.gain;
         inputElement = this.gainInputElement.getBoundingClientRect();
     }
-    window.console.log("outputToConnectoTo in OscBlock: ", outputToConnectTo);
     this.props.tryToConnectTo(
       this.props.node,
       outputToConnectTo,
@@ -88,7 +87,7 @@ export class OscBlock extends React.Component<ComposedBlockProps> {
     const updatedNode: NodeDataObject = {
       ...this.props.node,
       freq: e.target.value
-    };
+    } as NodeDataObject;
     this.props.updateNode(updatedNode);
   };
   handleTypeChange = (e: any, index: any, value: any) => {
@@ -99,7 +98,7 @@ export class OscBlock extends React.Component<ComposedBlockProps> {
     const updatedNode: NodeDataObject = {
       ...this.props.node,
       type: value
-    };
+    } as NodeDataObject;
     this.props.updateNode(updatedNode);
   };
   render() {

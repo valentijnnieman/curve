@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "./Editor.css";
 import OscBlock from "../components/OscBlock";
-import GainNode from "../components/GainNode";
+import GainBlock from "../components/GainBlock";
 import { Code } from "../components/ui/Code";
 // import OutputNode from "../components/OutputNode";
 import { InternalObject, InternalGainObject } from "../types/internalObject";
@@ -287,7 +287,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
           );
         } else {
           return (
-            <GainNode
+            <GainBlock
               key={index}
               node={node}
               allNodes={this.props.nodeData}

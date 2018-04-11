@@ -2,9 +2,9 @@ import { NodeDataObject, GainDataObject } from "../types/nodeObject";
 import { InternalObject, InternalGainObject } from "../types/internalObject";
 
 export interface BlockProps {
-  node: NodeDataObject;
+  node: NodeDataObject | GainDataObject;
   allNodes: Array<NodeDataObject | GainDataObject>;
-  internal: InternalObject;
+  internal: InternalObject | InternalGainObject;
   allInternals: Array<InternalObject | InternalGainObject>;
   tryToConnect: any;
   tryToConnectTo: any;
@@ -13,7 +13,22 @@ export interface BlockProps {
   audioCtx: AudioContext;
 }
 
-export interface ComposedBlockProps extends BlockProps {
+export interface OscBlockProps extends BlockProps {
+  node: NodeDataObject;
+  internal: InternalObject;
+  connectToAnalyser: () => void;
+  connectInternal: () => void;
+  tryToConnect: (outputElement: DOMRect) => void;
+  onDragHandler: (
+    gainInputElement: DOMRect,
+    outputElement: DOMRect,
+    freqInputElement?: DOMRect
+  ) => void;
+}
+
+export interface GainBlockProps extends BlockProps {
+  node: GainDataObject;
+  internal: InternalGainObject;
   connectToAnalyser: () => void;
   connectInternal: () => void;
   tryToConnect: (outputElement: DOMRect) => void;
