@@ -7,18 +7,18 @@ import {
   InternalGainObject
 } from "../../types/internalObject";
 import { Line } from "../../types/lineObject";
-import { audioCtx, mockNodeData } from "./Mocks";
+import { audioCtx, mockNodeData, speakersDOMRect } from "./Mocks";
 
+const internals: Array<InternalOscObject | InternalGainObject> = [];
+const builtInternals = buildInternals(
+  mockNodeData,
+  audioCtx,
+  (node: OscDataObject | GainDataObject) => {
+    // fire updateNode
+  },
+  internals
+);
 describe("buildInternals()", () => {
-  const internals: Array<InternalOscObject | InternalGainObject> = [];
-  const builtInternals = buildInternals(
-    mockNodeData,
-    audioCtx,
-    (node: OscDataObject | GainDataObject) => {
-      // fire updateNode
-    },
-    internals
-  );
   test("internal oscillator has gain", () => {
     const internalToTest: InternalOscObject = builtInternals[0] as InternalOscObject;
     expect(internalToTest.gain).toBeDefined();
@@ -51,15 +51,24 @@ describe("buildInternals()", () => {
 
 describe("drawConnectionLines()", () => {
   test("sets line coordinates correctly", () => {
-    let lines = drawConnectionLines(mockNodeData);
-
-    let fromRect = mockNodeData[0].connectedFromEl as DOMRect;
-    let toRect = mockNodeData[0].connectedToEl as DOMRect;
+    mockNodeData[0].outputs = [
+      {
+        id: 0,
+        destination: builtInternals[1].gain.gain,
+        isConnectedTo: 1,
+        connectedToType: "gain"
+      }
+    ];
+    let lines = drawConnectionLines(mockNodeData, speakersDOMRect);
+    let fromRect = mockNodeData[0].outputDOMRect as DOMRect;
+    let toRect = mockNodeData[1].gainInputDOMRect;
     let expectedLine = {
       x1: fromRect.x + fromRect.width / 2,
       y1: fromRect.y + fromRect.height / 2,
       x2: toRect.x,
-      y2: toRect.y + toRect.height / 2
+      y2: toRect.y + toRect.height / 2,
+      fromBlock: 0,
+      toBlock: 1
     } as Line;
 
     expect(lines.length).toEqual(1);
@@ -67,37 +76,28 @@ describe("drawConnectionLines()", () => {
   });
   test("no lines are drawn if not connected", () => {
     mockNodeData[0].connected = false;
-    let lines = drawConnectionLines(mockNodeData);
+    let lines = drawConnectionLines(mockNodeData, speakersDOMRect);
 
     expect(lines.length).toEqual(0);
   });
-  test("no lines are drawn if connected but no connectedFromEl", () => {
-    mockNodeData[0].connected = true;
-    mockNodeData[0].connectedFromEl = undefined;
-    let lines = drawConnectionLines(mockNodeData);
+  // test("no lines are drawn if connected but no connectedFromEl", () => {
+  //   mockNodeData[0].connected = true;
+  //   mockNodeData[0].connectedFromEl = undefined;
+  //   let lines = drawConnectionLines(mockNodeData);
 
-    expect(lines.length).toEqual(0);
-  });
-  test("no lines are drawn if connected but no connectedToEl", () => {
-    mockNodeData[0].connected = true;
-    mockNodeData[0].connectedToEl = undefined;
-    let lines = drawConnectionLines(mockNodeData);
+  //   expect(lines.length).toEqual(0);
+  // });
+  // test("no lines are drawn if connected but no connectedToEl", () => {
+  //   mockNodeData[0].connected = true;
+  //   mockNodeData[0].connectedToEl = undefined;
+  //   let lines = drawConnectionLines(mockNodeData);
 
-    expect(lines.length).toEqual(0);
-  });
+  //   expect(lines.length).toEqual(0);
+  // });
 });
 
 describe("genWACode()", () => {
   test("it generates Web Audio code", () => {
-    const internals: Array<InternalOscObject | InternalGainObject> = [];
-    const builtInternals = buildInternals(
-      mockNodeData,
-      audioCtx,
-      (node: OscDataObject | GainDataObject) => {
-        // fire updateNode
-      },
-      internals
-    );
     const code = genWACode(mockNodeData, builtInternals);
     const expectedCode = `const audioCtx = new AudioContext(); // define audio context
 

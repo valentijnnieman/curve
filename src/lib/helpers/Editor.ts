@@ -19,7 +19,7 @@ export const buildInternals = (
       let gain = audioCtx.createGain();
       gain.gain.value = 1;
       let analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 2048;
+      analyser.fftSize = 1024;
       if ("freq" in node) {
         let oscillator;
         oscillator = audioCtx.createOscillator();
@@ -52,18 +52,42 @@ export const buildInternals = (
 
 // draws lines between connected nodes
 export const drawConnectionLines = (
-  nodeData: Array<OscDataObject | GainDataObject>
+  nodeData: Array<OscDataObject | GainDataObject>,
+  speakersDOMRect: DOMRect
 ) => {
   let allNewLines: Array<Line> = [];
   nodeData.map(node => {
-    if (node.connected && node.connectedFromEl && node.connectedToEl) {
-      const newLineCoords = {
-        x1: node.connectedFromEl.x + node.connectedFromEl.width / 2,
-        y1: node.connectedFromEl.y + node.connectedFromEl.height / 2,
-        x2: node.connectedToEl.x,
-        y2: node.connectedToEl.y + node.connectedToEl.height / 2 // .height not picked up here for some reason
-      };
-      allNewLines.push(newLineCoords);
+    if (node.connected) {
+      node.outputs.map((output, outputId) => {
+        let inputDOMRect;
+        if (output.isConnectedTo === -1) {
+          // if it's smaller than 0 it's connected to the output (speakers)
+          inputDOMRect = speakersDOMRect;
+        } else {
+          switch (output.connectedToType) {
+            case "gain":
+              inputDOMRect = nodeData[output.isConnectedTo].gainInputDOMRect;
+              break;
+            case "freq":
+              inputDOMRect = (nodeData[output.isConnectedTo] as OscDataObject)
+                .freqInputDOMRect;
+              break;
+            default:
+              inputDOMRect = nodeData[output.isConnectedTo].gainInputDOMRect;
+              break;
+          }
+        }
+        const newLineCoords = {
+          x1: node.outputDOMRect.x + node.outputDOMRect.width / 2,
+          y1: node.outputDOMRect.y + node.outputDOMRect.height / 2,
+          x2: inputDOMRect.x,
+          y2: inputDOMRect.y + inputDOMRect.height / 2,
+          fromBlock: node.id,
+          toBlock: output.isConnectedTo,
+          outputId
+        };
+        allNewLines.push(newLineCoords);
+      });
     }
   });
   return allNewLines;
@@ -80,7 +104,7 @@ export const genWACode = (
   internals.map((internal, index) => {
     // get nodeData object for more info like output
     let node = nodeData[index];
-    if ("oscillator" in internal && "freq" in node) {
+    if (node && "oscillator" in internal && "freq" in node) {
       jsString += `// Creating oscillator node
 let osc${index} = audioCtx.createOscillator();
 osc${index}.type = "${internal.oscillator.type}";
@@ -95,23 +119,27 @@ osc${index}.start();`;
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
-          if (node.connectedToType === "gain" && node.isConnectedTo) {
-            if ("gain" in nodeData[node.isConnectedTo]) {
-              connects += `gain${index}.connect(gain${node.isConnectedTo});\n`;
-            } else {
-              connects += `gain${index}.connect(gain${
-                node.isConnectedTo
-              }.gain);\n`;
+          node.outputs.map(output => {
+            if (output.connectedToType === "gain" && output.isConnectedTo) {
+              if ("gain" in nodeData[output.isConnectedTo]) {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                });\n`;
+              } else {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                }.gain);\n`;
+              }
+            } else if (output.connectedToType === "freq") {
+              connects += `gain${index}.connect(osc${
+                output.isConnectedTo
+              }.frequency);\n`;
             }
-          } else if (node.connectedToType === "freq") {
-            connects += `gain${index}.connect(osc${
-              node.isConnectedTo
-            }.frequency);\n`;
-          }
+          });
         }
       }
       jsString += "\n\n";
-    } else if ("gain" in internal && "gain" in node) {
+    } else if (node && "gain" in internal && "gain" in node) {
       jsString += `let gain${index} = audioCtx.createGain();
 gain${index}.gain.value = ${node.gain};`;
       if (node.connected) {
@@ -119,19 +147,23 @@ gain${index}.gain.value = ${node.gain};`;
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
-          if (node.connectedToType === "gain" && node.isConnectedTo) {
-            if ("gain" in nodeData[node.isConnectedTo]) {
-              connects += `gain${index}.connect(gain${node.isConnectedTo});\n`;
-            } else {
-              connects += `gain${index}.connect(gain${
-                node.isConnectedTo
-              }.gain);\n`;
+          node.outputs.map(output => {
+            if (output.connectedToType === "gain" && output.isConnectedTo) {
+              if ("gain" in nodeData[output.isConnectedTo]) {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                });\n`;
+              } else {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                }.gain);\n`;
+              }
+            } else if (output.connectedToType === "freq") {
+              connects += `gain${index}.connect(osc${
+                output.isConnectedTo
+              }.frequency);\n`;
             }
-          } else if (node.connectedToType === "freq") {
-            connects += `gain${index}.connect(osc${
-              node.isConnectedTo
-            }.frequency);\n`;
-          }
+          });
         }
       }
       jsString += "\n\n";

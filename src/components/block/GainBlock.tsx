@@ -21,7 +21,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
 
   constructor(props: GainBlockProps) {
     super(props);
-    // this.connectInternal();
+    this.props.connectInternal();
   }
   tryToConnectTo = () => {
     this.props.tryToConnectTo(
@@ -47,6 +47,16 @@ export class GainBlock extends React.Component<GainBlockProps> {
       this.props.updateNode(updatedNode);
     }
   };
+
+  componentDidMount() {
+    // when component has mounted and refs are set, we update the store
+    const updatedNode: GainDataObject = {
+      ...this.props.node,
+      gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
+      outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect
+    } as GainDataObject;
+    this.props.updateNode(updatedNode);
+  }
   render() {
     return (
       <Draggable

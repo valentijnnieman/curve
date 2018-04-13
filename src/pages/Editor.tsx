@@ -6,7 +6,11 @@ import GainBlock from "../components/block/GainBlock";
 import { Code } from "../components/ui/Code";
 // import OutputNode from "../components/block/OutputNode";
 import { InternalOscObject, InternalGainObject } from "../types/internalObject";
-import { OscDataObject, GainDataObject } from "../types/nodeObject";
+import {
+  OscDataObject,
+  GainDataObject,
+  OutputObject
+} from "../types/nodeObject";
 import { Line } from "../types/lineObject";
 import { StoreState } from "../types/storeState";
 
@@ -48,6 +52,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   _AUDIOCTX: AudioContext;
   _INTERNALS: Array<InternalOscObject | InternalGainObject> = [];
   lines: Array<Line> = [];
+  speakersDOMRect: HTMLDivElement;
   constructor(props: EditorProps) {
     super(props);
     this._AUDIOCTX = new AudioContext(); // define audio context
@@ -66,6 +71,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.code = genWACode(this.props.nodeData, this._INTERNALS);
   }
   checkGain = (outputType: string) => {
+    window.console.log("checkGain", outputType);
     if (outputType === "gain") {
       return true;
     }
@@ -89,12 +95,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
       // update node info in store
       const updatedNode: OscDataObject | GainDataObject = {
         ...nodeToConnect,
-        output: outputToConnectTo,
         connected: true,
-        connectedToType: outputType,
-        isConnectedTo: nodeToConnectTo.id,
-        connectedToEl: this.state.lineTo,
-        connectedFromEl: this.state.lineFrom
+        outputs: [
+          ...nodeToConnect.outputs,
+          {
+            id: nodeToConnect.outputs.length, // TO-DO: find a better solution
+            destination: outputToConnectTo,
+            connectedToType: outputType,
+            isConnectedTo: nodeToConnectTo.id
+          } as OutputObject
+        ]
       };
       this.props.updateNode(updatedNode);
 
@@ -126,50 +136,47 @@ class Editor extends React.Component<EditorProps, EditorState> {
       lineTo: undefined
     });
   };
-  disconnect = (
-    node: OscDataObject | GainDataObject,
-    internal: InternalOscObject | InternalGainObject
-  ) => {
+  disconnect = (fromBlock: number, toBlock: number, outputId: number) => {
     // update node info in store
-    const updatedNode: OscDataObject | GainDataObject = {
-      ...node,
+    const block = this.props.nodeData[fromBlock];
+    const internal = this._INTERNALS[fromBlock];
+    const updatedBlock: OscDataObject | GainDataObject = {
+      ...block,
       connected: false,
-      isConnectedTo: undefined,
-      connectedToType: undefined,
-      connectedToEl: undefined,
-      connectedFromEl: undefined,
       isConnectedToOutput: false,
-      output: undefined
+      outputs: block.outputs.filter(output => output.id !== outputId)
     };
-    this.props.updateNode(updatedNode);
+    this.props.updateNode(updatedBlock);
 
-    // if node is connected to output, there's no node to update (output is not a node)
-    if (!node.isConnectedToOutput) {
+    // if block is connected to output, there's no node to update (output is not a node)
+    if (!block.isConnectedToOutput) {
       // update node that recieves input
-      const nodeToUpdate = this.props.nodeData[node.isConnectedTo as number];
-      if (node.connectedToType === "gain") {
-        const updatedInputNode: OscDataObject | GainDataObject = {
-          ...nodeToUpdate,
-          hasGainInput: false,
-          hasInputFrom: [
-            ...nodeToUpdate.hasInputFrom.filter(
-              input => input !== updatedNode.id
-            )
-          ]
-        };
-        this.props.updateNode(updatedInputNode);
-      } else if (node.connectedToType === "freq") {
-        const updatedInputNode: OscDataObject | GainDataObject = {
-          ...nodeToUpdate,
-          hasFreqInput: false,
-          hasInputFrom: [
-            ...nodeToUpdate.hasInputFrom.filter(
-              input => input !== updatedNode.id
-            )
-          ]
-        };
-        this.props.updateNode(updatedInputNode);
-      }
+      block.outputs.map(output => {
+        const nodeToUpdate = this.props.nodeData[toBlock];
+        if (output.connectedToType === "gain") {
+          const updatedInputNode: OscDataObject | GainDataObject = {
+            ...nodeToUpdate,
+            hasGainInput: false,
+            hasInputFrom: [
+              ...nodeToUpdate.hasInputFrom.filter(
+                input => input !== updatedBlock.id
+              )
+            ]
+          };
+          this.props.updateNode(updatedInputNode);
+        } else if (output.connectedToType === "freq") {
+          const updatedInputNode: OscDataObject | GainDataObject = {
+            ...nodeToUpdate,
+            hasFreqInput: false,
+            hasInputFrom: [
+              ...nodeToUpdate.hasInputFrom.filter(
+                input => input !== updatedBlock.id
+              )
+            ]
+          };
+          this.props.updateNode(updatedInputNode);
+        }
+      });
     }
 
     internal.gain.disconnect();
@@ -182,9 +189,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     // called from node that wants to connect it's output
 
     // if it's already connected, disconnect it!
-    if (node.connected) {
-      this.disconnect(node, internal);
-    }
+    // if (node.connected) {
+    //   this.disconnect(node, internal);
+    // }
     this.setState({
       wantsToConnect: true,
       nodeToConnect: node,
@@ -226,21 +233,30 @@ class Editor extends React.Component<EditorProps, EditorState> {
   };
   connectToSpeakers = (e: any) => {
     const { nodeToConnect } = this.state;
-    this.setState({
-      lineTo: e.target.getBoundingClientRect(),
-      outputToConnectTo: this._AUDIOCTX.destination,
-      speakersAreConnected: true
-    });
-    const updatedNode: OscDataObject | GainDataObject = {
-      ...(nodeToConnect as OscDataObject | GainDataObject),
-      output: this._AUDIOCTX.destination,
-      connected: true,
-      isConnectedToOutput: true,
-      connectedToEl: e.target.getBoundingClientRect(),
-      connectedFromEl: this.state.lineFrom
-    };
-    this.props.updateNode(updatedNode);
-    this.testConnect();
+    if (nodeToConnect) {
+      this.setState({
+        lineTo: e.target.getBoundingClientRect(),
+        outputToConnectTo: this._AUDIOCTX.destination,
+        speakersAreConnected: true
+      });
+      window.console.log(nodeToConnect);
+      const updatedNode: OscDataObject | GainDataObject = {
+        ...(nodeToConnect as OscDataObject | GainDataObject),
+        connected: true,
+        isConnectedToOutput: true,
+        outputs: [
+          ...nodeToConnect.outputs,
+          {
+            id: nodeToConnect.outputs.length, // TO-DO: maybe find a better solution
+            destination: this._AUDIOCTX.destination,
+            connectedToType: "gain",
+            isConnectedTo: -1 // speakers are -1
+          } as OutputObject
+        ]
+      };
+      this.props.updateNode(updatedNode);
+      this.testConnect();
+    }
   };
   componentWillReceiveProps(nextProps: EditorProps) {
     this.props = nextProps;
@@ -251,7 +267,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this.props.updateNode,
       this._INTERNALS
     );
-    this.lines = drawConnectionLines(this.props.nodeData);
+    this.lines = drawConnectionLines(
+      this.props.nodeData,
+      this.speakersDOMRect.getBoundingClientRect() as DOMRect
+    );
     this.code = genWACode(this.props.nodeData, this._INTERNALS);
   }
   onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -316,6 +335,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
             stroke="#f50057"
             strokeWidth={4}
             strokeDasharray="4, 4"
+            className="connection-line"
+            onClick={e =>
+              this.disconnect(line.fromBlock, line.toBlock, line.outputId)
+            }
           />
         </g>
       );
@@ -328,9 +351,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
           y1={this.state.lineFrom.y + 12}
           x2={this.state.mouseX}
           y2={this.state.mouseY}
+          strokeDasharray="4, 4"
           stroke="#f50057"
           strokeWidth={4}
-          strokeDasharray="4, 4"
         />
       );
     }
@@ -355,6 +378,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
             }
             onClick={e => {
               this.connectToSpeakers(e);
+            }}
+            ref={ref => {
+              this.speakersDOMRect = ref as HTMLDivElement;
             }}
           />
         </div>

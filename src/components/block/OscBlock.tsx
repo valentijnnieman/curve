@@ -107,6 +107,16 @@ export class OscBlock extends React.Component<OscBlockProps> {
     } as OscDataObject;
     this.props.updateNode(updatedNode);
   };
+  componentDidMount() {
+    // when component has mounted and refs are set, we update the store
+    const updatedNode: OscDataObject = {
+      ...this.props.node,
+      gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
+      freqInputDOMRect: this.freqInputElement.getBoundingClientRect() as DOMRect,
+      outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect
+    } as OscDataObject;
+    this.props.updateNode(updatedNode);
+  }
   render() {
     return (
       <Draggable

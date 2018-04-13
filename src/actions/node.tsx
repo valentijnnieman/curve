@@ -15,12 +15,6 @@ export interface CreateNodeAction {
   node: OscDataObject | GainDataObject;
 }
 
-// export function createSynth(newSynth: SynthObject): CreateSynthAction {
-//   return {
-//     type: "CREATE_SYNTH",
-//     newSynth
-//   };
-// }
 export function updateNode(
   node: OscDataObject | GainDataObject
 ): UpdateNodeAction {

@@ -17,12 +17,18 @@ export const inputDOMRect = {
   width: 200,
   height: 200
 } as DOMRect;
+
+export const speakersDOMRect = {
+  x: 0,
+  y: 0,
+  width: 200,
+  height: 200
+} as DOMRect;
 export const mockNodeData: Array<OscDataObject | GainDataObject> = [
   {
     id: 0,
     type: "sine" as OscillatorType,
     freq: 220,
-    output: undefined,
     hasInternal: false,
     running: false,
     connected: true,
@@ -30,23 +36,22 @@ export const mockNodeData: Array<OscDataObject | GainDataObject> = [
     hasFreqInput: false,
     hasInputFrom: [],
     isConnectedToOutput: false,
-    isConnectedTo: 1,
-    connectedToType: undefined,
-    connectedToEl: inputDOMRect,
-    connectedFromEl: outputDOMRect
+    outputs: [],
+    gainInputDOMRect: inputDOMRect,
+    freqInputDOMRect: inputDOMRect,
+    outputDOMRect: outputDOMRect
   },
   {
     id: 1,
     gain: 1,
-    output: undefined,
     hasInternal: false,
     hasGainInput: false,
     hasInputFrom: [],
     isConnectedToOutput: false,
-    isConnectedTo: undefined,
+    outputs: [],
     connected: false,
-    connectedToEl: undefined,
-    connectedFromEl: undefined
+    gainInputDOMRect: inputDOMRect,
+    outputDOMRect: outputDOMRect
   }
 ];
 

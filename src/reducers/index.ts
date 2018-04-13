@@ -6,7 +6,6 @@ const initialState = {
       id: 0,
       type: "sine" as OscillatorType,
       freq: 220,
-      output: undefined,
       hasInternal: false,
       running: false,
       connected: false,
@@ -14,40 +13,38 @@ const initialState = {
       hasFreqInput: false,
       hasInputFrom: [],
       isConnectedToOutput: false,
-      isConnectedTo: undefined,
-      connectedToType: undefined,
-      connectedToEl: undefined,
-      connectedFromEl: undefined
+      outputs: [],
+      gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+      freqInputDOMRect: new DOMRect(0, 0, 0, 0),
+      outputDOMRect: new DOMRect(0, 0, 0, 0)
     },
     {
       id: 1,
       type: "square" as OscillatorType,
       freq: 330,
-      output: undefined,
       hasInternal: false,
       running: false,
       hasGainInput: false,
       hasFreqInput: false,
       hasInputFrom: [],
       isConnectedToOutput: false,
-      isConnectedTo: undefined,
       connected: false,
-      connectedToType: undefined,
-      connectedToEl: undefined,
-      connectedFromEl: undefined
+      outputs: [],
+      gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+      freqInputDOMRect: new DOMRect(0, 0, 0, 0),
+      outputDOMRect: new DOMRect(0, 0, 0, 0)
     },
     {
       id: 2,
       gain: 1,
-      output: undefined,
       hasInternal: false,
       hasGainInput: false,
       hasInputFrom: [],
       isConnectedToOutput: false,
-      isConnectedTo: undefined,
       connected: false,
-      connectedToEl: undefined,
-      connectedFromEl: undefined
+      outputs: [],
+      gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+      outputDOMRect: new DOMRect(0, 0, 0, 0)
     }
   ]
 };

@@ -24,3 +24,12 @@
   margin: 32px;
   margin-top: 0px;
 }
+
+.connection-line {
+  transition: all 0.2s;
+}
+.connection-line:hover {
+  stroke-width: 5px;
+  stroke: "orange";
+  cursor: pointer;
+}

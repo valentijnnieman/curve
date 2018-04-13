@@ -61,19 +61,18 @@ export class Dropdown extends React.Component<DropdownProps, any> {
                   id: 999,
                   type: "square" as OscillatorType,
                   freq: 330,
-                  output: undefined,
                   hasInternal: false,
                   running: false,
                   hasGainInput: false,
                   hasFreqInput: false,
                   hasInputFrom: [],
                   isConnectedToOutput: false,
-                  isConnectedTo: undefined,
                   connected: false,
-                  connectedToType: undefined,
-                  connectedToEl: undefined,
-                  connectedFromEl: undefined
-                };
+                  outputs: [],
+                  gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+                  freqInputDOMRect: new DOMRect(0, 0, 0, 0),
+                  outputDOMRect: new DOMRect(0, 0, 0, 0)
+                } as OscDataObject;
                 this.props.createNode(newOscNode);
               }}
             />
@@ -83,15 +82,14 @@ export class Dropdown extends React.Component<DropdownProps, any> {
                 const newOscNode = {
                   id: 999,
                   gain: 1,
-                  output: undefined,
+                  connected: false,
                   hasInternal: false,
                   hasGainInput: false,
                   hasInputFrom: [],
                   isConnectedToOutput: false,
-                  isConnectedTo: undefined,
-                  connected: false,
-                  connectedToEl: undefined,
-                  connectedFromEl: undefined
+                  outputs: [],
+                  gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+                  outputDOMRect: new DOMRect(0, 0, 0, 0)
                 };
                 this.props.createNode(newOscNode);
               }}

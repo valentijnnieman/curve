@@ -20,9 +20,16 @@ export const composedBlock = (
     connectInternal = () => {
       const { node, internal } = this.props;
       internal.gain.disconnect();
+      window.console.log("connectINternal");
       this.connectToAnalyser();
-      if (node.output !== undefined) {
-        internal.gain.connect(node.output as AudioParam);
+      node.outputs.map(output => {
+        if (output !== undefined) {
+          internal.gain.connect(output.destination as AudioParam);
+        }
+      });
+      if (node.isConnectedToOutput) {
+        window.console.log("go to output");
+        internal.gain.connect(this.props.audioCtx.destination);
       }
     };
     onDragHandler = (
@@ -30,32 +37,21 @@ export const composedBlock = (
       outputElement: DOMRect,
       freqInputElement?: DOMRect
     ) => {
-      // determine if output and/or input is connected
-      if (this.props.node.hasInputFrom.length > 0) {
-        this.props.node.hasInputFrom.map(input => {
-          const inputFromNode = this.props.allNodes[input];
-          if (inputFromNode.connectedToType === "gain") {
-            const updatedNode: GainDataObject | OscDataObject = {
-              ...inputFromNode,
-              connectedToEl: gainInputElement
-            };
-            this.props.updateNode(updatedNode);
-          } else if (inputFromNode.connectedToType === "freq") {
-            const updatedNode: GainDataObject | OscDataObject = {
-              ...inputFromNode,
-              connectedToEl: freqInputElement
-            };
-            this.props.updateNode(updatedNode);
-          }
-        });
-      }
-
-      if (this.props.node.connected) {
-        const updateSelf: OscDataObject | GainDataObject = {
+      if (freqInputElement) {
+        const updatedNode: OscDataObject = {
           ...this.props.node,
-          connectedFromEl: outputElement
-        };
-        this.props.updateNode(updateSelf);
+          gainInputDOMRect: gainInputElement,
+          freqInputDOMRect: freqInputElement as DOMRect,
+          outputDOMRect: outputElement
+        } as OscDataObject;
+        this.props.updateNode(updatedNode);
+      } else {
+        const updatedNode: GainDataObject = {
+          ...this.props.node,
+          gainInputDOMRect: gainInputElement,
+          outputDOMRect: outputElement
+        } as GainDataObject;
+        this.props.updateNode(updatedNode);
       }
     };
     tryToConnect = (outputElement: DOMRect) => {
@@ -66,7 +62,7 @@ export const composedBlock = (
       );
     };
     componentWillReceiveProps(nextProps: BlockProps) {
-      if (this.props.node.output !== nextProps.node.output) {
+      if (this.props.node.outputs !== nextProps.node.outputs) {
         this.props = nextProps;
         this.connectInternal();
       } else {
