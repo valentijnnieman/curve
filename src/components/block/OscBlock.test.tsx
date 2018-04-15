@@ -3,13 +3,10 @@ import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 
 import "web-audio-test-api";
-import { audioCtx, mockNodeData } from "../../lib/helpers/Mocks";
+import { audioCtx, mockblocks } from "../../lib/helpers/Mocks";
 import { buildInternals } from "../../lib/helpers/Editor";
-import { OscDataObject, GainDataObject } from "../../types/nodeObject";
-import {
-  InternalOscObject,
-  InternalGainObject
-} from "../../types/internalObject";
+import { OscData, GainData } from "../../types/blockData";
+import { InternalOscData, InternalGainData } from "../../types/internalData";
 // import ComposedOscBlock from "./OscBlock";
 import { OscBlock } from "./OscBlock";
 // import { BlockProps } from "../types/blockProps";
@@ -19,26 +16,26 @@ import { MuiThemeProvider } from "material-ui/styles";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("<OscBlock />", () => {
-  const internals: Array<InternalOscObject | InternalGainObject> = [];
+  const internals: Array<InternalOscData | InternalGainData> = [];
   const builtInternals = buildInternals(
-    mockNodeData,
+    mockblocks,
     audioCtx,
-    (node: OscDataObject | GainDataObject) => {
-      mockNodeData[node.id] = node;
+    (node: OscData | GainData) => {
+      mockblocks[node.id] = node;
     },
     internals
   );
-  const nodeInstance = mockNodeData[0] as OscDataObject;
-  const internalInstance = builtInternals[0] as InternalOscObject;
+  const nodeInstance = mockblocks[0] as OscData;
+  const internalInstance = builtInternals[0] as InternalOscData;
   const MockBlock = mount(
     <MuiThemeProvider>
       <OscBlock
         node={nodeInstance}
-        allNodes={mockNodeData}
+        allNodes={mockblocks}
         internal={internalInstance}
         allInternals={builtInternals}
         tryToConnectTo={(
-          node: OscDataObject,
+          node: OscData,
           outputToConnectTo: AudioParam,
           outputType: string,
           inputElement: DOMRect
@@ -62,12 +59,12 @@ describe("<OscBlock />", () => {
           }
         }}
         canConnect={false}
-        updateNode={(node: OscDataObject | GainDataObject) => {
+        updateBlock={(node: OscData | GainData) => {
           // We're testing the actual redux action elsewhere
-          // const store = mockStore(mockNodeData);
-          // mockStore.dispatch(updateNode(node));
-          nodeInstance.running = (node as OscDataObject).running;
-          nodeInstance.freq = (node as OscDataObject).freq;
+          // const store = mockStore(mockblocks);
+          // mockStore.dispatch(updateBlock(node));
+          nodeInstance.running = (node as OscData).running;
+          nodeInstance.freq = (node as OscData).freq;
         }}
         audioCtx={audioCtx}
         connectToAnalyser={jest.fn()}

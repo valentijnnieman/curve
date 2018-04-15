@@ -1,7 +1,7 @@
 import { StoreState } from "../types/storeState";
 
 const initialState = {
-  nodeData: [
+  blocks: [
     {
       id: 0,
       type: "sine" as OscillatorType,
@@ -51,23 +51,20 @@ const initialState = {
 
 export default (state: StoreState = initialState, action: any): StoreState => {
   switch (action.type) {
-    case "UPDATE_NODE":
+    case "UPDATE_BLOCK":
       return {
         ...state,
-        nodeData: state.nodeData.map(node => {
-          if (node.id === action.node.id) {
-            return action.node;
+        blocks: state.blocks.map(block => {
+          if (block.id === action.block.id) {
+            return action.block;
           }
-          return node;
+          return block;
         })
       };
-    case "CREATE_NODE":
+    case "CREATE_BLOCK":
       return {
         ...state,
-        nodeData: [
-          ...state.nodeData,
-          { ...action.node, id: state.nodeData.length }
-        ]
+        blocks: [...state.blocks, { ...action.block, id: state.blocks.length }]
       };
     default:
       return state;

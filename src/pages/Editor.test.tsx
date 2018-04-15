@@ -4,11 +4,7 @@ import * as Adapter from "enzyme-adapter-react-16";
 
 import "web-audio-test-api";
 
-import {
-  mockNodeData,
-  outputDOMRect,
-  inputDOMRect
-} from "../lib/helpers/Mocks";
+import { mockblocks, outputDOMRect, inputDOMRect } from "../lib/helpers/Mocks";
 import { Editor } from "./Editor";
 import { shallow } from "enzyme";
 
@@ -18,13 +14,13 @@ describe("OscNode", () => {
   const mockUpdate = jest.fn();
 
   const wrapper = shallow(
-    <Editor nodeData={mockNodeData} updateNode={mockUpdate} />
+    <Editor blocks={mockblocks} updateBlock={mockUpdate} />
   );
 
   const instance = wrapper.instance() as any;
   const props = instance.props;
 
-  const testBlock = props.nodeData[0];
+  const testBlock = props.blocks[0];
   const testInternal = instance._INTERNALS[0];
 
   const resetState = () => {
@@ -42,7 +38,7 @@ describe("OscNode", () => {
     instance.tryToConnect(testBlock, testInternal, outputDOMRect);
 
     expect(instance.state.wantsToConnect).toBe(true);
-    expect(instance.state.nodeToConnect).toEqual(testBlock);
+    expect(instance.state.blockToConnect).toEqual(testBlock);
     expect(instance.state.internalToConnect).toEqual(testInternal);
     expect(instance.state.lineFrom).toEqual(outputDOMRect);
   });
@@ -52,8 +48,8 @@ describe("OscNode", () => {
     instance.tryToConnectTo(testBlock, outputToConnectTo, "gain", inputDOMRect);
     expect(testBlock.outputs.length).toEqual(0);
     expect(instance.state.wantsToConnect).toBe(false);
-    expect(instance.state.nodeToConnect).toBe(undefined);
-    expect(instance.state.nodeToConnectTo).toBe(undefined);
+    expect(instance.state.blockToConnect).toBe(undefined);
+    expect(instance.state.blockToConnectTo).toBe(undefined);
     expect(instance.state.internalToConnect).toBe(undefined);
     expect(instance.state.outputToConnectTo).toBe(undefined);
     expect(instance.state.lineFrom).toBe(undefined);
@@ -61,8 +57,8 @@ describe("OscNode", () => {
   });
   // instance.testConnect();
   test("tryToConnectTo() -> testConnect() connects", () => {
-    const blockToConnectTo = props.nodeData[1];
-    blockToConnectTo.hasInternal = true; // this gets set with the buildInternals helper -> updateNode redux action
+    const blockToConnectTo = props.blocks[1];
+    blockToConnectTo.hasInternal = true; // this gets set with the buildInternals helper -> updateBlock redux action
     const outputToConnectTo = instance._INTERNALS[1].gain.gain;
     instance.tryToConnect(testBlock, testInternal, outputDOMRect);
     instance.tryToConnectTo(
@@ -100,7 +96,7 @@ describe("OscNode", () => {
     const outputToConnectTo = instance._INTERNALS[1].gain.gain;
     instance.tryToConnect(testBlock, testInternal, outputDOMRect);
     instance.tryToConnectTo(
-      props.nodeData[1],
+      props.blocks[1],
       outputToConnectTo,
       "gain",
       inputDOMRect
@@ -112,7 +108,7 @@ describe("OscNode", () => {
       outputs: []
     };
     const expectedBlockWithInput = {
-      ...props.nodeData[1],
+      ...props.blocks[1],
       hasInputFrom: []
     };
     instance.disconnect(0, 1, 0);

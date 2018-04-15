@@ -5,7 +5,7 @@ import Toggle from "material-ui/Toggle";
 import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
-import { OscDataObject } from "../../types/nodeObject";
+import { OscData } from "../../types/blockData";
 
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
@@ -40,14 +40,14 @@ export class OscBlock extends React.Component<OscBlockProps> {
       }
       internal.gain.gain.value = 1;
       this.props.connectInternal();
-      this.props.updateNode({
+      this.props.updateBlock({
         ...this.props.node,
         running: true
       });
     } else {
       internal.gain.gain.value = 0;
       this.props.internal.gain.disconnect();
-      this.props.updateNode({
+      this.props.updateBlock({
         ...this.props.node,
         running: false
       });
@@ -89,11 +89,11 @@ export class OscBlock extends React.Component<OscBlockProps> {
       );
 
       // update node info in store
-      const updatedNode: OscDataObject = {
+      const updatedNode: OscData = {
         ...this.props.node,
         freq: e.target.value
-      } as OscDataObject;
-      this.props.updateNode(updatedNode);
+      } as OscData;
+      this.props.updateBlock(updatedNode);
     }
   };
   handleTypeChange = (e: any, index: any, value: any) => {
@@ -101,21 +101,21 @@ export class OscBlock extends React.Component<OscBlockProps> {
     this.props.internal.oscillator.type = value;
 
     // update node info in store
-    const updatedNode: OscDataObject = {
+    const updatedNode: OscData = {
       ...this.props.node,
       type: value
-    } as OscDataObject;
-    this.props.updateNode(updatedNode);
+    } as OscData;
+    this.props.updateBlock(updatedNode);
   };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
-    const updatedNode: OscDataObject = {
+    const updatedNode: OscData = {
       ...this.props.node,
       gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
       freqInputDOMRect: this.freqInputElement.getBoundingClientRect() as DOMRect,
       outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect
-    } as OscDataObject;
-    this.props.updateNode(updatedNode);
+    } as OscData;
+    this.props.updateBlock(updatedNode);
   }
 
   render() {

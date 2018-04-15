@@ -8,7 +8,7 @@ import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
 
-import { GainDataObject } from "../../types/nodeObject";
+import { GainData } from "../../types/blockData";
 
 import { GainBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
@@ -40,22 +40,22 @@ export class GainBlock extends React.Component<GainBlockProps> {
       this.props.internal.gain.gain.value = newGain;
 
       // update node info in store
-      const updatedNode: GainDataObject = {
+      const updatedNode: GainData = {
         ...this.props.node,
         gain: e.target.value
       };
-      this.props.updateNode(updatedNode);
+      this.props.updateBlock(updatedNode);
     }
   };
 
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
-    const updatedNode: GainDataObject = {
+    const updatedNode: GainData = {
       ...this.props.node,
       gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
       outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect
-    } as GainDataObject;
-    this.props.updateNode(updatedNode);
+    } as GainData;
+    this.props.updateBlock(updatedNode);
   }
   render() {
     return (

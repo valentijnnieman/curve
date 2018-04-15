@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { OscDataObject, GainDataObject } from "../../types/nodeObject";
+import { OscData, GainData } from "../../types/blockData";
 import {
   BlockProps,
   OscBlockProps,
@@ -38,20 +38,20 @@ export const composedBlock = (
       freqInputElement?: DOMRect
     ) => {
       if (freqInputElement) {
-        const updatedNode: OscDataObject = {
+        const updatedNode: OscData = {
           ...this.props.node,
           gainInputDOMRect: gainInputElement,
           freqInputDOMRect: freqInputElement as DOMRect,
           outputDOMRect: outputElement
-        } as OscDataObject;
-        this.props.updateNode(updatedNode);
+        } as OscData;
+        this.props.updateBlock(updatedNode);
       } else {
-        const updatedNode: GainDataObject = {
+        const updatedNode: GainData = {
           ...this.props.node,
           gainInputDOMRect: gainInputElement,
           outputDOMRect: outputElement
-        } as GainDataObject;
-        this.props.updateNode(updatedNode);
+        } as GainData;
+        this.props.updateBlock(updatedNode);
       }
     };
     tryToConnect = (outputElement: DOMRect) => {

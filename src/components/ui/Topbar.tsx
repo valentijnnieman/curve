@@ -7,8 +7,8 @@ import { joyrideSteps } from "../../lib/joyrideSteps";
 
 import { connect } from "react-redux";
 
-import { OscDataObject, GainDataObject } from "../../types/nodeObject";
-import { createNode } from "../../actions/node";
+import { OscData, GainData } from "../../types/blockData";
+import { createBlock } from "../../actions/block";
 import { Dropdown } from "./Dropdown";
 
 import FlatButton from "material-ui/FlatButton";
@@ -20,7 +20,7 @@ interface TopbarState {
 }
 
 interface TopbarProps {
-  createNode: (node: OscDataObject | GainDataObject) => void;
+  createBlock: (node: OscData | GainData) => void;
 }
 
 class Topbar extends React.Component<TopbarProps, TopbarState> {
@@ -52,7 +52,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           type="continuous"
           autoStart={true}
         />
-        <Dropdown createNode={this.props.createNode} />
+        <Dropdown createBlock={this.props.createBlock} />
       </AppBar>
     );
   }
@@ -60,8 +60,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    createNode: (node: OscDataObject | GainDataObject) =>
-      dispatch(createNode(node))
+    createBlock: (node: OscData | GainData) => dispatch(createBlock(node))
   };
 };
 

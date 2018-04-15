@@ -6,16 +6,16 @@ import "web-audio-test-api";
 
 import {
   audioCtx,
-  mockNodeData,
+  mockblocks,
   outputDOMRect,
   inputDOMRect
 } from "../helpers/Mocks";
 import { buildInternals } from "../helpers/Editor";
-import { OscDataObject, GainDataObject } from "../../types/nodeObject";
+import { OscData, GainData } from "../../types/blockData";
 import {
-  InternalOscObject,
-  InternalGainObject
-} from "../../types/internalObject";
+  InternalOscData,
+  InternalGainData
+} from "../../types/internalData";
 import { shallow } from "enzyme";
 import { composedBlock } from "./Block";
 import { OscBlockProps } from "../../types/blockProps";
@@ -29,28 +29,28 @@ class MockBlock extends React.Component<OscBlockProps> {
 }
 
 const ComposedBlock = composedBlock(MockBlock);
-const internals: Array<InternalOscObject | InternalGainObject> = [];
+const internals: Array<InternalOscData | InternalGainData> = [];
 const builtInternals = buildInternals(
-  mockNodeData,
+  mockblocks,
   audioCtx,
-  (node: OscDataObject | GainDataObject) => {
-    mockNodeData[node.id] = node;
+  (node: OscData | GainData) => {
+    mockblocks[node.id] = node;
   },
   internals
 );
 
 describe("OscNode", () => {
-  const nodeInstance = mockNodeData[0] as OscDataObject;
-  const internalInstance = builtInternals[0] as InternalOscObject;
+  const nodeInstance = mockblocks[0] as OscData;
+  const internalInstance = builtInternals[0] as InternalOscData;
   const wrapper = shallow(
     <ComposedBlock
       node={nodeInstance}
-      allNodes={mockNodeData}
+      allNodes={mockblocks}
       internal={internalInstance}
       allInternals={builtInternals}
       tryToConnect={(
-        node: OscDataObject | GainDataObject,
-        internal: InternalOscObject | InternalGainObject,
+        node: OscData | GainData,
+        internal: InternalOscData | InternalGainData,
         el: DOMRect
       ) => {
         // this is the parent method that will catch component's tryToConnect method
@@ -59,7 +59,7 @@ describe("OscNode", () => {
         expect(el).toEqual(outputDOMRect);
       }}
       tryToConnectTo={(
-        node: OscDataObject,
+        node: OscData,
         outputToConnectTo: AudioParam,
         outputType: string,
         inputElement: DOMRect
@@ -84,11 +84,11 @@ describe("OscNode", () => {
         }
       }}
       canConnect={false}
-      updateNode={(node: OscDataObject | GainDataObject) => {
+      updateBlock={(node: OscData | GainData) => {
         // We're testing the actual redux action elsewhere
-        (mockNodeData[
+        (mockblocks[
           node.id
-        ] as OscDataObject).outputDOMRect = (node as OscDataObject).outputDOMRect;
+        ] as OscData).outputDOMRect = (node as OscData).outputDOMRect;
       }}
       audioCtx={audioCtx}
     />

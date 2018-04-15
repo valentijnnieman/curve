@@ -1,18 +1,15 @@
-import { OscDataObject, GainDataObject } from "../../types/nodeObject";
-import {
-  InternalOscObject,
-  InternalGainObject
-} from "../../types/internalObject";
-import { Line } from "../../types/lineObject";
+import { OscData, GainData } from "../../types/blockData";
+import { InternalOscData, InternalGainData } from "../../types/internalData";
+import { Line } from "../../types/lineData";
 
-// builds internal objects from nodeData used with web audio api
+// builds internal objects from blocks used with web audio api
 export const buildInternals = (
-  nodeData: Array<OscDataObject | GainDataObject>,
+  blocks: Array<OscData | GainData>,
   audioCtx: AudioContext,
-  updateNode: (node: OscDataObject | GainDataObject) => void,
-  internals: Array<InternalOscObject | InternalGainObject>
+  updateBlock: (node: OscData | GainData) => void,
+  internals: Array<InternalOscData | InternalGainData>
 ) => {
-  nodeData.map((node, index) => {
+  blocks.map((node, index) => {
     if (node.hasInternal) {
       // node already has an internal - no need to create new internals
     } else {
@@ -40,8 +37,8 @@ export const buildInternals = (
         };
         internals.push(newGainInternal);
       }
-      // update the nodeData object now that we build an internal
-      updateNode({
+      // update the blocks object now that we build an internal
+      updateBlock({
         ...node,
         hasInternal: true
       });
@@ -52,11 +49,11 @@ export const buildInternals = (
 
 // draws lines between connected nodes
 export const drawConnectionLines = (
-  nodeData: Array<OscDataObject | GainDataObject>,
+  blocks: Array<OscData | GainData>,
   speakersDOMRect: DOMRect
 ) => {
   let allNewLines: Array<Line> = [];
-  nodeData.map(node => {
+  blocks.map(node => {
     if (node.connected) {
       node.outputs.map(output => {
         let inputDOMRect;
@@ -66,14 +63,14 @@ export const drawConnectionLines = (
         } else {
           switch (output.connectedToType) {
             case "gain":
-              inputDOMRect = nodeData[output.isConnectedTo].gainInputDOMRect;
+              inputDOMRect = blocks[output.isConnectedTo].gainInputDOMRect;
               break;
             case "freq":
-              inputDOMRect = (nodeData[output.isConnectedTo] as OscDataObject)
+              inputDOMRect = (blocks[output.isConnectedTo] as OscData)
                 .freqInputDOMRect;
               break;
             default:
-              inputDOMRect = nodeData[output.isConnectedTo].gainInputDOMRect;
+              inputDOMRect = blocks[output.isConnectedTo].gainInputDOMRect;
               break;
           }
         }
@@ -95,15 +92,15 @@ export const drawConnectionLines = (
 
 // Generates web audio code from internals (experimental)
 export const genWACode = (
-  nodeData: Array<OscDataObject | GainDataObject>,
-  internals: Array<InternalOscObject | InternalGainObject>
+  blocks: Array<OscData | GainData>,
+  internals: Array<InternalOscData | InternalGainData>
 ) => {
   let jsString: string =
       "const audioCtx = new AudioContext(); // define audio context\n\n",
     connects: string = "";
   internals.map((internal, index) => {
-    // get nodeData object for more info like output
-    let node = nodeData[index];
+    // get blocks object for more info like output
+    let node = blocks[index];
     if (node && "oscillator" in internal && "freq" in node) {
       jsString += `// Creating oscillator node
 let osc${index} = audioCtx.createOscillator();
@@ -121,7 +118,7 @@ osc${index}.start();`;
         } else {
           node.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              if ("gain" in nodeData[output.isConnectedTo]) {
+              if ("gain" in blocks[output.isConnectedTo]) {
                 connects += `gain${index}.connect(gain${
                   output.isConnectedTo
                 });\n`;
@@ -149,7 +146,7 @@ gain${index}.gain.value = ${node.gain};`;
         } else {
           node.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              if ("gain" in nodeData[output.isConnectedTo]) {
+              if ("gain" in blocks[output.isConnectedTo]) {
                 connects += `gain${index}.connect(gain${
                   output.isConnectedTo
                 });\n`;

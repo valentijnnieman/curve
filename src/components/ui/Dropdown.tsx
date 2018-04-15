@@ -3,12 +3,12 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import Popover from "material-ui/Popover";
 import Menu from "material-ui/Menu";
 import MenuItem from "material-ui/MenuItem";
-import { OscDataObject, GainDataObject } from "../../types/nodeObject";
+import { OscData, GainData } from "../../types/blockData";
 import "./Dropdown.css";
 import ContentAdd from "material-ui/svg-icons/content/add";
 
 interface DropdownProps {
-  createNode: (node: OscDataObject | GainDataObject) => void;
+  createBlock: (node: OscData | GainData) => void;
 }
 
 export class Dropdown extends React.Component<DropdownProps, any> {
@@ -72,8 +72,8 @@ export class Dropdown extends React.Component<DropdownProps, any> {
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
                   freqInputDOMRect: new DOMRect(0, 0, 0, 0),
                   outputDOMRect: new DOMRect(0, 0, 0, 0)
-                } as OscDataObject;
-                this.props.createNode(newOscNode);
+                } as OscData;
+                this.props.createBlock(newOscNode);
               }}
             />
             <MenuItem
@@ -91,7 +91,7 @@ export class Dropdown extends React.Component<DropdownProps, any> {
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
                   outputDOMRect: new DOMRect(0, 0, 0, 0)
                 };
-                this.props.createNode(newOscNode);
+                this.props.createBlock(newOscNode);
               }}
             />
           </Menu>
