@@ -58,7 +58,7 @@ export const drawConnectionLines = (
   let allNewLines: Array<Line> = [];
   nodeData.map(node => {
     if (node.connected) {
-      node.outputs.map((output, outputId) => {
+      node.outputs.map(output => {
         let inputDOMRect;
         if (output.isConnectedTo === -1) {
           // if it's smaller than 0 it's connected to the output (speakers)
@@ -84,7 +84,7 @@ export const drawConnectionLines = (
           y2: inputDOMRect.y + inputDOMRect.height / 2,
           fromBlock: node.id,
           toBlock: output.isConnectedTo,
-          outputId
+          outputId: output.id
         };
         allNewLines.push(newLineCoords);
       });

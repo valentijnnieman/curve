@@ -24,6 +24,7 @@ export interface OscBlockProps extends BlockProps {
     outputElement: DOMRect,
     freqInputElement?: DOMRect
   ) => void;
+  checkInputs: (outputType: string) => string;
 }
 
 export interface GainBlockProps extends BlockProps {
@@ -37,4 +38,5 @@ export interface GainBlockProps extends BlockProps {
     outputElement: DOMRect,
     freqInputElement?: DOMRect
   ) => void;
+  checkInputs: (outputType: string) => string;
 }

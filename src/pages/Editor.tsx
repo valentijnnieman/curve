@@ -46,7 +46,7 @@ interface EditorState {
   mouseY?: number;
 }
 
-class Editor extends React.Component<EditorProps, EditorState> {
+export class Editor extends React.Component<EditorProps, EditorState> {
   output: InternalGainObject;
   code: string;
   _AUDIOCTX: AudioContext;
@@ -71,7 +71,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.code = genWACode(this.props.nodeData, this._INTERNALS);
   }
   checkGain = (outputType: string) => {
-    window.console.log("checkGain", outputType);
     if (outputType === "gain") {
       return true;
     }
@@ -138,46 +137,24 @@ class Editor extends React.Component<EditorProps, EditorState> {
   };
   disconnect = (fromBlock: number, toBlock: number, outputId: number) => {
     // update node info in store
-    const block = this.props.nodeData[fromBlock];
+    const blockWithOutput = this.props.nodeData[fromBlock];
+    const blockWithInput = this.props.nodeData[toBlock];
     const internal = this._INTERNALS[fromBlock];
-    const updatedBlock: OscDataObject | GainDataObject = {
-      ...block,
-      connected: false,
+    const updatedBlockWithOutput: OscDataObject | GainDataObject = {
+      ...blockWithOutput,
+      connected: blockWithOutput.outputs.length > 1 ? true : false,
       isConnectedToOutput: false,
-      outputs: block.outputs.filter(output => output.id !== outputId)
+      outputs: blockWithOutput.outputs.filter(output => output.id !== outputId)
     };
-    this.props.updateNode(updatedBlock);
+    this.props.updateNode(updatedBlockWithOutput);
 
-    // if block is connected to output, there's no node to update (output is not a node)
-    if (!block.isConnectedToOutput) {
-      // update node that recieves input
-      block.outputs.map(output => {
-        const nodeToUpdate = this.props.nodeData[toBlock];
-        if (output.connectedToType === "gain") {
-          const updatedInputNode: OscDataObject | GainDataObject = {
-            ...nodeToUpdate,
-            hasGainInput: false,
-            hasInputFrom: [
-              ...nodeToUpdate.hasInputFrom.filter(
-                input => input !== updatedBlock.id
-              )
-            ]
-          };
-          this.props.updateNode(updatedInputNode);
-        } else if (output.connectedToType === "freq") {
-          const updatedInputNode: OscDataObject | GainDataObject = {
-            ...nodeToUpdate,
-            hasFreqInput: false,
-            hasInputFrom: [
-              ...nodeToUpdate.hasInputFrom.filter(
-                input => input !== updatedBlock.id
-              )
-            ]
-          };
-          this.props.updateNode(updatedInputNode);
-        }
-      });
-    }
+    const indexOfInput = blockWithInput.hasInputFrom.indexOf(fromBlock);
+
+    blockWithInput.hasInputFrom.splice(indexOfInput, 1);
+    const updatedBlockWithInput: OscDataObject | GainDataObject = {
+      ...blockWithInput
+    };
+    this.props.updateNode(updatedBlockWithInput);
 
     internal.gain.disconnect();
   };
@@ -239,7 +216,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
         outputToConnectTo: this._AUDIOCTX.destination,
         speakersAreConnected: true
       });
-      window.console.log(nodeToConnect);
       const updatedNode: OscDataObject | GainDataObject = {
         ...(nodeToConnect as OscDataObject | GainDataObject),
         connected: true,

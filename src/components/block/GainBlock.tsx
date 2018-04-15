@@ -70,11 +70,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
       >
         <div className="card" id="gain-block">
           <div
-            className={
-              this.props.node.hasGainInput
-                ? "io-element io-element--active"
-                : "io-element"
-            }
+            className={this.props.checkInputs("gain")}
             onClick={this.tryToConnectTo}
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;

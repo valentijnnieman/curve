@@ -68,6 +68,7 @@ describe("<GainBlock />", () => {
         connectInternal={jest.fn()}
         onDragHandler={jest.fn()}
         tryToConnect={jest.fn()}
+        checkInputs={jest.fn()}
       />
     </MuiThemeProvider>
   );

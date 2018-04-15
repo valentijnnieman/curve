@@ -68,6 +68,7 @@ describe("drawConnectionLines()", () => {
       x2: toRect.x,
       y2: toRect.y + toRect.height / 2,
       fromBlock: 0,
+      outputId: 0,
       toBlock: 1
     } as Line;
 
@@ -113,6 +114,9 @@ osc0.start();
 
 let gain1 = audioCtx.createGain();
 gain1.gain.value = 1;
+
+let gain2 = audioCtx.createGain();
+gain2.gain.value = 1;
 
 `;
     expect(code).toEqual(expectedCode);

@@ -117,6 +117,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
     } as OscDataObject;
     this.props.updateNode(updatedNode);
   }
+
   render() {
     return (
       <Draggable
@@ -131,22 +132,14 @@ export class OscBlock extends React.Component<OscBlockProps> {
       >
         <div className="card">
           <div
-            className={
-              this.props.node.hasGainInput
-                ? "io-element io-element--active"
-                : "io-element"
-            }
+            className={this.props.checkInputs("gain")}
             onClick={() => this.tryToConnectTo("gain")}
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
             }}
           />
           <div
-            className={
-              this.props.node.hasFreqInput
-                ? "io-element io-element--freq io-element--active"
-                : "io-element io-element--freq"
-            }
+            className={this.props.checkInputs("freq") + " io-element--freq"}
             onClick={() => this.tryToConnectTo("freq")}
             ref={ref => {
               this.freqInputElement = ref as HTMLDivElement;

@@ -52,10 +52,19 @@ export const mockNodeData: Array<OscDataObject | GainDataObject> = [
     connected: false,
     gainInputDOMRect: inputDOMRect,
     outputDOMRect: outputDOMRect
+  },
+  {
+    id: 2,
+    gain: 1,
+    hasInternal: false,
+    hasGainInput: false,
+    hasInputFrom: [],
+    isConnectedToOutput: false,
+    outputs: [],
+    connected: false,
+    gainInputDOMRect: inputDOMRect,
+    outputDOMRect: outputDOMRect
   }
 ];
 
-const middleWare: any = [];
-export const mockStore = configureMockStore(middleWare, {
-  nodeData: mockNodeData
-});
+export const mockStore = configureMockStore();

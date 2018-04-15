@@ -61,6 +61,22 @@ export const composedBlock = (
         outputElement
       );
     };
+    checkInputs = (outputType: string) => {
+      let allInputTypes: Array<string> = [];
+      this.props.node.hasInputFrom.map(input => {
+        const inputFromBlock = this.props.allNodes[input];
+        inputFromBlock.outputs
+          .filter(output => output.connectedToType === outputType)
+          .map(output => {
+            allInputTypes.push(output.connectedToType as string);
+          });
+      });
+      if (allInputTypes.includes(outputType)) {
+        return "io-element io-element--active";
+      } else {
+        return "io-element";
+      }
+    };
     componentWillReceiveProps(nextProps: BlockProps) {
       if (this.props.node.outputs !== nextProps.node.outputs) {
         this.props = nextProps;
@@ -77,6 +93,7 @@ export const composedBlock = (
           connectInternal={this.connectInternal}
           tryToConnect={this.tryToConnect}
           onDragHandler={this.onDragHandler}
+          checkInputs={this.checkInputs}
         />
       );
     }
