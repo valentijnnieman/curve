@@ -78,20 +78,6 @@ describe("drawConnectionLines()", () => {
 
     expect(lines.length).toEqual(0);
   });
-  // test("no lines are drawn if connected but no connectedFromEl", () => {
-  //   mockblocks[0].connected = true;
-  //   mockblocks[0].connectedFromEl = undefined;
-  //   let lines = drawConnectionLines(mockblocks);
-
-  //   expect(lines.length).toEqual(0);
-  // });
-  // test("no lines are drawn if connected but no connectedToEl", () => {
-  //   mockblocks[0].connected = true;
-  //   mockblocks[0].connectedToEl = undefined;
-  //   let lines = drawConnectionLines(mockblocks);
-
-  //   expect(lines.length).toEqual(0);
-  // });
 });
 
 describe("genWACode()", () => {

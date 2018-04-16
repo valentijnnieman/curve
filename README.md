@@ -4,13 +4,13 @@
 
 <img src="https://raw.githubusercontent.com/valentijnnieman/curve/master/src/curve.svg?sanitize=true" width="48" />
 
-A visual programming language for Web Audio!
+A visual synth-design tool for Web Audio
 
 [Play around with it here!](https://curve-visual.herokuapp.com/)
 
 # What is this?
 
-This is a visual programming language (sort of!) for Web Audio! You can use it to play around with digital audio, connecting stuff together to create cool sounds, all in the browser!
+This is a visual synth-design tool for Web Audio! You can use it to design synthesizers using basic oscillators and filters. Ever wanted to try out some cool synth design patterns you found on the internet? Learning about subtractive or FM synthesis, and want to try things out for yourself? Then this is the tool for you!
 
 ## How should I use this?
 
@@ -29,7 +29,7 @@ This is still very much work in progress! :) I use Typescript with create-react-
 Here is some stuff I would love to implement next:
 
 * [x] A tutorial/walkthrough explaining what does what
+* [x] Better performance! The drawing of the connection lines is quite slow.
 * [ ] Filter blocks
 * [ ] Saving a 'project'
 * [ ] Cookbook recipes showing off cool synth ideas
-* [ ] Better performance! The drawing of the connection lines is quite slow.
