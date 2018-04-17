@@ -7,11 +7,12 @@ import { joyrideSteps } from "../../lib/joyrideSteps";
 
 import { connect } from "react-redux";
 
-import { OscData, GainData } from "../../types/blockData";
+import { BlockData } from "../../types/blockData";
 import { createBlock } from "../../actions/block";
 import { Dropdown } from "./Dropdown";
 
 import FlatButton from "material-ui/FlatButton";
+import { StoreState } from "../../types/storeState";
 
 const CurveSVG = require("../../curve.svg");
 
@@ -20,7 +21,8 @@ interface TopbarState {
 }
 
 interface TopbarProps {
-  createBlock: (node: OscData | GainData) => void;
+  blocksLength: number;
+  createBlock: (block: BlockData) => void;
 }
 
 class Topbar extends React.Component<TopbarProps, TopbarState> {
@@ -52,16 +54,25 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           type="continuous"
           autoStart={true}
         />
-        <Dropdown createBlock={this.props.createBlock} />
+        <Dropdown
+          blocksLength={this.props.blocksLength}
+          createBlock={this.props.createBlock}
+        />
       </AppBar>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapStateToProps = ({ blocks }: StoreState) => {
   return {
-    createBlock: (node: OscData | GainData) => dispatch(createBlock(node))
+    blocksLength: blocks.length
   };
 };
 
-export default connect(null, mapDispatchToProps)(Topbar);
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    createBlock: (block: BlockData) => dispatch(createBlock(block))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Topbar);

@@ -1,4 +1,4 @@
-import { OscData, GainData } from "../../types/blockData";
+import { BlockData } from "../../types/blockData";
 
 const configureMockStore = require("redux-mock-store"); // Prevent Ts warning.
 
@@ -24,16 +24,15 @@ export const speakersDOMRect = {
   width: 200,
   height: 200
 } as DOMRect;
-export const mockblocks: Array<OscData | GainData> = [
+export const mockblocks: Array<BlockData> = [
   {
     id: 0,
+    blockType: "OSC",
     type: "sine" as OscillatorType,
-    freq: 220,
+    value: 220,
     hasInternal: false,
     running: false,
     connected: true,
-    hasGainInput: false,
-    hasFreqInput: false,
     hasInputFrom: [],
     isConnectedToOutput: false,
     outputs: [],
@@ -43,9 +42,9 @@ export const mockblocks: Array<OscData | GainData> = [
   },
   {
     id: 1,
-    gain: 1,
+    blockType: "GAIN",
+    value: 1,
     hasInternal: false,
-    hasGainInput: false,
     hasInputFrom: [],
     isConnectedToOutput: false,
     outputs: [],
@@ -55,9 +54,9 @@ export const mockblocks: Array<OscData | GainData> = [
   },
   {
     id: 2,
-    gain: 1,
+    blockType: "GAIN",
+    value: 1,
     hasInternal: false,
-    hasGainInput: false,
     hasInputFrom: [],
     isConnectedToOutput: false,
     outputs: [],

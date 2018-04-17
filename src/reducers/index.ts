@@ -1,31 +1,30 @@
 import { StoreState } from "../types/storeState";
+import { BlockData } from "../types/blockData";
 
 const initialState = {
   blocks: [
     {
       id: 0,
+      blockType: "OSC",
       type: "sine" as OscillatorType,
-      freq: 220,
+      value: 220,
       hasInternal: false,
       running: false,
       connected: false,
-      hasGainInput: false,
-      hasFreqInput: false,
       hasInputFrom: [],
       isConnectedToOutput: false,
       outputs: [],
       gainInputDOMRect: new DOMRect(0, 0, 0, 0),
       freqInputDOMRect: new DOMRect(0, 0, 0, 0),
       outputDOMRect: new DOMRect(0, 0, 0, 0)
-    },
+    } as BlockData,
     {
       id: 1,
+      blockType: "OSC",
       type: "square" as OscillatorType,
-      freq: 330,
+      value: 330,
       hasInternal: false,
       running: false,
-      hasGainInput: false,
-      hasFreqInput: false,
       hasInputFrom: [],
       isConnectedToOutput: false,
       connected: false,
@@ -33,19 +32,19 @@ const initialState = {
       gainInputDOMRect: new DOMRect(0, 0, 0, 0),
       freqInputDOMRect: new DOMRect(0, 0, 0, 0),
       outputDOMRect: new DOMRect(0, 0, 0, 0)
-    },
+    } as BlockData,
     {
       id: 2,
-      gain: 1,
+      blockType: "GAIN",
+      value: 1,
       hasInternal: false,
-      hasGainInput: false,
       hasInputFrom: [],
       isConnectedToOutput: false,
       connected: false,
       outputs: [],
       gainInputDOMRect: new DOMRect(0, 0, 0, 0),
       outputDOMRect: new DOMRect(0, 0, 0, 0)
-    }
+    } as BlockData
   ]
 };
 

@@ -8,7 +8,7 @@ import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
 
-import { GainData } from "../../types/blockData";
+import { BlockData } from "../../types/blockData";
 
 import { GainBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
@@ -25,7 +25,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
   }
   tryToConnectTo = () => {
     this.props.tryToConnectTo(
-      this.props.node,
+      this.props.block,
       this.props.internal.gain,
       "gain",
       this.gainInputElement.getBoundingClientRect()
@@ -39,10 +39,10 @@ export class GainBlock extends React.Component<GainBlockProps> {
       // set change here so it is instant
       this.props.internal.gain.gain.value = newGain;
 
-      // update node info in store
-      const updatedNode: GainData = {
-        ...this.props.node,
-        gain: e.target.value
+      // update block info in store
+      const updatedNode: BlockData = {
+        ...this.props.block,
+        value: e.target.value
       };
       this.props.updateBlock(updatedNode);
     }
@@ -50,12 +50,12 @@ export class GainBlock extends React.Component<GainBlockProps> {
 
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
-    const updatedNode: GainData = {
-      ...this.props.node,
+    const updatedBlock: BlockData = {
+      ...this.props.block,
       gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
       outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect
-    } as GainData;
-    this.props.updateBlock(updatedNode);
+    };
+    this.props.updateBlock(updatedBlock);
   }
   render() {
     return (
@@ -80,7 +80,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
             <form onSubmit={e => e.preventDefault()}>
               <TextField
                 floatingLabelText="Gain"
-                defaultValue={this.props.node.gain}
+                defaultValue={this.props.block.value}
                 onChange={this.handleGainChange}
                 type="number"
                 step={0.1}
@@ -95,7 +95,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
           </div>
           <div
             className={
-              this.props.node.connected
+              this.props.block.connected
                 ? "io-element io-element--right io-element--active"
                 : "io-element io-element--right"
             }

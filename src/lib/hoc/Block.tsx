@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { OscData, GainData } from "../../types/blockData";
+import { BlockData } from "../../types/blockData";
 import {
   BlockProps,
   OscBlockProps,
@@ -18,17 +18,15 @@ export const composedBlock = (
       this.props.internal.gain.connect(this.props.internal.analyser);
     };
     connectInternal = () => {
-      const { node, internal } = this.props;
+      const { block, internal } = this.props;
       internal.gain.disconnect();
-      window.console.log("connectINternal");
       this.connectToAnalyser();
-      node.outputs.map(output => {
+      block.outputs.map(output => {
         if (output !== undefined) {
           internal.gain.connect(output.destination as AudioParam);
         }
       });
-      if (node.isConnectedToOutput) {
-        window.console.log("go to output");
+      if (block.isConnectedToOutput) {
         internal.gain.connect(this.props.audioCtx.destination);
       }
     };
@@ -38,33 +36,33 @@ export const composedBlock = (
       freqInputElement?: DOMRect
     ) => {
       if (freqInputElement) {
-        const updatedNode: OscData = {
-          ...this.props.node,
+        const updatedBlock: BlockData = {
+          ...this.props.block,
           gainInputDOMRect: gainInputElement,
           freqInputDOMRect: freqInputElement as DOMRect,
           outputDOMRect: outputElement
-        } as OscData;
-        this.props.updateBlock(updatedNode);
+        };
+        this.props.updateBlock(updatedBlock);
       } else {
-        const updatedNode: GainData = {
-          ...this.props.node,
+        const updatedBlock: BlockData = {
+          ...this.props.block,
           gainInputDOMRect: gainInputElement,
           outputDOMRect: outputElement
-        } as GainData;
-        this.props.updateBlock(updatedNode);
+        };
+        this.props.updateBlock(updatedBlock);
       }
     };
     tryToConnect = (outputElement: DOMRect) => {
       this.props.tryToConnect(
-        this.props.node,
+        this.props.block,
         this.props.internal,
         outputElement
       );
     };
     checkInputs = (outputType: string) => {
       let allInputTypes: Array<string> = [];
-      this.props.node.hasInputFrom.map(input => {
-        const inputFromBlock = this.props.allNodes[input];
+      this.props.block.hasInputFrom.map(input => {
+        const inputFromBlock = this.props.allBlocks[input];
         inputFromBlock.outputs
           .filter(output => output.connectedToType === outputType)
           .map(output => {
@@ -78,7 +76,7 @@ export const composedBlock = (
       }
     };
     componentWillReceiveProps(nextProps: BlockProps) {
-      if (this.props.node.outputs !== nextProps.node.outputs) {
+      if (this.props.block.outputs !== nextProps.block.outputs) {
         this.props = nextProps;
         this.connectInternal();
       } else {

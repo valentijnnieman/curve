@@ -11,11 +11,8 @@ import {
   inputDOMRect
 } from "../helpers/Mocks";
 import { buildInternals } from "../helpers/Editor";
-import { OscData, GainData } from "../../types/blockData";
-import {
-  InternalOscData,
-  InternalGainData
-} from "../../types/internalData";
+import { BlockData } from "../../types/blockData";
+import { InternalOscData, InternalGainData } from "../../types/internalData";
 import { shallow } from "enzyme";
 import { composedBlock } from "./Block";
 import { OscBlockProps } from "../../types/blockProps";
@@ -33,33 +30,33 @@ const internals: Array<InternalOscData | InternalGainData> = [];
 const builtInternals = buildInternals(
   mockblocks,
   audioCtx,
-  (node: OscData | GainData) => {
-    mockblocks[node.id] = node;
+  (block: BlockData) => {
+    mockblocks[block.id] = block;
   },
   internals
 );
 
 describe("OscNode", () => {
-  const nodeInstance = mockblocks[0] as OscData;
+  const blockInstance = mockblocks[0];
   const internalInstance = builtInternals[0] as InternalOscData;
   const wrapper = shallow(
     <ComposedBlock
-      node={nodeInstance}
-      allNodes={mockblocks}
+      block={blockInstance}
+      allBlocks={mockblocks}
       internal={internalInstance}
       allInternals={builtInternals}
       tryToConnect={(
-        node: OscData | GainData,
+        block: BlockData,
         internal: InternalOscData | InternalGainData,
         el: DOMRect
       ) => {
         // this is the parent method that will catch component's tryToConnect method
-        expect(node).toEqual(nodeInstance);
+        expect(block).toEqual(blockInstance);
         expect(internal).toEqual(internalInstance);
         expect(el).toEqual(outputDOMRect);
       }}
       tryToConnectTo={(
-        node: OscData,
+        block: BlockData,
         outputToConnectTo: AudioParam,
         outputType: string,
         inputElement: DOMRect
@@ -68,7 +65,7 @@ describe("OscNode", () => {
         expect(outputToConnectTo).toBeDefined();
         expect(outputType).toBeDefined();
         expect(inputElement).toBeDefined();
-        expect(node).toEqual(nodeInstance);
+        expect(block).toEqual(blockInstance);
         switch (outputType) {
           case "gain":
             expect(outputToConnectTo).toEqual(internalInstance.gain.gain);
@@ -84,11 +81,9 @@ describe("OscNode", () => {
         }
       }}
       canConnect={false}
-      updateBlock={(node: OscData | GainData) => {
+      updateBlock={(block: BlockData) => {
         // We're testing the actual redux action elsewhere
-        (mockblocks[
-          node.id
-        ] as OscData).outputDOMRect = (node as OscData).outputDOMRect;
+        mockblocks[block.id].outputDOMRect = block.outputDOMRect;
       }}
       audioCtx={audioCtx}
     />
@@ -104,18 +99,18 @@ describe("OscNode", () => {
   const instance = wrapper.instance() as any;
 
   test("connectInternal()", () => {
-    instance.props.node.output = builtInternals[1].gain.gain as AudioParam;
+    instance.props.block.output = builtInternals[1].gain.gain as AudioParam;
     instance.connectInternal();
     expect(instance.props.internal.gain.numberOfOutputs).toEqual(1);
-    // not much else to test here, there's no (easy) way of testing if the internal Web Audio node is connected
+    // not much else to test here, there's no (easy) way of testing if the internal Web Audio block is connected
   });
   test("tryToConnect()", () => {
     instance.tryToConnect(outputDOMRect);
   });
   test("onDragHandler()", () => {
     // test if outputElement (positoin) is updated when connected
-    instance.props.node.connected = true;
-    instance.props.node.outputs = [
+    instance.props.block.connected = true;
+    instance.props.block.outputs = [
       {
         id: 0,
         destination: builtInternals[1].gain.gain,
@@ -127,21 +122,21 @@ describe("OscNode", () => {
     ];
     const newOutputRect = { ...outputDOMRect, x: 999 };
     instance.onDragHandler(inputDOMRect, newOutputRect);
-    expect(instance.props.node.outputDOMRect).toEqual(newOutputRect);
+    expect(instance.props.block.outputDOMRect).toEqual(newOutputRect);
     // TO-DO: create inputs array before testing this?
     // test if gainInputElement is updated when hasInputFrom
-    // instance.props.allNodes[1].connected = true;
+    // instance.props.allBlocks[1].connected = true;
     // const newInputRect = { ...inputDOMRect, x: 999 };
-    // instance.props.node.hasInputFrom = [1];
+    // instance.props.block.hasInputFrom = [1];
     // instance.onDragHandler(newInputRect, outputDOMRect);
-    // expect(instance.props.allNodes[1].outputs[0].connectedToEl).toEqual(
+    // expect(instance.props.allBlocks[1].outputs[0].connectedToEl).toEqual(
     //   newInputRect
     // );
     // // test if freqInputElement is updated when hasInputFrom
-    // instance.props.allNodes[1].connectedToType = "freq";
-    // instance.props.allNodes[1].connectedToEl = inputDOMRect;
-    // instance.props.node.hasInputFrom = [1];
+    // instance.props.allBlocks[1].connectedToType = "freq";
+    // instance.props.allBlocks[1].connectedToEl = inputDOMRect;
+    // instance.props.block.hasInputFrom = [1];
     // instance.onDragHandler(inputDOMRect, outputDOMRect, newInputRect);
-    // expect(instance.props.allNodes[1].connectedToEl).toEqual(newInputRect);
+    // expect(instance.props.allBlocks[1].connectedToEl).toEqual(newInputRect);
   });
 });

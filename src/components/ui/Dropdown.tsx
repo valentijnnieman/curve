@@ -3,12 +3,13 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import Popover from "material-ui/Popover";
 import Menu from "material-ui/Menu";
 import MenuItem from "material-ui/MenuItem";
-import { OscData, GainData } from "../../types/blockData";
+import { BlockData } from "../../types/blockData";
 import "./Dropdown.css";
 import ContentAdd from "material-ui/svg-icons/content/add";
 
 interface DropdownProps {
-  createBlock: (node: OscData | GainData) => void;
+  blocksLength: number;
+  createBlock: (node: BlockData) => void;
 }
 
 export class Dropdown extends React.Component<DropdownProps, any> {
@@ -58,13 +59,12 @@ export class Dropdown extends React.Component<DropdownProps, any> {
               primaryText="Oscillator"
               onClick={() => {
                 const newOscNode = {
-                  id: 999,
+                  id: this.props.blocksLength,
+                  blockType: "OSC",
                   type: "square" as OscillatorType,
-                  freq: 330,
+                  value: 330,
                   hasInternal: false,
                   running: false,
-                  hasGainInput: false,
-                  hasFreqInput: false,
                   hasInputFrom: [],
                   isConnectedToOutput: false,
                   connected: false,
@@ -72,7 +72,7 @@ export class Dropdown extends React.Component<DropdownProps, any> {
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
                   freqInputDOMRect: new DOMRect(0, 0, 0, 0),
                   outputDOMRect: new DOMRect(0, 0, 0, 0)
-                } as OscData;
+                } as BlockData;
                 this.props.createBlock(newOscNode);
               }}
             />
@@ -80,17 +80,17 @@ export class Dropdown extends React.Component<DropdownProps, any> {
               primaryText="Gain"
               onClick={() => {
                 const newOscNode = {
-                  id: 999,
-                  gain: 1,
+                  id: this.props.blocksLength,
+                  blockType: "GAIN",
+                  value: 1,
                   connected: false,
                   hasInternal: false,
-                  hasGainInput: false,
                   hasInputFrom: [],
                   isConnectedToOutput: false,
                   outputs: [],
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
                   outputDOMRect: new DOMRect(0, 0, 0, 0)
-                };
+                } as BlockData;
                 this.props.createBlock(newOscNode);
               }}
             />

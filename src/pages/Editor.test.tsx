@@ -84,9 +84,7 @@ describe("OscNode", () => {
     );
     const expectedBlockToConnectTo = {
       ...blockToConnectTo,
-      hasGainInput: true,
-      hasInputFrom: [0],
-      hasFreqInput: false
+      hasInputFrom: [0]
     };
     expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 1][0]).toEqual(
       expectedBlockToConnectTo

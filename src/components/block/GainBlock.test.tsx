@@ -5,7 +5,7 @@ import * as Adapter from "enzyme-adapter-react-16";
 import "web-audio-test-api";
 import { audioCtx, mockblocks } from "../../lib/helpers/Mocks";
 import { buildInternals } from "../../lib/helpers/Editor";
-import { OscData, GainData } from "../../types/blockData";
+import { BlockData } from "../../types/blockData";
 import { InternalOscData, InternalGainData } from "../../types/internalData";
 // import ComposedOscBlock from "./OscBlock";
 import { GainBlock } from "./GainBlock";
@@ -20,22 +20,22 @@ describe("<GainBlock />", () => {
   const builtInternals = buildInternals(
     mockblocks,
     audioCtx,
-    (node: OscData | GainData) => {
-      mockblocks[node.id] = node;
+    (block: BlockData) => {
+      mockblocks[block.id] = block;
     },
     internals
   );
-  const nodeInstance = mockblocks[0] as GainData;
+  const blockInstance = mockblocks[0] as BlockData;
   const internalInstance = builtInternals[0] as InternalGainData;
   const MockBlock = mount(
     <MuiThemeProvider>
       <GainBlock
-        node={nodeInstance}
-        allNodes={mockblocks}
+        block={blockInstance}
+        allBlocks={mockblocks}
         internal={internalInstance}
         allInternals={builtInternals}
         tryToConnectTo={(
-          node: OscData,
+          block: BlockData,
           outputToConnectTo: AudioParam,
           outputType: string,
           inputElement: DOMRect
@@ -43,7 +43,7 @@ describe("<GainBlock />", () => {
           expect(outputToConnectTo).toBeDefined();
           expect(outputType).toBeDefined();
           expect(inputElement).toBeDefined();
-          // expect(node).toEqual(MockBlockProps.node);
+          // expect(block).toEqual(MockBlockProps.block);
           switch (outputType) {
             case "gain":
               expect(outputToConnectTo).toEqual(builtInternals[0].gain);
@@ -54,11 +54,11 @@ describe("<GainBlock />", () => {
           }
         }}
         canConnect={false}
-        updateBlock={(node: OscData | GainData) => {
+        updateBlock={(block: BlockData) => {
           // We're testing the actual redux action elsewhere
           // const store = mockStore(mockblocks);
-          // mockStore.dispatch(updateBlock(node));
-          // nodeInstance.running = (node as OscData).running;
+          // mockStore.dispatch(updateBlock(block));
+          // blockInstance.running = (block as OscData).running;
         }}
         audioCtx={audioCtx}
         connectToAnalyser={jest.fn()}
@@ -77,6 +77,6 @@ describe("<GainBlock />", () => {
   });
   test("handleGainChange()", () => {
     // MockBlockInstance.handleFreqChange(999);
-    // expect(MockBlockInstance.props.node.freq).toEqual(999);
+    // expect(MockBlockInstance.props.block.freq).toEqual(999);
   });
 });

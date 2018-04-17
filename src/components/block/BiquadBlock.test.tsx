@@ -8,14 +8,14 @@ import { buildInternals } from "../../lib/helpers/Editor";
 import { BlockData } from "../../types/blockData";
 import { InternalOscData, InternalGainData } from "../../types/internalData";
 // import ComposedOscBlock from "./OscBlock";
-import { OscBlock } from "./OscBlock";
+import { BiquadBlock } from "./BiquadBlock";
 // import { BlockProps } from "../types/blockProps";
 import { mount } from "enzyme";
 import { MuiThemeProvider } from "material-ui/styles";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("<OscBlock />", () => {
+describe("<BiquadBlock />", () => {
   const internals: Array<InternalOscData | InternalGainData> = [];
   const builtInternals = buildInternals(
     mockblocks,
@@ -29,7 +29,7 @@ describe("<OscBlock />", () => {
   const internalInstance = builtInternals[0] as InternalOscData;
   const MockBlock = mount(
     <MuiThemeProvider>
-      <OscBlock
+      <BiquadBlock
         block={blockInstance}
         allBlocks={mockblocks}
         internal={internalInstance}
@@ -76,17 +76,7 @@ describe("<OscBlock />", () => {
     </MuiThemeProvider>
   );
 
-  const MockBlockInstance = MockBlock.children().instance() as OscBlock;
-  const MockBlockProps = MockBlock.props().children.props;
-  test("toggleOsc()", () => {
-    expect(MockBlockProps.block.running).toBe(false);
-    MockBlockInstance.toggleOsc();
-    expect(MockBlockProps.internal.gain.gain.value).toEqual(1);
-    expect(MockBlockProps.block.running).toBe(true);
-    MockBlockInstance.toggleOsc();
-    expect(MockBlockProps.internal.gain.gain.value).toEqual(0);
-    expect(MockBlockProps.block.running).toBe(false);
-  });
+  const MockBlockInstance = MockBlock.children().instance() as BiquadBlock;
   test("tryToConnectTo()", () => {
     MockBlockInstance.tryToConnectTo("gain");
     MockBlockInstance.tryToConnectTo("freq");

@@ -1,6 +1,5 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
-import Toggle from "material-ui/Toggle";
 
 import TextField from "material-ui/TextField";
 
@@ -17,7 +16,7 @@ import { Analyser } from "../Analyser";
 import { OscBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 
-export class OscBlock extends React.Component<OscBlockProps> {
+export class BiquadBlock extends React.Component<OscBlockProps> {
   freqInput: HTMLInputElement;
   typeInput: HTMLInputElement;
 
@@ -30,29 +29,6 @@ export class OscBlock extends React.Component<OscBlockProps> {
 
     this.props.internal.oscillator.connect(this.props.internal.gain);
   }
-  toggleOsc = () => {
-    const internal = this.props.internal;
-    if (!this.props.block.running) {
-      try {
-        this.props.internal.oscillator.start();
-      } catch (e) {
-        // window.console.log(e);
-      }
-      internal.gain.gain.value = 1;
-      this.props.connectInternal();
-      this.props.updateBlock({
-        ...this.props.block,
-        running: true
-      });
-    } else {
-      internal.gain.gain.value = 0;
-      this.props.internal.gain.disconnect();
-      this.props.updateBlock({
-        ...this.props.block,
-        running: false
-      });
-    }
-  };
 
   tryToConnectTo = (outputType: string) => {
     let outputToConnectTo, inputElement;
@@ -104,7 +80,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
     const updatedBlock: BlockData = {
       ...this.props.block,
       type: value
-    } as BlockData;
+    };
     this.props.updateBlock(updatedBlock);
   };
   componentDidMount() {
@@ -146,12 +122,6 @@ export class OscBlock extends React.Component<OscBlockProps> {
             }}
           />
           <div className="card-content">
-            <Toggle
-              onClick={this.toggleOsc}
-              className="toggle"
-              thumbSwitchedStyle={{ backgroundColor: "#f50057" }}
-              trackSwitchedStyle={{ backgroundColor: "#ff9d9d" }}
-            />
             <form onSubmit={e => e.preventDefault()} className="block-controls">
               <TextField
                 id="freq"
@@ -199,4 +169,4 @@ export class OscBlock extends React.Component<OscBlockProps> {
   }
 }
 
-export default composedBlock(OscBlock);
+export default composedBlock(BiquadBlock);
