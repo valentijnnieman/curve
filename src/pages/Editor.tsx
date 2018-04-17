@@ -3,9 +3,14 @@ import * as React from "react";
 import "./Editor.css";
 import OscBlock from "../components/block/OscBlock";
 import GainBlock from "../components/block/GainBlock";
+import BiquadBlock from "../components/block/BiquadBlock";
 import { Code } from "../components/ui/Code";
 // import OutputNode from "../components/block/OutputNode";
-import { InternalOscData, InternalGainData } from "../types/internalData";
+import {
+  InternalOscData,
+  InternalData,
+  InternalBiquadData
+} from "../types/internalData";
 import { BlockData, OutputData } from "../types/blockData";
 import { Line } from "../types/lineData";
 import { StoreState } from "../types/storeState";
@@ -15,16 +20,13 @@ import { connect } from "react-redux";
 import { updateBlock } from "../actions/block";
 
 // helpers
-import {
-  buildInternals,
-  drawConnectionLines,
-  genWACode
-} from "../lib/helpers/Editor";
+import { drawConnectionLines, genWACode } from "../lib/helpers/Editor";
 
 const SpeakerSVG = require("../speakers.svg");
 
 interface EditorProps {
   blocks: Array<BlockData>;
+  audioCtx: AudioContext;
   updateBlock: (block: BlockData) => void;
 }
 
@@ -32,7 +34,7 @@ interface EditorState {
   wantsToConnect: boolean;
   blockToConnect?: BlockData;
   blockToConnectTo?: BlockData;
-  internalToConnect?: InternalOscData | InternalGainData;
+  internalToConnect?: InternalOscData | InternalData | InternalBiquadData;
   outputToConnectTo?: AudioParam | AudioDestinationNode;
   outputType?: string;
   lineFrom?: DOMRect;
@@ -43,28 +45,19 @@ interface EditorState {
 }
 
 export class Editor extends React.Component<EditorProps, EditorState> {
-  output: InternalGainData;
+  output: InternalData;
   code: string;
-  _AUDIOCTX: AudioContext;
-  _INTERNALS: Array<InternalOscData | InternalGainData> = [];
   lines: Array<Line> = [];
   speakersDOMRect: HTMLDivElement;
   constructor(props: EditorProps) {
     super(props);
-    this._AUDIOCTX = new AudioContext(); // define audio context
 
     this.state = {
       wantsToConnect: false,
       speakersAreConnected: false
     };
     // Build internal objects from blocks used with web audio
-    this._INTERNALS = buildInternals(
-      this.props.blocks,
-      this._AUDIOCTX,
-      this.props.updateBlock,
-      this._INTERNALS
-    );
-    this.code = genWACode(this.props.blocks, this._INTERNALS);
+    this.code = genWACode(this.props.blocks);
   }
   testConnect = () => {
     // checks if connection can be made & updates blocks info
@@ -117,7 +110,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     // update node info in store
     const blockWithOutput = this.props.blocks[fromBlock];
     const blockWithInput = this.props.blocks[toBlock];
-    const internal = this._INTERNALS[fromBlock];
+    const internal = blockWithOutput.internal;
     const updatedBlockWithOutput: BlockData = {
       ...blockWithOutput,
       connected: blockWithOutput.outputs.length > 1 ? true : false,
@@ -134,13 +127,11 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     };
     this.props.updateBlock(updatedBlockWithInput);
 
-    internal.gain.disconnect();
+    if (internal) {
+      internal.gain.disconnect();
+    }
   };
-  tryToConnect = (
-    node: BlockData,
-    internal: InternalOscData | InternalGainData,
-    el: DOMRect
-  ) => {
+  tryToConnect = (node: BlockData, internal: InternalData, el: DOMRect) => {
     // called from node that wants to connect it's output
 
     // if it's already connected, disconnect it!
@@ -191,7 +182,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     if (blockToConnect) {
       this.setState({
         lineTo: e.target.getBoundingClientRect(),
-        outputToConnectTo: this._AUDIOCTX.destination,
+        outputToConnectTo: this.props.audioCtx.destination,
         speakersAreConnected: true
       });
       const updatedNode: BlockData = {
@@ -202,7 +193,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           ...blockToConnect.outputs,
           {
             id: blockToConnect.outputs.length, // TO-DO: maybe find a better solution
-            destination: this._AUDIOCTX.destination,
+            destination: this.props.audioCtx.destination,
             connectedToType: "gain",
             isConnectedTo: -1 // speakers are -1
           } as OutputData
@@ -214,18 +205,11 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   };
   componentWillReceiveProps(nextProps: EditorProps) {
     this.props = nextProps;
-    // rebuild internals
-    this._INTERNALS = buildInternals(
-      this.props.blocks,
-      this._AUDIOCTX,
-      this.props.updateBlock,
-      this._INTERNALS
-    );
     this.lines = drawConnectionLines(
       this.props.blocks,
       this.speakersDOMRect.getBoundingClientRect() as DOMRect
     );
-    this.code = genWACode(this.props.blocks, this._INTERNALS);
+    this.code = genWACode(this.props.blocks);
   }
   onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (this.state.wantsToConnect) {
@@ -245,36 +229,51 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   render() {
     const synthElements = this.props.blocks.map(
       (block: BlockData, index: number) => {
-        if (block.blockType === "OSC") {
-          return (
-            <OscBlock
-              key={index}
-              block={block}
-              allBlocks={this.props.blocks}
-              internal={this._INTERNALS[index] as InternalOscData}
-              allInternals={this._INTERNALS}
-              tryToConnect={this.tryToConnect}
-              tryToConnectTo={this.tryToConnectTo}
-              canConnect={this.state.wantsToConnect}
-              updateBlock={this.props.updateBlock}
-              audioCtx={this._AUDIOCTX}
-            />
-          );
+        if (block.internal) {
+          if (block.blockType === "OSC") {
+            return (
+              <OscBlock
+                key={index}
+                block={block}
+                allBlocks={this.props.blocks}
+                tryToConnect={this.tryToConnect}
+                tryToConnectTo={this.tryToConnectTo}
+                canConnect={this.state.wantsToConnect}
+                updateBlock={this.props.updateBlock}
+                audioCtx={this.props.audioCtx}
+              />
+            );
+          } else if (block.blockType === "GAIN") {
+            return (
+              <GainBlock
+                key={index}
+                block={block}
+                allBlocks={this.props.blocks}
+                tryToConnect={this.tryToConnect}
+                tryToConnectTo={this.tryToConnectTo}
+                canConnect={this.state.wantsToConnect}
+                updateBlock={this.props.updateBlock}
+                audioCtx={this.props.audioCtx}
+              />
+            );
+          } else if (block.blockType === "BIQUAD") {
+            return (
+              <BiquadBlock
+                key={index}
+                block={block}
+                allBlocks={this.props.blocks}
+                tryToConnect={this.tryToConnect}
+                tryToConnectTo={this.tryToConnectTo}
+                canConnect={this.state.wantsToConnect}
+                updateBlock={this.props.updateBlock}
+                audioCtx={this.props.audioCtx}
+              />
+            );
+          } else {
+            return null;
+          }
         } else {
-          return (
-            <GainBlock
-              key={index}
-              block={block}
-              allBlocks={this.props.blocks}
-              internal={this._INTERNALS[index] as InternalGainData}
-              allInternals={this._INTERNALS}
-              tryToConnect={this.tryToConnect}
-              tryToConnectTo={this.tryToConnectTo}
-              canConnect={this.state.wantsToConnect}
-              updateBlock={this.props.updateBlock}
-              audioCtx={this._AUDIOCTX}
-            />
-          );
+          return null;
         }
       }
     );
@@ -343,9 +342,10 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   }
 }
 
-const mapStateToProps = ({ blocks }: StoreState) => {
+const mapStateToProps = ({ blocks, audioCtx }: StoreState) => {
   return {
-    blocks
+    blocks,
+    audioCtx
   };
 };
 

@@ -1,69 +1,52 @@
-import { BlockData } from "../../types/blockData";
-import {
-  InternalOscData,
-  InternalGainData,
-  InternalBiquadData
-} from "../../types/internalData";
+import { BlockData, BlockDataOptions } from "../../types/blockData";
+import { InternalOscData, InternalBiquadData } from "../../types/internalData";
 import { Line } from "../../types/lineData";
 
-// builds internal objects from blocks used with web audio api
-export const buildInternals = (
-  blocks: Array<BlockData>,
-  audioCtx: AudioContext,
-  updateBlock: (block: BlockData) => void,
-  internals: Array<InternalOscData | InternalGainData | InternalBiquadData>
+// builds internal object from block used with web audio api
+export const buildInternal = (
+  block: BlockDataOptions,
+  audioCtx: AudioContext
 ) => {
-  blocks.map((block, index) => {
-    if (block.hasInternal) {
-      // block already has an internal - no need to create new internals
-    } else {
-      let gain = audioCtx.createGain();
-      gain.gain.value = 1;
-      let analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 1024;
-      if (block.blockType === "OSC") {
-        let oscillator;
-        oscillator = audioCtx.createOscillator();
-        oscillator.type = block.type as OscillatorType;
-        oscillator.frequency.setValueAtTime(block.value, audioCtx.currentTime);
-        const newOscInternal = {
-          id: index,
-          oscillator,
-          gain,
-          analyser
-        };
-        internals.push(newOscInternal);
-      } else if (block.blockType === "GAIN") {
-        const newGainInternal = {
-          id: index,
-          gain,
-          analyser
-        };
-        internals.push(newGainInternal);
-      } else if (block.blockType === "BIQUAD") {
-        let biquadFilter;
-        biquadFilter = audioCtx.createBiquadFilter();
-        biquadFilter.type = block.type as BiquadFilterType;
-        biquadFilter.frequency.setValueAtTime(
-          block.value,
-          audioCtx.currentTime
-        );
-        const newBiquadInternal = {
-          id: index,
-          filter: biquadFilter,
-          gain,
-          analyser
-        };
-        internals.push(newBiquadInternal);
-      }
-      // update the blocks object now that we build an internal
-      updateBlock({
-        ...block,
-        hasInternal: true
-      });
-    }
-  });
-  return internals;
+  let gain = audioCtx.createGain();
+  gain.gain.value = 1;
+  let analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 1024;
+  if (block.blockType === "OSC") {
+    let oscillator;
+    oscillator = audioCtx.createOscillator();
+    oscillator.type = block.type as OscillatorType;
+    oscillator.frequency.setValueAtTime(block.value, audioCtx.currentTime);
+    const newOscInternal = {
+      oscillator,
+      gain,
+      analyser
+    };
+    return newOscInternal;
+  } else if (block.blockType === "GAIN") {
+    const newGainInternal = {
+      gain,
+      analyser
+    };
+    return newGainInternal;
+  } else if (block.blockType === "BIQUAD") {
+    let filter;
+    filter = audioCtx.createBiquadFilter();
+    filter.type = block.type as BiquadFilterType;
+    filter.frequency.setValueAtTime(block.value, audioCtx.currentTime);
+    const newBiquadInternal = {
+      filter: filter,
+      gain,
+      analyser
+    } as InternalBiquadData;
+    return newBiquadInternal;
+  } else {
+    // default
+    const newGainInternal = {
+      gain,
+      analyser
+    };
+    return newGainInternal;
+  }
 };
 
 // draws lines between connected blocks
@@ -110,16 +93,13 @@ export const drawConnectionLines = (
 };
 
 // Generates web audio code from internals (experimental)
-export const genWACode = (
-  blocks: Array<BlockData>,
-  internals: Array<InternalOscData | InternalGainData>
-) => {
+export const genWACode = (blocks: Array<BlockData>) => {
   let jsString: string =
       "const audioCtx = new AudioContext(); // define audio context\n\n",
     connects: string = "";
-  internals.map((internal, index) => {
+  blocks.map((block, index) => {
     // get blocks object for more info like output
-    let block = blocks[index];
+    const internal = block.internal;
     if (block && block.blockType === "OSC") {
       jsString += `// Creating oscillator block
 let osc${index} = audioCtx.createOscillator();

@@ -21,7 +21,7 @@ interface TopbarState {
 }
 
 interface TopbarProps {
-  blocksLength: number;
+  audioCtx: AudioContext;
   createBlock: (block: BlockData) => void;
 }
 
@@ -55,20 +55,18 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           autoStart={true}
         />
         <Dropdown
-          blocksLength={this.props.blocksLength}
+          audioCtx={this.props.audioCtx}
           createBlock={this.props.createBlock}
         />
       </AppBar>
     );
   }
 }
-
-const mapStateToProps = ({ blocks }: StoreState) => {
+const mapStateToProps = ({ audioCtx }: StoreState) => {
   return {
-    blocksLength: blocks.length
+    audioCtx
   };
 };
-
 const mapDispatchToProps = (dispatch: any) => {
   return {
     createBlock: (block: BlockData) => dispatch(createBlock(block))

@@ -26,7 +26,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
   tryToConnectTo = () => {
     this.props.tryToConnectTo(
       this.props.block,
-      this.props.internal.gain,
+      this.props.block.internal.gain,
       "gain",
       this.gainInputElement.getBoundingClientRect()
     );
@@ -37,8 +37,9 @@ export class GainBlock extends React.Component<GainBlockProps> {
     const newGain = Number(e.target.value);
     if (newGain >= 0 && typeof newGain === "number") {
       // set change here so it is instant
-      this.props.internal.gain.gain.value = newGain;
-
+      if (this.props.block.internal.gain) {
+        this.props.block.internal.gain.gain.value = newGain;
+      }
       // update block info in store
       const updatedNode: BlockData = {
         ...this.props.block,
@@ -88,7 +89,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
               />
             </form>
             <Analyser
-              analyser={this.props.internal.analyser}
+              analyser={this.props.block.internal.analyser as AnalyserNode}
               backgroundColor="#337ab7"
               lineColor="#f8f8f8"
             />

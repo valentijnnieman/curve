@@ -10,9 +10,8 @@ import {
   outputDOMRect,
   inputDOMRect
 } from "../helpers/Mocks";
-import { buildInternals } from "../helpers/Editor";
 import { BlockData } from "../../types/blockData";
-import { InternalOscData, InternalGainData } from "../../types/internalData";
+import { InternalOscData, InternalData } from "../../types/internalData";
 import { shallow } from "enzyme";
 import { composedBlock } from "./Block";
 import { OscBlockProps } from "../../types/blockProps";
@@ -26,28 +25,17 @@ class MockBlock extends React.Component<OscBlockProps> {
 }
 
 const ComposedBlock = composedBlock(MockBlock);
-const internals: Array<InternalOscData | InternalGainData> = [];
-const builtInternals = buildInternals(
-  mockblocks,
-  audioCtx,
-  (block: BlockData) => {
-    mockblocks[block.id] = block;
-  },
-  internals
-);
 
 describe("OscNode", () => {
   const blockInstance = mockblocks[0];
-  const internalInstance = builtInternals[0] as InternalOscData;
+  const internalInstance = blockInstance.internal as InternalOscData;
   const wrapper = shallow(
     <ComposedBlock
       block={blockInstance}
       allBlocks={mockblocks}
-      internal={internalInstance}
-      allInternals={builtInternals}
       tryToConnect={(
         block: BlockData,
-        internal: InternalOscData | InternalGainData,
+        internal: InternalOscData | InternalData,
         el: DOMRect
       ) => {
         // this is the parent method that will catch component's tryToConnect method
@@ -99,7 +87,8 @@ describe("OscNode", () => {
   const instance = wrapper.instance() as any;
 
   test("connectInternal()", () => {
-    instance.props.block.output = builtInternals[1].gain.gain as AudioParam;
+    instance.props.block.output = mockblocks[1].internal.gain
+      .gain as AudioParam;
     instance.connectInternal();
     expect(instance.props.internal.gain.numberOfOutputs).toEqual(1);
     // not much else to test here, there's no (easy) way of testing if the internal Web Audio block is connected
@@ -113,7 +102,7 @@ describe("OscNode", () => {
     instance.props.block.outputs = [
       {
         id: 0,
-        destination: builtInternals[1].gain.gain,
+        destination: mockblocks[1].internal.gain.gain,
         isConnectedTo: 1,
         connectedToType: "gain",
         connectedToEl: inputDOMRect,
@@ -123,20 +112,5 @@ describe("OscNode", () => {
     const newOutputRect = { ...outputDOMRect, x: 999 };
     instance.onDragHandler(inputDOMRect, newOutputRect);
     expect(instance.props.block.outputDOMRect).toEqual(newOutputRect);
-    // TO-DO: create inputs array before testing this?
-    // test if gainInputElement is updated when hasInputFrom
-    // instance.props.allBlocks[1].connected = true;
-    // const newInputRect = { ...inputDOMRect, x: 999 };
-    // instance.props.block.hasInputFrom = [1];
-    // instance.onDragHandler(newInputRect, outputDOMRect);
-    // expect(instance.props.allBlocks[1].outputs[0].connectedToEl).toEqual(
-    //   newInputRect
-    // );
-    // // test if freqInputElement is updated when hasInputFrom
-    // instance.props.allBlocks[1].connectedToType = "freq";
-    // instance.props.allBlocks[1].connectedToEl = inputDOMRect;
-    // instance.props.block.hasInputFrom = [1];
-    // instance.onDragHandler(inputDOMRect, outputDOMRect, newInputRect);
-    // expect(instance.props.allBlocks[1].connectedToEl).toEqual(newInputRect);
   });
 });

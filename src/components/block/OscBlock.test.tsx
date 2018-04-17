@@ -4,9 +4,7 @@ import * as Adapter from "enzyme-adapter-react-16";
 
 import "web-audio-test-api";
 import { audioCtx, mockblocks } from "../../lib/helpers/Mocks";
-import { buildInternals } from "../../lib/helpers/Editor";
 import { BlockData } from "../../types/blockData";
-import { InternalOscData, InternalGainData } from "../../types/internalData";
 // import ComposedOscBlock from "./OscBlock";
 import { OscBlock } from "./OscBlock";
 // import { BlockProps } from "../types/blockProps";
@@ -16,47 +14,19 @@ import { MuiThemeProvider } from "material-ui/styles";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("<OscBlock />", () => {
-  const internals: Array<InternalOscData | InternalGainData> = [];
-  const builtInternals = buildInternals(
-    mockblocks,
-    audioCtx,
-    (block: BlockData) => {
-      mockblocks[block.id] = block;
-    },
-    internals
-  );
   const blockInstance = mockblocks[0] as BlockData;
-  const internalInstance = builtInternals[0] as InternalOscData;
   const MockBlock = mount(
     <MuiThemeProvider>
       <OscBlock
         block={blockInstance}
         allBlocks={mockblocks}
-        internal={internalInstance}
-        allInternals={builtInternals}
         tryToConnectTo={(
           block: BlockData,
           outputToConnectTo: AudioParam,
           outputType: string,
           inputElement: DOMRect
         ) => {
-          expect(outputToConnectTo).toBeDefined();
-          expect(outputType).toBeDefined();
-          expect(inputElement).toBeDefined();
-          // expect(block).toEqual(MockBlockProps.block);
-          switch (outputType) {
-            case "gain":
-              expect(outputToConnectTo).toEqual(builtInternals[0].gain.gain);
-              break;
-            case "freq":
-              expect(outputToConnectTo).toEqual(
-                internalInstance.oscillator.frequency
-              );
-              break;
-            default:
-              expect(outputToConnectTo).toEqual(internalInstance.gain.gain);
-              break;
-          }
+          //
         }}
         canConnect={false}
         updateBlock={(block: BlockData) => {

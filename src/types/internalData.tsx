@@ -1,15 +1,10 @@
-export interface InternalOscData {
+export interface InternalData {
+  gain: GainNode;
+  analyser: AnalyserNode;
+}
+export interface InternalOscData extends InternalData {
   oscillator: OscillatorNode;
-  gain: GainNode;
-  analyser: AnalyserNode;
 }
-export interface InternalBiquadData {
+export interface InternalBiquadData extends InternalData {
   filter: BiquadFilterNode;
-  gain: GainNode;
-  analyser: AnalyserNode;
-}
-
-export interface InternalGainData {
-  gain: GainNode;
-  analyser: AnalyserNode;
 }

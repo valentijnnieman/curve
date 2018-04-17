@@ -15,19 +15,21 @@ export const composedBlock = (
       super(props);
     }
     connectToAnalyser = () => {
-      this.props.internal.gain.connect(this.props.internal.analyser);
+      this.props.block.internal.gain.connect(
+        this.props.block.internal.analyser
+      );
     };
     connectInternal = () => {
-      const { block, internal } = this.props;
-      internal.gain.disconnect();
+      const { block } = this.props;
+      block.internal.gain.disconnect();
       this.connectToAnalyser();
       block.outputs.map(output => {
         if (output !== undefined) {
-          internal.gain.connect(output.destination as AudioParam);
+          block.internal.gain.connect(output.destination as AudioParam);
         }
       });
       if (block.isConnectedToOutput) {
-        internal.gain.connect(this.props.audioCtx.destination);
+        block.internal.gain.connect(this.props.audioCtx.destination);
       }
     };
     onDragHandler = (
@@ -55,7 +57,7 @@ export const composedBlock = (
     tryToConnect = (outputElement: DOMRect) => {
       this.props.tryToConnect(
         this.props.block,
-        this.props.internal,
+        this.props.block.internal,
         outputElement
       );
     };

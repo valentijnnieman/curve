@@ -4,7 +4,12 @@ import * as Adapter from "enzyme-adapter-react-16";
 
 import "web-audio-test-api";
 
-import { mockblocks, outputDOMRect, inputDOMRect } from "../lib/helpers/Mocks";
+import {
+  mockblocks,
+  outputDOMRect,
+  inputDOMRect,
+  audioCtx
+} from "../lib/helpers/Mocks";
 import { Editor } from "./Editor";
 import { shallow } from "enzyme";
 
@@ -14,7 +19,7 @@ describe("OscNode", () => {
   const mockUpdate = jest.fn();
 
   const wrapper = shallow(
-    <Editor blocks={mockblocks} updateBlock={mockUpdate} />
+    <Editor blocks={mockblocks} updateBlock={mockUpdate} audioCtx={audioCtx} />
   );
 
   const instance = wrapper.instance() as any;

@@ -7,6 +7,8 @@ import TextField from "material-ui/TextField";
 import Draggable from "react-draggable";
 import { BlockData } from "../../types/blockData";
 
+import { InternalOscData } from "../../types/internalData";
+
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
 
@@ -28,13 +30,14 @@ export class OscBlock extends React.Component<OscBlockProps> {
   constructor(props: OscBlockProps) {
     super(props);
 
-    this.props.internal.oscillator.connect(this.props.internal.gain);
+    (this.props.block.internal as InternalOscData).oscillator.connect(this.props
+      .block.internal.gain as GainNode);
   }
   toggleOsc = () => {
-    const internal = this.props.internal;
+    const internal = this.props.block.internal;
     if (!this.props.block.running) {
       try {
-        this.props.internal.oscillator.start();
+        (internal as InternalOscData).oscillator.start();
       } catch (e) {
         // window.console.log(e);
       }
@@ -46,7 +49,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
       });
     } else {
       internal.gain.gain.value = 0;
-      this.props.internal.gain.disconnect();
+      internal.gain.disconnect();
       this.props.updateBlock({
         ...this.props.block,
         running: false
@@ -55,18 +58,19 @@ export class OscBlock extends React.Component<OscBlockProps> {
   };
 
   tryToConnectTo = (outputType: string) => {
+    const internal = this.props.block.internal as InternalOscData;
     let outputToConnectTo, inputElement;
     switch (outputType) {
       case "gain":
-        outputToConnectTo = this.props.internal.gain.gain;
+        outputToConnectTo = internal.gain.gain;
         inputElement = this.gainInputElement.getBoundingClientRect();
         break;
       case "freq":
-        outputToConnectTo = this.props.internal.oscillator.frequency;
+        outputToConnectTo = internal.oscillator.frequency;
         inputElement = this.freqInputElement.getBoundingClientRect();
         break;
       default:
-        outputToConnectTo = this.props.internal.gain.gain;
+        outputToConnectTo = internal.gain.gain;
         inputElement = this.gainInputElement.getBoundingClientRect();
     }
     this.props.tryToConnectTo(
@@ -83,7 +87,8 @@ export class OscBlock extends React.Component<OscBlockProps> {
     // set change here so it is instant
     const newFreq = Number(e.target.value);
     if (newFreq >= 0 && typeof newFreq === "number") {
-      this.props.internal.oscillator.frequency.setValueAtTime(
+      (this.props.block
+        .internal as InternalOscData).oscillator.frequency.setValueAtTime(
         e.target.value,
         0
       );
@@ -98,7 +103,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
   };
   handleTypeChange = (e: any, index: any, value: any) => {
     // set change here so it is instant
-    this.props.internal.oscillator.type = value;
+    (this.props.block.internal as InternalOscData).oscillator.type = value;
 
     // update block info in store
     const updatedBlock: BlockData = {
@@ -173,7 +178,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
               </DropDownMenu>
             </form>
             <Analyser
-              analyser={this.props.internal.analyser}
+              analyser={this.props.block.internal.analyser}
               backgroundColor="#53a857"
               lineColor="#f8f8f8"
             />

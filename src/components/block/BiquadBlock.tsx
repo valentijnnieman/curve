@@ -13,10 +13,11 @@ import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
 
-import { OscBlockProps } from "../../types/blockProps";
+import { BiquadBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
+import { InternalBiquadData } from "../../types/internalData";
 
-export class BiquadBlock extends React.Component<OscBlockProps> {
+export class BiquadBlock extends React.Component<BiquadBlockProps> {
   freqInput: HTMLInputElement;
   typeInput: HTMLInputElement;
 
@@ -24,25 +25,31 @@ export class BiquadBlock extends React.Component<OscBlockProps> {
   freqInputElement: HTMLDivElement;
   outputElement: HTMLDivElement;
 
-  constructor(props: OscBlockProps) {
+  constructor(props: BiquadBlockProps) {
     super(props);
 
-    this.props.internal.oscillator.connect(this.props.internal.gain);
+    if ((this.props.block.internal as InternalBiquadData).filter) {
+      (this.props.block.internal as InternalBiquadData).filter.connect(this
+        .props.block.internal.gain as GainNode);
+    }
   }
 
   tryToConnectTo = (outputType: string) => {
     let outputToConnectTo, inputElement;
     switch (outputType) {
       case "gain":
-        outputToConnectTo = this.props.internal.gain.gain;
+        outputToConnectTo = (this.props.block.internal as InternalBiquadData)
+          .filter;
         inputElement = this.gainInputElement.getBoundingClientRect();
         break;
       case "freq":
-        outputToConnectTo = this.props.internal.oscillator.frequency;
+        outputToConnectTo = (this.props.block.internal as InternalBiquadData)
+          .filter.frequency;
         inputElement = this.freqInputElement.getBoundingClientRect();
         break;
       default:
-        outputToConnectTo = this.props.internal.gain.gain;
+        outputToConnectTo = (this.props.block.internal as InternalBiquadData)
+          .filter;
         inputElement = this.gainInputElement.getBoundingClientRect();
     }
     this.props.tryToConnectTo(
@@ -59,7 +66,8 @@ export class BiquadBlock extends React.Component<OscBlockProps> {
     // set change here so it is instant
     const newFreq = Number(e.target.value);
     if (newFreq >= 0 && typeof newFreq === "number") {
-      this.props.internal.oscillator.frequency.setValueAtTime(
+      (this.props.block
+        .internal as InternalBiquadData).filter.frequency.setValueAtTime(
         e.target.value,
         0
       );
@@ -74,7 +82,7 @@ export class BiquadBlock extends React.Component<OscBlockProps> {
   };
   handleTypeChange = (e: any, index: any, value: any) => {
     // set change here so it is instant
-    this.props.internal.oscillator.type = value;
+    (this.props.block.internal as InternalBiquadData).filter.type = value;
 
     // update block info in store
     const updatedBlock: BlockData = {
@@ -136,14 +144,18 @@ export class BiquadBlock extends React.Component<OscBlockProps> {
                 value={this.props.block.type}
                 onChange={this.handleTypeChange}
               >
-                <MenuItem value="sine" primaryText="Sine" />
-                <MenuItem value="square" primaryText="Square" />
-                <MenuItem value="triangle" primaryText="Triangle" />
-                <MenuItem value="sawtooth" primaryText="Sawtooth" />
+                <MenuItem value="lowpass" primaryText="Lowpass" />
+                <MenuItem value="highpass" primaryText="Highpass" />
+                <MenuItem value="bandpass" primaryText="Bandpass" />
+                <MenuItem value="lowshelf" primaryText="Lowshelf" />
+                <MenuItem value="highshelf" primaryText="Highshelf" />
+                <MenuItem value="peaking" primaryText="Peaking" />
+                <MenuItem value="notch" primaryText="Notch" />
+                <MenuItem value="allpass" primaryText="Allpass" />
               </DropDownMenu>
             </form>
             <Analyser
-              analyser={this.props.internal.analyser}
+              analyser={this.props.block.internal.analyser as AnalyserNode}
               backgroundColor="#53a857"
               lineColor="#f8f8f8"
             />
@@ -168,5 +180,4 @@ export class BiquadBlock extends React.Component<OscBlockProps> {
     );
   }
 }
-
 export default composedBlock(BiquadBlock);
