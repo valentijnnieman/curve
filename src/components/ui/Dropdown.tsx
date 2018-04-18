@@ -83,7 +83,7 @@ export class Dropdown extends React.Component<DropdownProps, any> {
               }}
             />
             <MenuItem
-              primaryText="Biquad Filter"
+              primaryText="Filter"
               onClick={() => {
                 const options = {
                   id: 999,

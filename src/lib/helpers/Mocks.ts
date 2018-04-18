@@ -64,6 +64,20 @@ const mockblockOptions: Array<BlockDataOptions> = [
     connected: false,
     gainInputDOMRect: inputDOMRect,
     outputDOMRect: outputDOMRect
+  },
+  {
+    id: 3,
+    blockType: "BIQUAD",
+    type: "lowpass" as BiquadFilterType,
+    values: [1000, 10],
+    connected: false,
+    hasInternal: false,
+    hasInputFrom: [],
+    isConnectedToOutput: false,
+    outputs: [],
+    gainInputDOMRect: inputDOMRect,
+    freqInputDOMRect: inputDOMRect,
+    outputDOMRect: outputDOMRect
   }
 ];
 export const mockblocks: Array<BlockData> = [
@@ -80,6 +94,11 @@ export const mockblocks: Array<BlockData> = [
   {
     ...mockblockOptions[2],
     internal: buildInternal(mockblockOptions[2], audioCtx)
+  },
+
+  {
+    ...mockblockOptions[3],
+    internal: buildInternal(mockblockOptions[3], audioCtx)
   }
 ];
 

@@ -118,7 +118,12 @@ osc${index}.start();`;
         } else {
           block.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              if ("gain" in blocks[output.isConnectedTo]) {
+              window.console.log("WA", blocks[output.isConnectedTo]);
+              if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
+                connects += `gain${index}.connect(filter${
+                  output.isConnectedTo
+                });\n`;
+              } else if (blocks[output.isConnectedTo].blockType === "GAIN") {
                 connects += `gain${index}.connect(gain${
                   output.isConnectedTo
                 });\n`;
@@ -146,7 +151,54 @@ gain${index}.gain.value = ${block.values[0]};`;
         } else {
           block.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              if ("gain" in blocks[output.isConnectedTo]) {
+              window.console.log("WA", blocks[output.isConnectedTo]);
+              if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
+                connects += `gain${index}.connect(filter${
+                  output.isConnectedTo
+                });\n`;
+              } else if (blocks[output.isConnectedTo].blockType === "GAIN") {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                });\n`;
+              } else {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                }.gain);\n`;
+              }
+            } else if (output.connectedToType === "freq") {
+              connects += `gain${index}.connect(osc${
+                output.isConnectedTo
+              }.frequency);\n`;
+            }
+          });
+        }
+      }
+      jsString += "\n\n";
+    } else if (block && block.blockType === "BIQUAD") {
+      jsString += `// Creating filter block
+let filter${index} = audioCtx.createBiquadFilter();
+filter${index}.type = "${(internal as InternalBiquadData).filter.type}";
+filter${index}.frequency.setValueAtTime(${
+        block.values[0]
+      }, audioCtx.currentTime);
+filter${index}.Q.setValueAtTime(${block.values[1]}, audioCtx.currentTime);
+// create a internal gain used with oscillator object
+let gain${index} = audioCtx.createGain();
+gain${index}.gain.value = 1;
+filter${index}.connect(gain${index});`;
+      if (block.connected) {
+        if (block.isConnectedToOutput) {
+          // connected to speakers
+          connects += `gain${index}.connect(audioCtx.destination);\n`;
+        } else {
+          block.outputs.map(output => {
+            if (output.connectedToType === "gain" && output.isConnectedTo) {
+              window.console.log("WA", blocks[output.isConnectedTo]);
+              if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
+                connects += `gain${index}.connect(filter${
+                  output.isConnectedTo
+                });\n`;
+              } else if (blocks[output.isConnectedTo].blockType === "GAIN") {
                 connects += `gain${index}.connect(gain${
                   output.isConnectedTo
                 });\n`;

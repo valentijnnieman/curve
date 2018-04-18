@@ -84,6 +84,16 @@ gain1.gain.value = 1;
 let gain2 = audioCtx.createGain();
 gain2.gain.value = 1;
 
+// Creating filter block
+let filter3 = audioCtx.createBiquadFilter();
+filter3.type = \"lowpass\";
+filter3.frequency.setValueAtTime(1000, audioCtx.currentTime);
+filter3.Q.setValueAtTime(10, audioCtx.currentTime);
+// create a internal gain used with oscillator object
+let gain3 = audioCtx.createGain();
+gain3.gain.value = 1;
+filter3.connect(gain3);
+
 `;
     expect(code).toEqual(expectedCode);
   });
