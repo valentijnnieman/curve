@@ -21,6 +21,7 @@ import { updateBlock } from "../actions/block";
 
 // helpers
 import { drawConnectionLines, genWACode } from "../lib/helpers/Editor";
+import { IconButton } from "material-ui";
 
 const SpeakerSVG = require("../speakers.svg");
 
@@ -131,6 +132,10 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       if (internal) {
         internal.gain.disconnect();
       }
+    } else {
+      this.setState({
+        speakersAreConnected: false
+      });
     }
   };
   tryToConnect = (node: BlockData, internal: InternalData, el: DOMRect) => {
@@ -325,19 +330,26 @@ export class Editor extends React.Component<EditorProps, EditorState> {
             <h6>Speakers</h6>
             <img className="speakers-svg" src={SpeakerSVG} width={100} />
           </div>
-          <div
-            className={
-              this.state.speakersAreConnected
-                ? "io-element io-element--active"
-                : "io-element"
-            }
-            onClick={e => {
-              this.connectToSpeakers(e);
-            }}
-            ref={ref => {
-              this.speakersDOMRect = ref as HTMLDivElement;
-            }}
-          />
+          <IconButton
+            tooltip="Speakers input"
+            tooltipPosition="bottom-left"
+            className="io-button"
+            tooltipStyles={{ marginTop: "-40px" }}
+          >
+            <div
+              className={
+                this.state.speakersAreConnected
+                  ? "io-element io-element--active"
+                  : "io-element"
+              }
+              onClick={e => {
+                this.connectToSpeakers(e);
+              }}
+              ref={ref => {
+                this.speakersDOMRect = ref as HTMLDivElement;
+              }}
+            />
+          </IconButton>
         </div>
       </div>
     );

@@ -68,6 +68,6 @@ describe("<OscBlock />", () => {
       stopPropagation: () => undefined,
       target: { value: 999 }
     });
-    expect(mockUpdate.mock.calls[3][0].value).toEqual(999);
+    expect(mockUpdate.mock.calls[3][0].values).toEqual([999]);
   });
 });

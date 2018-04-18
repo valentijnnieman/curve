@@ -165,6 +165,7 @@ describe("OscNode", () => {
   test("disconnect() from speakers", () => {
     testBlock.connected = true;
     testBlock.isConnectedToOutput = true;
+    instance.state.speakersAreConnected = true;
     testBlock.outputs = [
       {
         connectedToType: "gain",
@@ -185,5 +186,6 @@ describe("OscNode", () => {
     expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 1][0]).toEqual(
       expectedBlock
     );
+    expect(instance.state.speakersAreConnected).toBe(false);
   });
 });

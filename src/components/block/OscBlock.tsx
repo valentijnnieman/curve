@@ -98,7 +98,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
       // update block info in store
       const updatedBlock: BlockData = {
         ...this.props.block,
-        values: [newFreq, this.props.block.values[0]]
+        values: [newFreq]
       };
       this.props.updateBlock(updatedBlock);
     }
