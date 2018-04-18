@@ -1,52 +1,70 @@
 import { StoreState } from "../types/storeState";
+import { BlockDataOptions } from "../types/blockData";
+import { buildInternal } from "../lib/helpers/Editor";
+
+const audioCtx = new AudioContext();
+
+const blockOptions: Array<BlockDataOptions> = [
+  {
+    id: 0,
+    blockType: "OSC",
+    type: "sine" as OscillatorType,
+    values: [220],
+    hasInternal: false,
+    running: false,
+    connected: false,
+    hasInputFrom: [],
+    isConnectedToOutput: false,
+    outputs: [],
+    gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+    freqInputDOMRect: new DOMRect(0, 0, 0, 0),
+    outputDOMRect: new DOMRect(0, 0, 0, 0)
+  },
+  {
+    id: 1,
+    blockType: "OSC",
+    type: "square" as OscillatorType,
+    values: [330],
+    hasInternal: false,
+    running: false,
+    hasInputFrom: [],
+    isConnectedToOutput: false,
+    connected: false,
+    outputs: [],
+    gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+    freqInputDOMRect: new DOMRect(0, 0, 0, 0),
+    outputDOMRect: new DOMRect(0, 0, 0, 0)
+  },
+  {
+    id: 2,
+    blockType: "GAIN",
+    values: [1],
+    hasInternal: false,
+    hasInputFrom: [],
+    isConnectedToOutput: false,
+    connected: false,
+    outputs: [],
+    gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+    outputDOMRect: new DOMRect(0, 0, 0, 0)
+  }
+];
 
 const initialState = {
   blocks: [
     {
-      id: 0,
-      type: "sine" as OscillatorType,
-      freq: 220,
-      hasInternal: false,
-      running: false,
-      connected: false,
-      hasGainInput: false,
-      hasFreqInput: false,
-      hasInputFrom: [],
-      isConnectedToOutput: false,
-      outputs: [],
-      gainInputDOMRect: new DOMRect(0, 0, 0, 0),
-      freqInputDOMRect: new DOMRect(0, 0, 0, 0),
-      outputDOMRect: new DOMRect(0, 0, 0, 0)
+      ...blockOptions[0],
+      internal: buildInternal(blockOptions[0], audioCtx)
     },
     {
-      id: 1,
-      type: "square" as OscillatorType,
-      freq: 330,
-      hasInternal: false,
-      running: false,
-      hasGainInput: false,
-      hasFreqInput: false,
-      hasInputFrom: [],
-      isConnectedToOutput: false,
-      connected: false,
-      outputs: [],
-      gainInputDOMRect: new DOMRect(0, 0, 0, 0),
-      freqInputDOMRect: new DOMRect(0, 0, 0, 0),
-      outputDOMRect: new DOMRect(0, 0, 0, 0)
+      ...blockOptions[1],
+      internal: buildInternal(blockOptions[1], audioCtx)
     },
     {
-      id: 2,
-      gain: 1,
-      hasInternal: false,
-      hasGainInput: false,
-      hasInputFrom: [],
-      isConnectedToOutput: false,
-      connected: false,
-      outputs: [],
-      gainInputDOMRect: new DOMRect(0, 0, 0, 0),
-      outputDOMRect: new DOMRect(0, 0, 0, 0)
+      ...blockOptions[2],
+      internal: buildInternal(blockOptions[2], audioCtx)
     }
-  ]
+  ],
+  audioCtx
 };
 
 export default (state: StoreState = initialState, action: any): StoreState => {

@@ -1,48 +1,31 @@
 import "./Editor";
 import "web-audio-test-api";
-import { buildInternals, drawConnectionLines, genWACode } from "./Editor";
-import { OscData, GainData } from "../../types/blockData";
-import { InternalOscData, InternalGainData } from "../../types/internalData";
+import { drawConnectionLines, genWACode } from "./Editor";
+import { InternalOscData } from "../../types/internalData";
 import { Line } from "../../types/lineData";
-import { audioCtx, mockblocks, speakersDOMRect } from "./Mocks";
+import { mockblocks, speakersDOMRect } from "./Mocks";
 
-const internals: Array<InternalOscData | InternalGainData> = [];
-const builtInternals = buildInternals(
-  mockblocks,
-  audioCtx,
-  (node: OscData | GainData) => {
-    // fire updateBlock
-  },
-  internals
-);
-describe("buildInternals()", () => {
+describe("buildInternal()", () => {
+  let internalToTest: InternalOscData;
+  beforeEach(() => {
+    const testBlock = mockblocks[0];
+    internalToTest = testBlock.internal as InternalOscData;
+  });
   test("internal oscillator has gain", () => {
-    const internalToTest: InternalOscData = builtInternals[0] as InternalOscData;
     expect(internalToTest.gain).toBeDefined();
     expect(internalToTest.gain.gain.value).toEqual(1);
   });
   test("internal oscillators set correctly", () => {
-    const internalToTest: InternalOscData = builtInternals[0] as InternalOscData;
-
-    expect(internalToTest.oscillator.type).toEqual(
-      (mockblocks[0] as OscData).type
-    );
+    expect(internalToTest.oscillator.type).toEqual(mockblocks[0].type);
     expect(internalToTest.oscillator.frequency.value).toEqual(
-      (mockblocks[0] as OscData).freq
+      mockblocks[0].values[0]
     );
   });
   test("internal gain objects set correctly", () => {
-    const internalToTest = builtInternals[1] as InternalGainData;
-    expect(internalToTest.gain.gain.value).toEqual(
-      (mockblocks[1] as GainData).gain
-    );
+    expect(internalToTest.gain.gain.value).toEqual(mockblocks[1].values[0]);
   });
   test("internals have analyser", () => {
-    const internalWithOscillator: InternalOscData = builtInternals[0] as InternalOscData;
-    expect(internalWithOscillator.analyser).toBeDefined();
-
-    const internalWithGain: InternalOscData = builtInternals[0] as InternalOscData;
-    expect(internalWithGain.analyser).toBeDefined();
+    expect(internalToTest.analyser).toBeDefined();
   });
 });
 
@@ -51,7 +34,7 @@ describe("drawConnectionLines()", () => {
     mockblocks[0].outputs = [
       {
         id: 0,
-        destination: builtInternals[1].gain.gain,
+        destination: mockblocks[1].internal.gain.gain,
         isConnectedTo: 1,
         connectedToType: "gain"
       }
@@ -82,10 +65,10 @@ describe("drawConnectionLines()", () => {
 
 describe("genWACode()", () => {
   test("it generates Web Audio code", () => {
-    const code = genWACode(mockblocks, builtInternals);
+    const code = genWACode(mockblocks);
     const expectedCode = `const audioCtx = new AudioContext(); // define audio context
 
-// Creating oscillator node
+// Creating oscillator block
 let osc0 = audioCtx.createOscillator();
 osc0.type = \"sine\";
 osc0.frequency.setValueAtTime(220, audioCtx.currentTime);
@@ -100,6 +83,16 @@ gain1.gain.value = 1;
 
 let gain2 = audioCtx.createGain();
 gain2.gain.value = 1;
+
+// Creating filter block
+let filter3 = audioCtx.createBiquadFilter();
+filter3.type = \"lowpass\";
+filter3.frequency.setValueAtTime(1000, audioCtx.currentTime);
+filter3.Q.setValueAtTime(10, audioCtx.currentTime);
+// create a internal gain used with oscillator object
+let gain3 = audioCtx.createGain();
+gain3.gain.value = 1;
+filter3.connect(gain3);
 
 `;
     expect(code).toEqual(expectedCode);

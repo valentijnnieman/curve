@@ -6,23 +6,30 @@ import "web-audio-test-api";
 import { audioCtx, mockblocks } from "../../lib/helpers/Mocks";
 import { BlockData } from "../../types/blockData";
 // import ComposedOscBlock from "./OscBlock";
-import { GainBlock } from "./GainBlock";
+import { BiquadBlock } from "./BiquadBlock";
 // import { BlockProps } from "../types/blockProps";
 import { mount } from "enzyme";
 import { MuiThemeProvider } from "material-ui/styles";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("<GainBlock />", () => {
+describe("<BiquadBlock />", () => {
   const mockUpdate = jest.fn();
 
-  const blockInstance = mockblocks[0] as BlockData;
+  const blockInstance = mockblocks[3] as BlockData;
   const wrapper = mount(
     <MuiThemeProvider>
-      <GainBlock
+      <BiquadBlock
         block={blockInstance}
         allBlocks={mockblocks}
-        tryToConnectTo={jest.fn()}
+        tryToConnectTo={(
+          block: BlockData,
+          outputToConnectTo: AudioParam,
+          outputType: string,
+          inputElement: DOMRect
+        ) => {
+          //
+        }}
         canConnect={false}
         updateBlock={mockUpdate}
         audioCtx={audioCtx}
@@ -35,18 +42,19 @@ describe("<GainBlock />", () => {
     </MuiThemeProvider>
   );
 
-  const instance = wrapper.children().instance() as GainBlock;
+  const instance = wrapper.children().instance() as BiquadBlock;
   // const props = wrapper.children().instance().props;
-  // const MockBlockProps = MockBlock.props().children.props;
   test("tryToConnectTo()", () => {
-    instance.tryToConnectTo();
+    instance.tryToConnectTo("gain");
+    instance.tryToConnectTo("freq");
+    instance.tryToConnectTo("default");
   });
-  test("handleGainChange()", () => {
-    instance.handleGainChange({
+  test("handleFreqChange()", () => {
+    instance.handleFreqChange({
       preventDefault: () => undefined,
       stopPropagation: () => undefined,
       target: { value: 999 }
     });
-    expect(mockUpdate.mock.calls[1][0].values).toEqual([999]);
+    expect(mockUpdate.mock.calls[1][0].values).toEqual([999, 10]);
   });
 });

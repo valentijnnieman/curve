@@ -1,61 +1,64 @@
-import { OscData, GainData } from "../../types/blockData";
-import { InternalOscData, InternalGainData } from "../../types/internalData";
+import { BlockData, BlockDataOptions } from "../../types/blockData";
+import { InternalOscData, InternalBiquadData } from "../../types/internalData";
 import { Line } from "../../types/lineData";
 
-// builds internal objects from blocks used with web audio api
-export const buildInternals = (
-  blocks: Array<OscData | GainData>,
-  audioCtx: AudioContext,
-  updateBlock: (node: OscData | GainData) => void,
-  internals: Array<InternalOscData | InternalGainData>
+// builds internal object from block used with web audio api
+export const buildInternal = (
+  block: BlockDataOptions,
+  audioCtx: AudioContext
 ) => {
-  blocks.map((node, index) => {
-    if (node.hasInternal) {
-      // node already has an internal - no need to create new internals
-    } else {
-      let gain = audioCtx.createGain();
-      gain.gain.value = 1;
-      let analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 1024;
-      if ("freq" in node) {
-        let oscillator;
-        oscillator = audioCtx.createOscillator();
-        oscillator.type = node.type;
-        oscillator.frequency.setValueAtTime(node.freq, audioCtx.currentTime);
-        const newOscInternal = {
-          id: index,
-          oscillator,
-          gain,
-          analyser
-        };
-        internals.push(newOscInternal);
-      } else if ("gain" in node) {
-        const newGainInternal = {
-          id: index,
-          gain,
-          analyser
-        };
-        internals.push(newGainInternal);
-      }
-      // update the blocks object now that we build an internal
-      updateBlock({
-        ...node,
-        hasInternal: true
-      });
-    }
-  });
-  return internals;
+  let gain = audioCtx.createGain();
+  gain.gain.value = 1;
+  let analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 1024;
+  if (block.blockType === "OSC") {
+    let oscillator;
+    oscillator = audioCtx.createOscillator();
+    oscillator.type = block.type as OscillatorType;
+    oscillator.frequency.setValueAtTime(block.values[0], audioCtx.currentTime);
+    const newOscInternal = {
+      oscillator,
+      gain,
+      analyser
+    };
+    return newOscInternal;
+  } else if (block.blockType === "GAIN") {
+    const newGainInternal = {
+      gain,
+      analyser
+    };
+    return newGainInternal;
+  } else if (block.blockType === "BIQUAD") {
+    let filter;
+    filter = audioCtx.createBiquadFilter();
+    filter.type = block.type as BiquadFilterType;
+    filter.frequency.setValueAtTime(block.values[0], audioCtx.currentTime);
+    filter.Q.setValueAtTime(block.values[1], audioCtx.currentTime);
+    const newBiquadInternal = {
+      filter: filter,
+      gain,
+      analyser
+    } as InternalBiquadData;
+    return newBiquadInternal;
+  } else {
+    // default
+    const newGainInternal = {
+      gain,
+      analyser
+    };
+    return newGainInternal;
+  }
 };
 
-// draws lines between connected nodes
+// draws lines between connected blocks
 export const drawConnectionLines = (
-  blocks: Array<OscData | GainData>,
+  blocks: Array<BlockData>,
   speakersDOMRect: DOMRect
 ) => {
   let allNewLines: Array<Line> = [];
-  blocks.map(node => {
-    if (node.connected) {
-      node.outputs.map(output => {
+  blocks.map(block => {
+    if (block.connected) {
+      block.outputs.map(output => {
         let inputDOMRect;
         if (output.isConnectedTo === -1) {
           // if it's smaller than 0 it's connected to the output (speakers)
@@ -66,8 +69,8 @@ export const drawConnectionLines = (
               inputDOMRect = blocks[output.isConnectedTo].gainInputDOMRect;
               break;
             case "freq":
-              inputDOMRect = (blocks[output.isConnectedTo] as OscData)
-                .freqInputDOMRect;
+              inputDOMRect = blocks[output.isConnectedTo]
+                .freqInputDOMRect as DOMRect;
               break;
             default:
               inputDOMRect = blocks[output.isConnectedTo].gainInputDOMRect;
@@ -75,11 +78,11 @@ export const drawConnectionLines = (
           }
         }
         const newLineCoords = {
-          x1: node.outputDOMRect.x + node.outputDOMRect.width / 2,
-          y1: node.outputDOMRect.y + node.outputDOMRect.height / 2,
+          x1: block.outputDOMRect.x + block.outputDOMRect.width / 2,
+          y1: block.outputDOMRect.y + block.outputDOMRect.height / 2,
           x2: inputDOMRect.x,
           y2: inputDOMRect.y + inputDOMRect.height / 2,
-          fromBlock: node.id,
+          fromBlock: block.id,
           toBlock: output.isConnectedTo,
           outputId: output.id
         };
@@ -91,34 +94,36 @@ export const drawConnectionLines = (
 };
 
 // Generates web audio code from internals (experimental)
-export const genWACode = (
-  blocks: Array<OscData | GainData>,
-  internals: Array<InternalOscData | InternalGainData>
-) => {
+export const genWACode = (blocks: Array<BlockData>) => {
   let jsString: string =
       "const audioCtx = new AudioContext(); // define audio context\n\n",
     connects: string = "";
-  internals.map((internal, index) => {
+  blocks.map((block, index) => {
     // get blocks object for more info like output
-    let node = blocks[index];
-    if (node && "oscillator" in internal && "freq" in node) {
-      jsString += `// Creating oscillator node
+    const internal = block.internal;
+    if (block && block.blockType === "OSC") {
+      jsString += `// Creating oscillator block
 let osc${index} = audioCtx.createOscillator();
-osc${index}.type = "${internal.oscillator.type}";
-osc${index}.frequency.setValueAtTime(${node.freq}, audioCtx.currentTime);
+osc${index}.type = "${(internal as InternalOscData).oscillator.type}";
+osc${index}.frequency.setValueAtTime(${block.values[0]}, audioCtx.currentTime);
 // create a internal gain used with oscillator object
 let gain${index} = audioCtx.createGain();
 gain${index}.gain.value = 1;
 osc${index}.connect(gain${index});
 osc${index}.start();`;
-      if (node.connected) {
-        if (node.isConnectedToOutput) {
+      if (block.connected) {
+        if (block.isConnectedToOutput) {
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
-          node.outputs.map(output => {
+          block.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              if ("gain" in blocks[output.isConnectedTo]) {
+              window.console.log("WA", blocks[output.isConnectedTo]);
+              if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
+                connects += `gain${index}.connect(filter${
+                  output.isConnectedTo
+                });\n`;
+              } else if (blocks[output.isConnectedTo].blockType === "GAIN") {
                 connects += `gain${index}.connect(gain${
                   output.isConnectedTo
                 });\n`;
@@ -136,17 +141,64 @@ osc${index}.start();`;
         }
       }
       jsString += "\n\n";
-    } else if (node && "gain" in internal && "gain" in node) {
+    } else if (block && block.blockType === "GAIN") {
       jsString += `let gain${index} = audioCtx.createGain();
-gain${index}.gain.value = ${node.gain};`;
-      if (node.connected) {
-        if (node.isConnectedToOutput) {
+gain${index}.gain.value = ${block.values[0]};`;
+      if (block.connected) {
+        if (block.isConnectedToOutput) {
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
-          node.outputs.map(output => {
+          block.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              if ("gain" in blocks[output.isConnectedTo]) {
+              window.console.log("WA", blocks[output.isConnectedTo]);
+              if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
+                connects += `gain${index}.connect(filter${
+                  output.isConnectedTo
+                });\n`;
+              } else if (blocks[output.isConnectedTo].blockType === "GAIN") {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                });\n`;
+              } else {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                }.gain);\n`;
+              }
+            } else if (output.connectedToType === "freq") {
+              connects += `gain${index}.connect(osc${
+                output.isConnectedTo
+              }.frequency);\n`;
+            }
+          });
+        }
+      }
+      jsString += "\n\n";
+    } else if (block && block.blockType === "BIQUAD") {
+      jsString += `// Creating filter block
+let filter${index} = audioCtx.createBiquadFilter();
+filter${index}.type = "${(internal as InternalBiquadData).filter.type}";
+filter${index}.frequency.setValueAtTime(${
+        block.values[0]
+      }, audioCtx.currentTime);
+filter${index}.Q.setValueAtTime(${block.values[1]}, audioCtx.currentTime);
+// create a internal gain used with oscillator object
+let gain${index} = audioCtx.createGain();
+gain${index}.gain.value = 1;
+filter${index}.connect(gain${index});`;
+      if (block.connected) {
+        if (block.isConnectedToOutput) {
+          // connected to speakers
+          connects += `gain${index}.connect(audioCtx.destination);\n`;
+        } else {
+          block.outputs.map(output => {
+            if (output.connectedToType === "gain" && output.isConnectedTo) {
+              window.console.log("WA", blocks[output.isConnectedTo]);
+              if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
+                connects += `gain${index}.connect(filter${
+                  output.isConnectedTo
+                });\n`;
+              } else if (blocks[output.isConnectedTo].blockType === "GAIN") {
                 connects += `gain${index}.connect(gain${
                   output.isConnectedTo
                 });\n`;

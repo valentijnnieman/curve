@@ -1,13 +1,10 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
-import Toggle from "material-ui/Toggle";
 
 import TextField from "material-ui/TextField";
 
 import Draggable from "react-draggable";
 import { BlockData } from "../../types/blockData";
-
-import { InternalOscData } from "../../types/internalData";
 
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
@@ -16,11 +13,12 @@ import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
 
-import { OscBlockProps } from "../../types/blockProps";
+import { BiquadBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
+import { InternalBiquadData } from "../../types/internalData";
 import { IconButton } from "material-ui";
 
-export class OscBlock extends React.Component<OscBlockProps> {
+export class BiquadBlock extends React.Component<BiquadBlockProps> {
   freqInput: HTMLInputElement;
   typeInput: HTMLInputElement;
 
@@ -28,51 +26,31 @@ export class OscBlock extends React.Component<OscBlockProps> {
   freqInputElement: HTMLDivElement;
   outputElement: HTMLDivElement;
 
-  constructor(props: OscBlockProps) {
+  constructor(props: BiquadBlockProps) {
     super(props);
 
-    (this.props.block.internal as InternalOscData).oscillator.connect(this.props
-      .block.internal.gain as GainNode);
-  }
-  toggleOsc = () => {
-    const internal = this.props.block.internal;
-    if (!this.props.block.running) {
-      try {
-        (internal as InternalOscData).oscillator.start();
-      } catch (e) {
-        // window.console.log(e);
-      }
-      internal.gain.gain.value = 1;
-      this.props.connectInternal();
-      this.props.updateBlock({
-        ...this.props.block,
-        running: true
-      });
-    } else {
-      internal.gain.gain.value = 0;
-      internal.gain.disconnect();
-      this.props.updateBlock({
-        ...this.props.block,
-        internal: internal,
-        running: false
-      });
+    if ((this.props.block.internal as InternalBiquadData).filter) {
+      (this.props.block.internal as InternalBiquadData).filter.connect(this
+        .props.block.internal.gain as GainNode);
     }
-  };
+  }
 
   tryToConnectTo = (outputType: string) => {
-    const internal = this.props.block.internal as InternalOscData;
     let outputToConnectTo, inputElement;
     switch (outputType) {
       case "gain":
-        outputToConnectTo = internal.gain.gain;
+        outputToConnectTo = (this.props.block.internal as InternalBiquadData)
+          .filter;
         inputElement = this.gainInputElement.getBoundingClientRect();
         break;
       case "freq":
-        outputToConnectTo = internal.oscillator.frequency;
+        outputToConnectTo = (this.props.block.internal as InternalBiquadData)
+          .filter.frequency;
         inputElement = this.freqInputElement.getBoundingClientRect();
         break;
       default:
-        outputToConnectTo = internal.gain.gain;
+        outputToConnectTo = (this.props.block.internal as InternalBiquadData)
+          .filter;
         inputElement = this.gainInputElement.getBoundingClientRect();
     }
     this.props.tryToConnectTo(
@@ -90,29 +68,47 @@ export class OscBlock extends React.Component<OscBlockProps> {
     const newFreq = Number(e.target.value);
     if (newFreq >= 0 && typeof newFreq === "number") {
       (this.props.block
-        .internal as InternalOscData).oscillator.frequency.setValueAtTime(
-        newFreq,
+        .internal as InternalBiquadData).filter.frequency.setValueAtTime(
+        e.target.value,
         0
       );
 
       // update block info in store
       const updatedBlock: BlockData = {
         ...this.props.block,
-        values: [newFreq]
+        values: [newFreq, this.props.block.values[1]]
       };
       this.props.updateBlock(updatedBlock);
     }
   };
   handleTypeChange = (e: any, index: any, value: any) => {
     // set change here so it is instant
-    (this.props.block.internal as InternalOscData).oscillator.type = value;
+    (this.props.block.internal as InternalBiquadData).filter.type = value;
 
     // update block info in store
     const updatedBlock: BlockData = {
       ...this.props.block,
       type: value
-    } as BlockData;
+    };
     this.props.updateBlock(updatedBlock);
+  };
+  handleQChange = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // set change here so it is instant
+    const newQ = Number(e.target.value);
+    if (newQ >= 0 && typeof newQ === "number") {
+      (this.props.block.internal as InternalBiquadData).filter.Q.setValueAtTime(
+        newQ,
+        0
+      );
+      // update block info in store
+      const updatedBlock: BlockData = {
+        ...this.props.block,
+        values: [this.props.block.values[0], newQ]
+      };
+      this.props.updateBlock(updatedBlock);
+    }
   };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
@@ -140,7 +136,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
         <div className="card">
           <IconButton
             tooltipPosition="bottom-left"
-            tooltip="Modulate gain input"
+            tooltip="Input"
             className="io-button"
             tooltipStyles={{ marginTop: "-40px" }}
           >
@@ -167,12 +163,6 @@ export class OscBlock extends React.Component<OscBlockProps> {
             />
           </IconButton>
           <div className="card-content">
-            <Toggle
-              onClick={this.toggleOsc}
-              className="toggle"
-              thumbSwitchedStyle={{ backgroundColor: "#f50057" }}
-              trackSwitchedStyle={{ backgroundColor: "#ff9d9d" }}
-            />
             <form onSubmit={e => e.preventDefault()} className="block-controls">
               <TextField
                 id="freq"
@@ -182,19 +172,31 @@ export class OscBlock extends React.Component<OscBlockProps> {
                 className="input"
                 type="number"
               />
+              <TextField
+                id="q"
+                floatingLabelText="Q"
+                defaultValue={this.props.block.values[1]}
+                onChange={this.handleQChange}
+                className="input"
+                type="number"
+              />
             </form>
             <DropDownMenu
               className="input"
               value={this.props.block.type}
               onChange={this.handleTypeChange}
             >
-              <MenuItem value="sine" primaryText="Sine" />
-              <MenuItem value="square" primaryText="Square" />
-              <MenuItem value="triangle" primaryText="Triangle" />
-              <MenuItem value="sawtooth" primaryText="Sawtooth" />
+              <MenuItem value="lowpass" primaryText="Lowpass" />
+              <MenuItem value="highpass" primaryText="Highpass" />
+              <MenuItem value="bandpass" primaryText="Bandpass" />
+              <MenuItem value="lowshelf" primaryText="Lowshelf" />
+              <MenuItem value="highshelf" primaryText="Highshelf" />
+              <MenuItem value="peaking" primaryText="Peaking" />
+              <MenuItem value="notch" primaryText="Notch" />
+              <MenuItem value="allpass" primaryText="Allpass" />
             </DropDownMenu>
             <Analyser
-              analyser={this.props.block.internal.analyser}
+              analyser={this.props.block.internal.analyser as AnalyserNode}
               backgroundColor="#53a857"
               lineColor="#f8f8f8"
             />
@@ -226,5 +228,4 @@ export class OscBlock extends React.Component<OscBlockProps> {
     );
   }
 }
-
-export default composedBlock(OscBlock);
+export default composedBlock(BiquadBlock);

@@ -3,12 +3,15 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import Popover from "material-ui/Popover";
 import Menu from "material-ui/Menu";
 import MenuItem from "material-ui/MenuItem";
-import { OscData, GainData } from "../../types/blockData";
+import { BlockData, BlockDataOptions } from "../../types/blockData";
 import "./Dropdown.css";
 import ContentAdd from "material-ui/svg-icons/content/add";
 
+import { buildInternal } from "../../lib/helpers/Editor";
+
 interface DropdownProps {
-  createBlock: (node: OscData | GainData) => void;
+  audioCtx: AudioContext;
+  createBlock: (node: BlockData) => void;
 }
 
 export class Dropdown extends React.Component<DropdownProps, any> {
@@ -57,14 +60,13 @@ export class Dropdown extends React.Component<DropdownProps, any> {
             <MenuItem
               primaryText="Oscillator"
               onClick={() => {
-                const newOscNode = {
+                const options = {
                   id: 999,
+                  blockType: "OSC",
                   type: "square" as OscillatorType,
-                  freq: 330,
+                  values: [330],
                   hasInternal: false,
                   running: false,
-                  hasGainInput: false,
-                  hasFreqInput: false,
                   hasInputFrom: [],
                   isConnectedToOutput: false,
                   connected: false,
@@ -72,26 +74,58 @@ export class Dropdown extends React.Component<DropdownProps, any> {
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
                   freqInputDOMRect: new DOMRect(0, 0, 0, 0),
                   outputDOMRect: new DOMRect(0, 0, 0, 0)
-                } as OscData;
-                this.props.createBlock(newOscNode);
+                } as BlockDataOptions;
+                const newOscBlock = {
+                  ...options,
+                  internal: buildInternal(options, this.props.audioCtx)
+                } as BlockData;
+                this.props.createBlock(newOscBlock);
+              }}
+            />
+            <MenuItem
+              primaryText="Filter"
+              onClick={() => {
+                const options = {
+                  id: 999,
+                  blockType: "BIQUAD",
+                  type: "lowpass" as BiquadFilterType,
+                  values: [1000, 10],
+                  connected: false,
+                  hasInternal: false,
+                  hasInputFrom: [],
+                  isConnectedToOutput: false,
+                  outputs: [],
+                  gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+                  freqInputDOMRect: new DOMRect(0, 0, 0, 0),
+                  outputDOMRect: new DOMRect(0, 0, 0, 0)
+                } as BlockDataOptions;
+                const newOscBlock = {
+                  ...options,
+                  internal: buildInternal(options, this.props.audioCtx)
+                } as BlockData;
+                this.props.createBlock(newOscBlock);
               }}
             />
             <MenuItem
               primaryText="Gain"
               onClick={() => {
-                const newOscNode = {
+                const options = {
                   id: 999,
-                  gain: 1,
+                  blockType: "GAIN",
+                  values: [1],
                   connected: false,
                   hasInternal: false,
-                  hasGainInput: false,
                   hasInputFrom: [],
                   isConnectedToOutput: false,
                   outputs: [],
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
                   outputDOMRect: new DOMRect(0, 0, 0, 0)
-                };
-                this.props.createBlock(newOscNode);
+                } as BlockDataOptions;
+                const newOscBlock = {
+                  ...options,
+                  internal: buildInternal(options, this.props.audioCtx)
+                } as BlockData;
+                this.props.createBlock(newOscBlock);
               }}
             />
           </Menu>

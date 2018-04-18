@@ -8,10 +8,11 @@ import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
 
-import { GainData } from "../../types/blockData";
+import { BlockData } from "../../types/blockData";
 
 import { GainBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
+import { IconButton } from "material-ui";
 
 export class GainBlock extends React.Component<GainBlockProps> {
   analyser: AnalyserNode;
@@ -25,8 +26,8 @@ export class GainBlock extends React.Component<GainBlockProps> {
   }
   tryToConnectTo = () => {
     this.props.tryToConnectTo(
-      this.props.node,
-      this.props.internal.gain,
+      this.props.block,
+      this.props.block.internal.gain,
       "gain",
       this.gainInputElement.getBoundingClientRect()
     );
@@ -37,12 +38,13 @@ export class GainBlock extends React.Component<GainBlockProps> {
     const newGain = Number(e.target.value);
     if (newGain >= 0 && typeof newGain === "number") {
       // set change here so it is instant
-      this.props.internal.gain.gain.value = newGain;
-
-      // update node info in store
-      const updatedNode: GainData = {
-        ...this.props.node,
-        gain: e.target.value
+      if (this.props.block.internal.gain) {
+        this.props.block.internal.gain.gain.value = newGain;
+      }
+      // update block info in store
+      const updatedNode: BlockData = {
+        ...this.props.block,
+        values: [newGain]
       };
       this.props.updateBlock(updatedNode);
     }
@@ -50,12 +52,12 @@ export class GainBlock extends React.Component<GainBlockProps> {
 
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
-    const updatedNode: GainData = {
-      ...this.props.node,
+    const updatedBlock: BlockData = {
+      ...this.props.block,
       gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
       outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect
-    } as GainData;
-    this.props.updateBlock(updatedNode);
+    };
+    this.props.updateBlock(updatedBlock);
   }
   render() {
     return (
@@ -69,18 +71,25 @@ export class GainBlock extends React.Component<GainBlockProps> {
         cancel="input"
       >
         <div className="card" id="gain-block">
-          <div
-            className={this.props.checkInputs("gain")}
-            onClick={this.tryToConnectTo}
-            ref={ref => {
-              this.gainInputElement = ref as HTMLDivElement;
-            }}
-          />
+          <IconButton
+            tooltipPosition="bottom-left"
+            tooltip="Input"
+            className="io-button"
+            tooltipStyles={{ marginTop: "-40px" }}
+          >
+            <div
+              className={this.props.checkInputs("gain")}
+              onClick={this.tryToConnectTo}
+              ref={ref => {
+                this.gainInputElement = ref as HTMLDivElement;
+              }}
+            />
+          </IconButton>
           <div className="card-content">
             <form onSubmit={e => e.preventDefault()}>
               <TextField
                 floatingLabelText="Gain"
-                defaultValue={this.props.node.gain}
+                defaultValue={this.props.block.values[0]}
                 onChange={this.handleGainChange}
                 type="number"
                 step={0.1}
@@ -88,26 +97,33 @@ export class GainBlock extends React.Component<GainBlockProps> {
               />
             </form>
             <Analyser
-              analyser={this.props.internal.analyser}
+              analyser={this.props.block.internal.analyser as AnalyserNode}
               backgroundColor="#337ab7"
               lineColor="#f8f8f8"
             />
           </div>
-          <div
-            className={
-              this.props.node.connected
-                ? "io-element io-element--right io-element--active"
-                : "io-element io-element--right"
-            }
-            onClick={() =>
-              this.props.tryToConnect(
-                this.outputElement.getBoundingClientRect() as DOMRect
-              )
-            }
-            ref={ref => {
-              this.outputElement = ref as HTMLSpanElement;
-            }}
-          />
+          <IconButton
+            tooltip="Output"
+            tooltipPosition="bottom-right"
+            className="io-button io-button--right"
+            tooltipStyles={{ marginTop: "-40px" }}
+          >
+            <div
+              className={
+                this.props.block.connected
+                  ? "io-element io-element--right io-element--active"
+                  : "io-element io-element--right"
+              }
+              onClick={() =>
+                this.props.tryToConnect(
+                  this.outputElement.getBoundingClientRect() as DOMRect
+                )
+              }
+              ref={ref => {
+                this.outputElement = ref as HTMLSpanElement;
+              }}
+            />
+          </IconButton>
         </div>
       </Draggable>
     );

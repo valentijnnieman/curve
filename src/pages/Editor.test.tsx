@@ -4,7 +4,12 @@ import * as Adapter from "enzyme-adapter-react-16";
 
 import "web-audio-test-api";
 
-import { mockblocks, outputDOMRect, inputDOMRect } from "../lib/helpers/Mocks";
+import {
+  mockblocks,
+  outputDOMRect,
+  inputDOMRect,
+  audioCtx
+} from "../lib/helpers/Mocks";
 import { Editor } from "./Editor";
 import { shallow } from "enzyme";
 
@@ -14,14 +19,14 @@ describe("OscNode", () => {
   const mockUpdate = jest.fn();
 
   const wrapper = shallow(
-    <Editor blocks={mockblocks} updateBlock={mockUpdate} />
+    <Editor blocks={mockblocks} updateBlock={mockUpdate} audioCtx={audioCtx} />
   );
 
   const instance = wrapper.instance() as any;
   const props = instance.props;
 
-  const testBlock = props.blocks[0];
-  const testInternal = instance._INTERNALS[0];
+  let testBlock = props.blocks[0];
+  const testInternal = testBlock.internal;
 
   const resetState = () => {
     instance.state = {
@@ -32,6 +37,7 @@ describe("OscNode", () => {
 
   afterEach(() => {
     resetState();
+    testBlock = mockblocks[0];
   });
 
   test("tryToConnect()", () => {
@@ -43,7 +49,7 @@ describe("OscNode", () => {
     expect(instance.state.lineFrom).toEqual(outputDOMRect);
   });
   test("tryToConnectTo() -> testConnect() can't connect output to own input", () => {
-    const outputToConnectTo = instance._INTERNALS[0].gain.gain;
+    const outputToConnectTo = testInternal.gain.gain;
     instance.tryToConnect(testBlock, testInternal, outputDOMRect);
     instance.tryToConnectTo(testBlock, outputToConnectTo, "gain", inputDOMRect);
     expect(testBlock.outputs.length).toEqual(0);
@@ -59,7 +65,7 @@ describe("OscNode", () => {
   test("tryToConnectTo() -> testConnect() connects", () => {
     const blockToConnectTo = props.blocks[1];
     blockToConnectTo.hasInternal = true; // this gets set with the buildInternals helper -> updateBlock redux action
-    const outputToConnectTo = instance._INTERNALS[1].gain.gain;
+    const outputToConnectTo = blockToConnectTo.internal.gain.gain;
     instance.tryToConnect(testBlock, testInternal, outputDOMRect);
     instance.tryToConnectTo(
       blockToConnectTo,
@@ -84,16 +90,14 @@ describe("OscNode", () => {
     );
     const expectedBlockToConnectTo = {
       ...blockToConnectTo,
-      hasGainInput: true,
-      hasInputFrom: [0],
-      hasFreqInput: false
+      hasInputFrom: [0]
     };
     expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 1][0]).toEqual(
       expectedBlockToConnectTo
     );
   });
   test("disconnect()", () => {
-    const outputToConnectTo = instance._INTERNALS[1].gain.gain;
+    const outputToConnectTo = props.blocks[1].internal.gain.gain;
     instance.tryToConnect(testBlock, testInternal, outputDOMRect);
     instance.tryToConnectTo(
       props.blocks[1],
@@ -126,13 +130,13 @@ describe("OscNode", () => {
     testBlock.outputs = [
       {
         connectedToType: "gain",
-        destination: instance._INTERNALS[1].gain.gain,
+        destination: props.blocks[1].internal.gain.gain,
         id: 0,
         isConnectedTo: 1
       },
       {
         connectedToType: "gain",
-        destination: instance._INTERNALS[2].gain.gain,
+        destination: props.blocks[2].internal.gain.gain,
         id: 1,
         isConnectedTo: 2
       }
@@ -147,7 +151,7 @@ describe("OscNode", () => {
       outputs: [
         {
           connectedToType: "gain",
-          destination: instance._INTERNALS[2].gain.gain,
+          destination: props.blocks[2].internal.gain.gain,
           id: 1,
           isConnectedTo: 2
         }
@@ -157,5 +161,31 @@ describe("OscNode", () => {
     expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 2][0]).toEqual(
       expectedBlock
     );
+  });
+  test("disconnect() from speakers", () => {
+    testBlock.connected = true;
+    testBlock.isConnectedToOutput = true;
+    instance.state.speakersAreConnected = true;
+    testBlock.outputs = [
+      {
+        connectedToType: "gain",
+        destination: audioCtx.destination,
+        id: 0,
+        isConnectedTo: -1 // speakers are -1
+      }
+    ];
+    instance.disconnect(0, -1, 0);
+
+    const expectedBlock = {
+      ...testBlock,
+      connected: false,
+      isConnectedToOutput: false,
+      outputs: []
+    };
+
+    expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 1][0]).toEqual(
+      expectedBlock
+    );
+    expect(instance.state.speakersAreConnected).toBe(false);
   });
 });

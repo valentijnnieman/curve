@@ -1,32 +1,35 @@
 .io-element {
-  display: block;
-  width: 4px;
-  height: 20px;
-  padding: 2px;
+  display: block !important;
+  width: 8px !important;
+  height: 20px !important;
   /* border-top-left-radius: 110px; 100px of height + 10px of border */
-  opacity: 0.8;
+  opacity: 0.8 !important;
   border: 1px solid transparent;
   background-color: #e2e2e2;
-  border-left: 0;
-  position: absolute;
+  border-left: 0 !important;
+  position: absolute !important;
   transition: transform 0.2s;
-  top: 16px;
+}
+.io-button {
+  position: absolute !important;
+  display: block !important;
+  width: 8px !important;
+  height: 20px !important;
+  top: 16px !important;
+  padding: 0px !important;
 }
 .io-element:hover {
   cursor: pointer;
   transform: scale(2, 1);
 }
-.io-element:hover .tooltip {
-  visibility: visible;
-  transform: scale(0.5, 1);
+.io-button--freq {
+  top: 48px !important;
 }
-.io-element--freq {
-  top: 48px;
-}
-.io-element--right {
+.io-element--right,
+.io-button--right {
   border-left: 1px solid transparent;
   border-right: 0;
-  right: 0;
+  right: 0 !important;
 }
 
 .io-element--active {
@@ -56,6 +59,7 @@ form {
   z-index: 90;
   font-size: 12px !important;
   width: 100% !important;
+  display: block !important;
 }
 
 .toggle {

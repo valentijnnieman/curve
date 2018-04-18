@@ -1,5 +1,6 @@
-import { OscData, GainData } from "../types/blockData";
+import { BlockData } from "../types/blockData";
 
 export interface StoreState {
-  blocks: Array<OscData | GainData>;
+  blocks: Array<BlockData>;
+  audioCtx: AudioContext;
 }

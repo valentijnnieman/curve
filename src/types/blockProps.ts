@@ -1,21 +1,30 @@
-import { OscData, GainData } from "../types/blockData";
-import { InternalOscData, InternalGainData } from "../types/internalData";
+import { BlockData } from "../types/blockData";
 
 export interface BlockProps {
-  node: OscData | GainData;
-  allNodes: Array<OscData | GainData>;
-  internal: InternalOscData | InternalGainData;
-  allInternals: Array<InternalOscData | InternalGainData>;
+  block: BlockData;
+  allBlocks: Array<BlockData>;
   tryToConnect: any;
   tryToConnectTo: any;
   canConnect: boolean;
-  updateBlock: (node: OscData | GainData) => void;
+  updateBlock: (node: BlockData) => void;
   audioCtx: AudioContext;
 }
 
 export interface OscBlockProps extends BlockProps {
-  node: OscData;
-  internal: InternalOscData;
+  block: BlockData;
+  connectToAnalyser: () => void;
+  connectInternal: () => void;
+  tryToConnect: (outputElement: DOMRect) => void;
+  onDragHandler: (
+    gainInputElement: DOMRect,
+    outputElement: DOMRect,
+    freqInputElement?: DOMRect
+  ) => void;
+  checkInputs: (outputType: string) => string;
+}
+
+export interface BiquadBlockProps extends BlockProps {
+  block: BlockData;
   connectToAnalyser: () => void;
   connectInternal: () => void;
   tryToConnect: (outputElement: DOMRect) => void;
@@ -28,8 +37,7 @@ export interface OscBlockProps extends BlockProps {
 }
 
 export interface GainBlockProps extends BlockProps {
-  node: GainData;
-  internal: InternalGainData;
+  block: BlockData;
   connectToAnalyser: () => void;
   connectInternal: () => void;
   tryToConnect: (outputElement: DOMRect) => void;
