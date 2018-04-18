@@ -30,6 +30,7 @@ Here is some stuff I would love to implement next:
 
 * [x] A tutorial/walkthrough explaining what does what
 * [x] Better performance! The drawing of the connection lines is quite slow.
-* [ ] Filter blocks
+* [x] Filter blocks
+* [ ] Envelope blocks
 * [ ] Saving a 'project'
 * [ ] Cookbook recipes showing off cool synth ideas
