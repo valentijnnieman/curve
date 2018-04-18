@@ -18,11 +18,11 @@ describe("buildInternal()", () => {
   test("internal oscillators set correctly", () => {
     expect(internalToTest.oscillator.type).toEqual(mockblocks[0].type);
     expect(internalToTest.oscillator.frequency.value).toEqual(
-      mockblocks[0].value
+      mockblocks[0].values[0]
     );
   });
   test("internal gain objects set correctly", () => {
-    expect(internalToTest.gain.gain.value).toEqual(mockblocks[1].value);
+    expect(internalToTest.gain.gain.value).toEqual(mockblocks[1].values[0]);
   });
   test("internals have analyser", () => {
     expect(internalToTest.analyser).toBeDefined();

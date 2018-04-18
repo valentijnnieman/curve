@@ -7,7 +7,7 @@ export interface BlockDataOptions {
   id: number;
   blockType: "OSC" | "GAIN" | "BIQUAD";
   type?: OscillatorType | BiquadFilterType;
-  value: number;
+  values: Array<number>;
   hasInternal: boolean;
   running?: boolean;
   hasInputFrom: Array<number>;

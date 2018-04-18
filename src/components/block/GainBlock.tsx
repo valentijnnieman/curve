@@ -43,7 +43,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
       // update block info in store
       const updatedNode: BlockData = {
         ...this.props.block,
-        value: e.target.value
+        values: [newGain]
       };
       this.props.updateBlock(updatedNode);
     }
@@ -81,7 +81,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
             <form onSubmit={e => e.preventDefault()}>
               <TextField
                 floatingLabelText="Gain"
-                defaultValue={this.props.block.value}
+                defaultValue={this.props.block.values[0]}
                 onChange={this.handleGainChange}
                 type="number"
                 step={0.1}

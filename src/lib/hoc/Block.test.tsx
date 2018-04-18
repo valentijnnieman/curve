@@ -90,7 +90,7 @@ describe("OscNode", () => {
     instance.props.block.output = mockblocks[1].internal.gain
       .gain as AudioParam;
     instance.connectInternal();
-    expect(instance.props.internal.gain.numberOfOutputs).toEqual(1);
+    expect(instance.props.block.internal.gain.numberOfOutputs).toEqual(1);
     // not much else to test here, there's no (easy) way of testing if the internal Web Audio block is connected
   });
   test("tryToConnect()", () => {

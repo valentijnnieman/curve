@@ -15,7 +15,7 @@ export const buildInternal = (
     let oscillator;
     oscillator = audioCtx.createOscillator();
     oscillator.type = block.type as OscillatorType;
-    oscillator.frequency.setValueAtTime(block.value, audioCtx.currentTime);
+    oscillator.frequency.setValueAtTime(block.values[0], audioCtx.currentTime);
     const newOscInternal = {
       oscillator,
       gain,
@@ -32,7 +32,8 @@ export const buildInternal = (
     let filter;
     filter = audioCtx.createBiquadFilter();
     filter.type = block.type as BiquadFilterType;
-    filter.frequency.setValueAtTime(block.value, audioCtx.currentTime);
+    filter.frequency.setValueAtTime(block.values[0], audioCtx.currentTime);
+    filter.Q.setValueAtTime(block.values[1], audioCtx.currentTime);
     const newBiquadInternal = {
       filter: filter,
       gain,
@@ -104,7 +105,7 @@ export const genWACode = (blocks: Array<BlockData>) => {
       jsString += `// Creating oscillator block
 let osc${index} = audioCtx.createOscillator();
 osc${index}.type = "${(internal as InternalOscData).oscillator.type}";
-osc${index}.frequency.setValueAtTime(${block.value}, audioCtx.currentTime);
+osc${index}.frequency.setValueAtTime(${block.values[0]}, audioCtx.currentTime);
 // create a internal gain used with oscillator object
 let gain${index} = audioCtx.createGain();
 gain${index}.gain.value = 1;
@@ -137,7 +138,7 @@ osc${index}.start();`;
       jsString += "\n\n";
     } else if (block && block.blockType === "GAIN") {
       jsString += `let gain${index} = audioCtx.createGain();
-gain${index}.gain.value = ${block.value};`;
+gain${index}.gain.value = ${block.values[0]};`;
       if (block.connected) {
         if (block.isConnectedToOutput) {
           // connected to speakers

@@ -75,7 +75,7 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
       // update block info in store
       const updatedBlock: BlockData = {
         ...this.props.block,
-        value: e.target.value
+        values: [newFreq, this.props.block.values[1]]
       };
       this.props.updateBlock(updatedBlock);
     }
@@ -90,6 +90,24 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
       type: value
     };
     this.props.updateBlock(updatedBlock);
+  };
+  handleQChange = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // set change here so it is instant
+    const newQ = Number(e.target.value);
+    if (newQ >= 0 && typeof newQ === "number") {
+      (this.props.block.internal as InternalBiquadData).filter.Q.setValueAtTime(
+        newQ,
+        0
+      );
+      // update block info in store
+      const updatedBlock: BlockData = {
+        ...this.props.block,
+        values: [this.props.block.values[0], newQ]
+      };
+      this.props.updateBlock(updatedBlock);
+    }
   };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
@@ -134,26 +152,34 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
               <TextField
                 id="freq"
                 floatingLabelText="Frequency"
-                defaultValue={this.props.block.value}
+                defaultValue={this.props.block.values[0]}
                 onChange={this.handleFreqChange}
                 className="input"
                 type="number"
               />
-              <DropDownMenu
+              <TextField
+                id="q"
+                floatingLabelText="Q"
+                defaultValue={this.props.block.values[1]}
+                onChange={this.handleQChange}
                 className="input"
-                value={this.props.block.type}
-                onChange={this.handleTypeChange}
-              >
-                <MenuItem value="lowpass" primaryText="Lowpass" />
-                <MenuItem value="highpass" primaryText="Highpass" />
-                <MenuItem value="bandpass" primaryText="Bandpass" />
-                <MenuItem value="lowshelf" primaryText="Lowshelf" />
-                <MenuItem value="highshelf" primaryText="Highshelf" />
-                <MenuItem value="peaking" primaryText="Peaking" />
-                <MenuItem value="notch" primaryText="Notch" />
-                <MenuItem value="allpass" primaryText="Allpass" />
-              </DropDownMenu>
+                type="number"
+              />
             </form>
+            <DropDownMenu
+              className="input"
+              value={this.props.block.type}
+              onChange={this.handleTypeChange}
+            >
+              <MenuItem value="lowpass" primaryText="Lowpass" />
+              <MenuItem value="highpass" primaryText="Highpass" />
+              <MenuItem value="bandpass" primaryText="Bandpass" />
+              <MenuItem value="lowshelf" primaryText="Lowshelf" />
+              <MenuItem value="highshelf" primaryText="Highshelf" />
+              <MenuItem value="peaking" primaryText="Peaking" />
+              <MenuItem value="notch" primaryText="Notch" />
+              <MenuItem value="allpass" primaryText="Allpass" />
+            </DropDownMenu>
             <Analyser
               analyser={this.props.block.internal.analyser as AnalyserNode}
               backgroundColor="#53a857"

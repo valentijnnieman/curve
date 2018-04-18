@@ -30,7 +30,7 @@ const mockblockOptions: Array<BlockDataOptions> = [
     id: 0,
     blockType: "OSC",
     type: "sine" as OscillatorType,
-    value: 220,
+    values: [220],
     hasInternal: false,
     running: false,
     connected: true,
@@ -44,7 +44,7 @@ const mockblockOptions: Array<BlockDataOptions> = [
   {
     id: 1,
     blockType: "GAIN",
-    value: 1,
+    values: [1],
     hasInternal: false,
     hasInputFrom: [],
     isConnectedToOutput: false,
@@ -56,7 +56,7 @@ const mockblockOptions: Array<BlockDataOptions> = [
   {
     id: 2,
     blockType: "GAIN",
-    value: 1,
+    values: [1],
     hasInternal: false,
     hasInputFrom: [],
     isConnectedToOutput: false,

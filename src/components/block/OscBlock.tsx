@@ -52,6 +52,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
       internal.gain.disconnect();
       this.props.updateBlock({
         ...this.props.block,
+        internal: internal,
         running: false
       });
     }
@@ -89,14 +90,14 @@ export class OscBlock extends React.Component<OscBlockProps> {
     if (newFreq >= 0 && typeof newFreq === "number") {
       (this.props.block
         .internal as InternalOscData).oscillator.frequency.setValueAtTime(
-        e.target.value,
+        newFreq,
         0
       );
 
       // update block info in store
       const updatedBlock: BlockData = {
         ...this.props.block,
-        value: e.target.value
+        values: [newFreq, this.props.block.values[0]]
       };
       this.props.updateBlock(updatedBlock);
     }
@@ -161,22 +162,22 @@ export class OscBlock extends React.Component<OscBlockProps> {
               <TextField
                 id="freq"
                 floatingLabelText="Frequency"
-                defaultValue={this.props.block.value}
+                defaultValue={this.props.block.values[0]}
                 onChange={this.handleFreqChange}
                 className="input"
                 type="number"
               />
-              <DropDownMenu
-                className="input"
-                value={this.props.block.type}
-                onChange={this.handleTypeChange}
-              >
-                <MenuItem value="sine" primaryText="Sine" />
-                <MenuItem value="square" primaryText="Square" />
-                <MenuItem value="triangle" primaryText="Triangle" />
-                <MenuItem value="sawtooth" primaryText="Sawtooth" />
-              </DropDownMenu>
             </form>
+            <DropDownMenu
+              className="input"
+              value={this.props.block.type}
+              onChange={this.handleTypeChange}
+            >
+              <MenuItem value="sine" primaryText="Sine" />
+              <MenuItem value="square" primaryText="Square" />
+              <MenuItem value="triangle" primaryText="Triangle" />
+              <MenuItem value="sawtooth" primaryText="Sawtooth" />
+            </DropDownMenu>
             <Analyser
               analyser={this.props.block.internal.analyser}
               backgroundColor="#53a857"

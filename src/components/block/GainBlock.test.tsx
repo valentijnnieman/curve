@@ -14,20 +14,17 @@ import { MuiThemeProvider } from "material-ui/styles";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("<GainBlock />", () => {
+  const mockUpdate = jest.fn();
+
   const blockInstance = mockblocks[0] as BlockData;
-  const MockBlock = mount(
+  const wrapper = mount(
     <MuiThemeProvider>
       <GainBlock
         block={blockInstance}
         allBlocks={mockblocks}
         tryToConnectTo={jest.fn()}
         canConnect={false}
-        updateBlock={(block: BlockData) => {
-          // We're testing the actual redux action elsewhere
-          // const store = mockStore(mockblocks);
-          // mockStore.dispatch(updateBlock(block));
-          // blockInstance.running = (block as OscData).running;
-        }}
+        updateBlock={mockUpdate}
         audioCtx={audioCtx}
         connectToAnalyser={jest.fn()}
         connectInternal={jest.fn()}
@@ -38,13 +35,18 @@ describe("<GainBlock />", () => {
     </MuiThemeProvider>
   );
 
-  const MockBlockInstance = MockBlock.children().instance() as GainBlock;
+  const instance = wrapper.children().instance() as GainBlock;
+  // const props = wrapper.children().instance().props;
   // const MockBlockProps = MockBlock.props().children.props;
   test("tryToConnectTo()", () => {
-    MockBlockInstance.tryToConnectTo();
+    instance.tryToConnectTo();
   });
   test("handleGainChange()", () => {
-    // MockBlockInstance.handleFreqChange(999);
-    // expect(MockBlockInstance.props.block.freq).toEqual(999);
+    instance.handleGainChange({
+      preventDefault: () => undefined,
+      stopPropagation: () => undefined,
+      target: { value: 999 }
+    });
+    expect(mockUpdate.mock.calls[1][0].value).toEqual(999);
   });
 });

@@ -14,8 +14,10 @@ import { MuiThemeProvider } from "material-ui/styles";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("<OscBlock />", () => {
+  const mockUpdate = jest.fn();
+
   const blockInstance = mockblocks[0] as BlockData;
-  const MockBlock = mount(
+  const wrapper = mount(
     <MuiThemeProvider>
       <OscBlock
         block={blockInstance}
@@ -29,13 +31,7 @@ describe("<OscBlock />", () => {
           //
         }}
         canConnect={false}
-        updateBlock={(block: BlockData) => {
-          // We're testing the actual redux action elsewhere
-          // const store = mockStore(mockblocks);
-          // mockStore.dispatch(updateBlock(block));
-          blockInstance.running = (block as BlockData).running;
-          blockInstance.value = (block as BlockData).value;
-        }}
+        updateBlock={mockUpdate}
         audioCtx={audioCtx}
         connectToAnalyser={jest.fn()}
         connectInternal={jest.fn()}
@@ -46,24 +42,32 @@ describe("<OscBlock />", () => {
     </MuiThemeProvider>
   );
 
-  const MockBlockInstance = MockBlock.children().instance() as OscBlock;
-  const MockBlockProps = MockBlock.props().children.props;
+  const instance = wrapper.children().instance() as OscBlock;
+  const props = wrapper.children().instance().props;
   test("toggleOsc()", () => {
-    expect(MockBlockProps.block.running).toBe(false);
-    MockBlockInstance.toggleOsc();
-    expect(MockBlockProps.internal.gain.gain.value).toEqual(1);
-    expect(MockBlockProps.block.running).toBe(true);
-    MockBlockInstance.toggleOsc();
-    expect(MockBlockProps.internal.gain.gain.value).toEqual(0);
-    expect(MockBlockProps.block.running).toBe(false);
+    expect(props.block.running).toBe(false);
+    instance.toggleOsc();
+    // osc is now ON
+    expect(mockUpdate.mock.calls[1][0].internal.gain.gain.value).toEqual(1);
+    expect(mockUpdate.mock.calls[1][0].running).toEqual(true);
+
+    instance.props.block.running = true;
+    instance.toggleOsc();
+    // osc is now OFF
+    expect(mockUpdate.mock.calls[0][0].internal.gain.gain.value).toEqual(0);
+    expect(mockUpdate.mock.calls[0][0].running).toBe(false);
   });
   test("tryToConnectTo()", () => {
-    MockBlockInstance.tryToConnectTo("gain");
-    MockBlockInstance.tryToConnectTo("freq");
-    MockBlockInstance.tryToConnectTo("default");
+    instance.tryToConnectTo("gain");
+    instance.tryToConnectTo("freq");
+    instance.tryToConnectTo("default");
   });
   test("handleFreqChange()", () => {
-    // MockBlockInstance.handleFreqChange(999);
-    // expect(MockBlockInstance.props.block.freq).toEqual(999);
+    instance.handleFreqChange({
+      preventDefault: () => undefined,
+      stopPropagation: () => undefined,
+      target: { value: 999 }
+    });
+    expect(mockUpdate.mock.calls[3][0].value).toEqual(999);
   });
 });
