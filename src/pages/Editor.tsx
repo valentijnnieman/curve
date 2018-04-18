@@ -119,16 +119,18 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     };
     this.props.updateBlock(updatedBlockWithOutput);
 
-    const indexOfInput = blockWithInput.hasInputFrom.indexOf(fromBlock);
+    if (!blockWithOutput.isConnectedToOutput) {
+      const indexOfInput = blockWithInput.hasInputFrom.indexOf(fromBlock);
 
-    blockWithInput.hasInputFrom.splice(indexOfInput, 1);
-    const updatedBlockWithInput: BlockData = {
-      ...blockWithInput
-    };
-    this.props.updateBlock(updatedBlockWithInput);
+      blockWithInput.hasInputFrom.splice(indexOfInput, 1);
+      const updatedBlockWithInput: BlockData = {
+        ...blockWithInput
+      };
+      this.props.updateBlock(updatedBlockWithInput);
 
-    if (internal) {
-      internal.gain.disconnect();
+      if (internal) {
+        internal.gain.disconnect();
+      }
     }
   };
   tryToConnect = (node: BlockData, internal: InternalData, el: DOMRect) => {
