@@ -12,6 +12,7 @@ import { BlockData } from "../../types/blockData";
 
 import { GainBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
+import { IconButton } from "material-ui";
 
 export class GainBlock extends React.Component<GainBlockProps> {
   analyser: AnalyserNode;
@@ -70,13 +71,20 @@ export class GainBlock extends React.Component<GainBlockProps> {
         cancel="input"
       >
         <div className="card" id="gain-block">
-          <div
-            className={this.props.checkInputs("gain")}
-            onClick={this.tryToConnectTo}
-            ref={ref => {
-              this.gainInputElement = ref as HTMLDivElement;
-            }}
-          />
+          <IconButton
+            tooltipPosition="bottom-left"
+            tooltip="Input"
+            className="io-button"
+            tooltipStyles={{ marginTop: "-40px" }}
+          >
+            <div
+              className={this.props.checkInputs("gain")}
+              onClick={this.tryToConnectTo}
+              ref={ref => {
+                this.gainInputElement = ref as HTMLDivElement;
+              }}
+            />
+          </IconButton>
           <div className="card-content">
             <form onSubmit={e => e.preventDefault()}>
               <TextField
@@ -94,21 +102,28 @@ export class GainBlock extends React.Component<GainBlockProps> {
               lineColor="#f8f8f8"
             />
           </div>
-          <div
-            className={
-              this.props.block.connected
-                ? "io-element io-element--right io-element--active"
-                : "io-element io-element--right"
-            }
-            onClick={() =>
-              this.props.tryToConnect(
-                this.outputElement.getBoundingClientRect() as DOMRect
-              )
-            }
-            ref={ref => {
-              this.outputElement = ref as HTMLSpanElement;
-            }}
-          />
+          <IconButton
+            tooltip="Output"
+            tooltipPosition="bottom-right"
+            className="io-button io-button--right"
+            tooltipStyles={{ marginTop: "-40px" }}
+          >
+            <div
+              className={
+                this.props.block.connected
+                  ? "io-element io-element--right io-element--active"
+                  : "io-element io-element--right"
+              }
+              onClick={() =>
+                this.props.tryToConnect(
+                  this.outputElement.getBoundingClientRect() as DOMRect
+                )
+              }
+              ref={ref => {
+                this.outputElement = ref as HTMLSpanElement;
+              }}
+            />
+          </IconButton>
         </div>
       </Draggable>
     );

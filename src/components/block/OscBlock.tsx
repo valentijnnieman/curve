@@ -18,6 +18,7 @@ import { Analyser } from "../Analyser";
 
 import { OscBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
+import { IconButton } from "material-ui";
 
 export class OscBlock extends React.Component<OscBlockProps> {
   freqInput: HTMLInputElement;
@@ -137,20 +138,34 @@ export class OscBlock extends React.Component<OscBlockProps> {
         cancel="input"
       >
         <div className="card">
-          <div
-            className={this.props.checkInputs("gain")}
-            onClick={() => this.tryToConnectTo("gain")}
-            ref={ref => {
-              this.gainInputElement = ref as HTMLDivElement;
-            }}
-          />
-          <div
-            className={this.props.checkInputs("freq") + " io-element--freq"}
-            onClick={() => this.tryToConnectTo("freq")}
-            ref={ref => {
-              this.freqInputElement = ref as HTMLDivElement;
-            }}
-          />
+          <IconButton
+            tooltipPosition="bottom-left"
+            tooltip="Modulate gain input"
+            className="io-button"
+            tooltipStyles={{ marginTop: "-40px" }}
+          >
+            <div
+              className={this.props.checkInputs("gain")}
+              onClick={() => this.tryToConnectTo("gain")}
+              ref={ref => {
+                this.gainInputElement = ref as HTMLDivElement;
+              }}
+            />
+          </IconButton>
+          <IconButton
+            tooltip="Modulate frequency input"
+            tooltipPosition="bottom-left"
+            className="io-button io-button--freq"
+            tooltipStyles={{ marginTop: "-40px" }}
+          >
+            <div
+              className={this.props.checkInputs("freq") + " io-element--freq"}
+              onClick={() => this.tryToConnectTo("freq")}
+              ref={ref => {
+                this.freqInputElement = ref as HTMLDivElement;
+              }}
+            />
+          </IconButton>
           <div className="card-content">
             <Toggle
               onClick={this.toggleOsc}
@@ -184,21 +199,28 @@ export class OscBlock extends React.Component<OscBlockProps> {
               lineColor="#f8f8f8"
             />
           </div>
-          <div
-            className={
-              this.props.block.connected
-                ? "io-element io-element--right io-element--active"
-                : "io-element io-element--right"
-            }
-            onClick={() =>
-              this.props.tryToConnect(
-                this.outputElement.getBoundingClientRect() as DOMRect
-              )
-            }
-            ref={ref => {
-              this.outputElement = ref as HTMLDivElement;
-            }}
-          />
+          <IconButton
+            tooltip="Output"
+            tooltipPosition="bottom-right"
+            className="io-button io-button--right"
+            tooltipStyles={{ marginTop: "-40px" }}
+          >
+            <div
+              className={
+                this.props.block.connected
+                  ? "io-element io-element--right io-element--active"
+                  : "io-element io-element--right"
+              }
+              onClick={() =>
+                this.props.tryToConnect(
+                  this.outputElement.getBoundingClientRect() as DOMRect
+                )
+              }
+              ref={ref => {
+                this.outputElement = ref as HTMLDivElement;
+              }}
+            />
+          </IconButton>
         </div>
       </Draggable>
     );
