@@ -197,7 +197,7 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
             </DropDownMenu>
             <Analyser
               analyser={this.props.block.internal.analyser as AnalyserNode}
-              backgroundColor="#53a857"
+              backgroundColor="#fdd835"
               lineColor="#f8f8f8"
             />
           </div>

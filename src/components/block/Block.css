@@ -1,6 +1,6 @@
 .io-element {
   display: block !important;
-  width: 8px !important;
+  width: 6px !important;
   height: 20px !important;
   /* border-top-left-radius: 110px; 100px of height + 10px of border */
   opacity: 0.8 !important;
@@ -13,7 +13,7 @@
 .io-button {
   position: absolute !important;
   display: block !important;
-  width: 8px !important;
+  width: 6px !important;
   height: 20px !important;
   top: 16px !important;
   padding: 0px !important;
@@ -57,7 +57,7 @@ form {
 
 .input {
   z-index: 90;
-  font-size: 12px !important;
+  font-size: 10px !important;
   width: 100% !important;
   display: block !important;
 }

@@ -1,5 +1,4 @@
 import * as React from "react";
-// import { Button, ButtonToolbar } from "react-bootstrap";
 import Toggle from "material-ui/Toggle";
 
 import TextField from "material-ui/TextField";
@@ -103,16 +102,22 @@ export class OscBlock extends React.Component<OscBlockProps> {
       this.props.updateBlock(updatedBlock);
     }
   };
-  handleTypeChange = (e: any, index: any, value: any) => {
+  handleTypeChange = (value: any) => {
     // set change here so it is instant
-    (this.props.block.internal as InternalOscData).oscillator.type = value;
+    try {
+      (this.props.block.internal as InternalOscData).oscillator.type = value;
 
-    // update block info in store
-    const updatedBlock: BlockData = {
-      ...this.props.block,
-      type: value
-    } as BlockData;
-    this.props.updateBlock(updatedBlock);
+      // update block info in store
+      const updatedBlock: BlockData = {
+        ...this.props.block,
+        type: value
+      } as BlockData;
+      this.props.updateBlock(updatedBlock);
+    } catch (e) {
+      throw () => {
+        return e;
+      };
+    }
   };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
