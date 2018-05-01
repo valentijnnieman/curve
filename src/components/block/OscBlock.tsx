@@ -102,22 +102,16 @@ export class OscBlock extends React.Component<OscBlockProps> {
       this.props.updateBlock(updatedBlock);
     }
   };
-  handleTypeChange = (value: any) => {
+  handleTypeChange = (e: any, index: any, value: any) => {
     // set change here so it is instant
-    try {
-      (this.props.block.internal as InternalOscData).oscillator.type = value;
+    (this.props.block.internal as InternalOscData).oscillator.type = value;
 
-      // update block info in store
-      const updatedBlock: BlockData = {
-        ...this.props.block,
-        type: value
-      } as BlockData;
-      this.props.updateBlock(updatedBlock);
-    } catch (e) {
-      throw () => {
-        return e;
-      };
-    }
+    // update block info in store
+    const updatedBlock: BlockData = {
+      ...this.props.block,
+      type: value
+    } as BlockData;
+    this.props.updateBlock(updatedBlock);
   };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
