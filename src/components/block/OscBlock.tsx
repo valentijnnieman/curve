@@ -102,6 +102,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
       this.props.updateBlock(updatedBlock);
     }
   };
+  // handleTypeChange's parameters are dictated by material-ui/DropdownMenu
   handleTypeChange = (e: any, index: any, value: any) => {
     // set change here so it is instant
     (this.props.block.internal as InternalOscData).oscillator.type = value;

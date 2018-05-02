@@ -70,8 +70,8 @@ describe("<OscBlock />", () => {
     });
     expect(mockUpdate.mock.calls[3][0].values).toEqual([999]);
   });
-  // test("handleTypeChange()", () => {
-  //   instance.handleTypeChange("sine");
-  //   expect(mockUpdate.mock.calls[3][0].type).toEqual("sine");
-  // });
+  test("handleTypeChange()", () => {
+    instance.handleTypeChange({}, 0, "sine");
+    expect(mockUpdate.mock.calls[3][0].type).toEqual("sine");
+  });
 });
