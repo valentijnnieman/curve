@@ -4,6 +4,7 @@ import "./Editor.css";
 import OscBlock from "../components/block/OscBlock";
 import GainBlock from "../components/block/GainBlock";
 import BiquadBlock from "../components/block/BiquadBlock";
+import EnvelopeBlock from "../components/block/EnvelopeBlock";
 import { Code } from "../components/ui/Code";
 // import OutputNode from "../components/block/OutputNode";
 import {
@@ -266,6 +267,19 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           } else if (block.blockType === "BIQUAD") {
             return (
               <BiquadBlock
+                key={index}
+                block={block}
+                allBlocks={this.props.blocks}
+                tryToConnect={this.tryToConnect}
+                tryToConnectTo={this.tryToConnectTo}
+                canConnect={this.state.wantsToConnect}
+                updateBlock={this.props.updateBlock}
+                audioCtx={this.props.audioCtx}
+              />
+            );
+          } else if (block.blockType === "ENVELOPE") {
+            return (
+              <EnvelopeBlock
                 key={index}
                 block={block}
                 allBlocks={this.props.blocks}

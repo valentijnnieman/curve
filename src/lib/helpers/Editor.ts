@@ -28,6 +28,13 @@ export const buildInternal = (
       analyser
     };
     return newGainInternal;
+  } else if (block.blockType === "ENVELOPE") {
+    gain.gain.value = 0; // an envelope will control it's own gain
+    const newGainInternal = {
+      gain,
+      analyser
+    };
+    return newGainInternal;
   } else if (block.blockType === "BIQUAD") {
     let filter;
     filter = audioCtx.createBiquadFilter();
