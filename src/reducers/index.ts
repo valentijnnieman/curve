@@ -23,7 +23,7 @@ const blockOptions: Array<BlockDataOptions> = [
   {
     id: 1,
     blockType: "ENVELOPE",
-    values: [0, 1, 1, 0.5],
+    values: [0, 0.5, 0.5, 0.4],
     hasInternal: false,
     running: false,
     hasInputFrom: [],
@@ -35,6 +35,20 @@ const blockOptions: Array<BlockDataOptions> = [
   },
   {
     id: 2,
+    blockType: "BIQUAD",
+    type: "lowpass" as BiquadFilterType,
+    values: [440, 10],
+    hasInternal: false,
+    running: false,
+    hasInputFrom: [],
+    isConnectedToOutput: false,
+    connected: false,
+    outputs: [],
+    gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+    outputDOMRect: new DOMRect(0, 0, 0, 0)
+  },
+  {
+    id: 3,
     blockType: "GAIN",
     values: [1],
     hasInternal: false,
@@ -60,6 +74,10 @@ const initialState = {
     {
       ...blockOptions[2],
       internal: buildInternal(blockOptions[2], audioCtx)
+    },
+    {
+      ...blockOptions[3],
+      internal: buildInternal(blockOptions[3], audioCtx)
     }
   ],
   audioCtx

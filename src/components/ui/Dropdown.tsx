@@ -107,6 +107,28 @@ export class Dropdown extends React.Component<DropdownProps, any> {
               }}
             />
             <MenuItem
+              primaryText="Envelope"
+              onClick={() => {
+                const options = {
+                  id: 999,
+                  blockType: "ENVELOPE",
+                  values: [0, 0.5, 0.5, 0.4],
+                  connected: false,
+                  hasInternal: false,
+                  hasInputFrom: [],
+                  isConnectedToOutput: false,
+                  outputs: [],
+                  gainInputDOMRect: new DOMRect(0, 0, 0, 0),
+                  outputDOMRect: new DOMRect(0, 0, 0, 0)
+                } as BlockDataOptions;
+                const newOscBlock = {
+                  ...options,
+                  internal: buildInternal(options, this.props.audioCtx)
+                } as BlockData;
+                this.props.createBlock(newOscBlock);
+              }}
+            />
+            <MenuItem
               primaryText="Gain"
               onClick={() => {
                 const options = {

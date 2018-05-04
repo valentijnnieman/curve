@@ -78,6 +78,19 @@ const mockblockOptions: Array<BlockDataOptions> = [
     gainInputDOMRect: inputDOMRect,
     freqInputDOMRect: inputDOMRect,
     outputDOMRect: outputDOMRect
+  },
+  {
+    id: 3,
+    blockType: "ENVELOPE",
+    values: [0, 0.5, 0.5, 0.4],
+    connected: false,
+    hasInternal: false,
+    hasInputFrom: [],
+    isConnectedToOutput: false,
+    outputs: [],
+    gainInputDOMRect: inputDOMRect,
+    freqInputDOMRect: inputDOMRect,
+    outputDOMRect: outputDOMRect
   }
 ];
 export const mockblocks: Array<BlockData> = [
@@ -99,6 +112,10 @@ export const mockblocks: Array<BlockData> = [
   {
     ...mockblockOptions[3],
     internal: buildInternal(mockblockOptions[3], audioCtx)
+  },
+  {
+    ...mockblockOptions[4],
+    internal: buildInternal(mockblockOptions[4], audioCtx)
   }
 ];
 
