@@ -102,7 +102,7 @@ export class EnvelopeBlock extends React.Component<
         }
         cancel="input"
       >
-        <div className="card" id="gain-block">
+        <div className="card">
           <IconButton
             tooltipPosition="bottom-left"
             tooltip="Input"
