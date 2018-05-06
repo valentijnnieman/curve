@@ -94,6 +94,28 @@ let gain3 = audioCtx.createGain();
 gain3.gain.value = 1;
 filter3.connect(gain3);
 
+// Creating envelope block
+let envelope4 = {
+  attack: 0,
+  decay: 0,
+  sustain: 0,
+  release: 0
+};
+
+// create a internal gain used with envelope object
+let gain4 = audioCtx.createGain();
+gain4.gain.value = 0;
+
+envelope4.trigger = function() {
+    const { attack, decay, sustain, release } = envelope4;
+    const now = audioCtx.currentTime;
+    gain4.gain.cancelScheduledValues(now);
+    gain4.gain.setValueAtTime(0, now);
+    gain4.gain.linearRampToValueAtTime(1, now + attack);
+    gain4.gain.linearRampToValueAtTime(sustain, now + attack + decay);
+    gain4.gain.linearRampToValueAtTime(0, now + attack + decay + release);
+}
+
 `;
     expect(code).toEqual(expectedCode);
   });

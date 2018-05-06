@@ -19,6 +19,12 @@ import { OscBlockProps } from "../../types/blockProps";
 Enzyme.configure({ adapter: new Adapter() });
 
 class MockBlock extends React.Component<OscBlockProps> {
+  tryToConnectTo = () => {
+    //
+  };
+  connectToAnalyser = () => {
+    //
+  };
   render() {
     return <div>Mock</div>;
   }

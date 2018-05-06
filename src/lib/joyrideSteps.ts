@@ -20,7 +20,7 @@ export const joyrideSteps = [
   {
     title: "Oscillator blocks",
     text: "You can change the frequency and set the type of waveform here",
-    selector: ".node-controls",
+    selector: ".block-controls",
     position: "bottom-left",
     type: "hover",
     isFixed: true

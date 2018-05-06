@@ -5,7 +5,7 @@ import {
 } from "./internalData";
 export interface BlockDataOptions {
   id: number;
-  blockType: "OSC" | "GAIN" | "BIQUAD";
+  blockType: "OSC" | "GAIN" | "BIQUAD" | "ENVELOPE";
   type?: OscillatorType | BiquadFilterType;
   values: Array<number>;
   hasInternal: boolean;

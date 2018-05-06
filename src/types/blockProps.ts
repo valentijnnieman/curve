@@ -1,6 +1,7 @@
 import { BlockData } from "../types/blockData";
 
-export interface BlockProps {
+// The props of the composed HOC - what we use in Editor.jsx
+export interface ComposedBlockProps {
   block: BlockData;
   allBlocks: Array<BlockData>;
   tryToConnect: any;
@@ -10,41 +11,41 @@ export interface BlockProps {
   audioCtx: AudioContext;
 }
 
-export interface OscBlockProps extends BlockProps {
+// common props between blocks - extends the composed block's props
+export interface BlockProps extends ComposedBlockProps {
   block: BlockData;
   connectToAnalyser: () => void;
   connectInternal: () => void;
   tryToConnect: (outputElement: DOMRect) => void;
+  checkInputs: (outputType: string) => string;
+  onDragHandler: any;
+}
+
+// block specific props - not all blocks have a freqInputElement for example
+export interface OscBlockProps extends BlockProps {
   onDragHandler: (
     gainInputElement: DOMRect,
     outputElement: DOMRect,
     freqInputElement?: DOMRect
   ) => void;
-  checkInputs: (outputType: string) => string;
 }
 
 export interface BiquadBlockProps extends BlockProps {
-  block: BlockData;
-  connectToAnalyser: () => void;
-  connectInternal: () => void;
-  tryToConnect: (outputElement: DOMRect) => void;
   onDragHandler: (
     gainInputElement: DOMRect,
     outputElement: DOMRect,
     freqInputElement?: DOMRect
   ) => void;
-  checkInputs: (outputType: string) => string;
 }
 
 export interface GainBlockProps extends BlockProps {
-  block: BlockData;
-  connectToAnalyser: () => void;
-  connectInternal: () => void;
-  tryToConnect: (outputElement: DOMRect) => void;
+  onDragHandler: (gainInputElement: DOMRect, outputElement: DOMRect) => void;
+}
+
+export interface EnvelopeBlockProps extends BlockProps {
   onDragHandler: (
     gainInputElement: DOMRect,
     outputElement: DOMRect,
     freqInputElement?: DOMRect
   ) => void;
-  checkInputs: (outputType: string) => string;
 }

@@ -1,17 +1,13 @@
 import * as React from "react";
 
 import { BlockData } from "../../types/blockData";
-import {
-  BlockProps,
-  OscBlockProps,
-  GainBlockProps
-} from "../../types/blockProps";
+import { ComposedBlockProps, BlockProps } from "../../types/blockProps";
 
 export const composedBlock = (
-  BlockToCompose: React.ComponentClass<OscBlockProps | GainBlockProps>
+  BlockToCompose: React.ComponentClass<BlockProps>
 ) => {
-  return class extends React.Component<BlockProps> {
-    constructor(props: BlockProps) {
+  return class extends React.Component<ComposedBlockProps> {
+    constructor(props: ComposedBlockProps) {
       super(props);
     }
     connectToAnalyser = () => {
@@ -77,7 +73,7 @@ export const composedBlock = (
         return "io-element";
       }
     };
-    componentWillReceiveProps(nextProps: BlockProps) {
+    componentWillReceiveProps(nextProps: ComposedBlockProps) {
       if (this.props.block.outputs !== nextProps.block.outputs) {
         this.props = nextProps;
         this.connectInternal();
@@ -88,7 +84,7 @@ export const composedBlock = (
     render() {
       return (
         <BlockToCompose
-          {...this.props as OscBlockProps | GainBlockProps}
+          {...this.props as ComposedBlockProps}
           connectToAnalyser={this.connectToAnalyser}
           connectInternal={this.connectInternal}
           tryToConnect={this.tryToConnect}

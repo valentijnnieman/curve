@@ -28,6 +28,13 @@ export const buildInternal = (
       analyser
     };
     return newGainInternal;
+  } else if (block.blockType === "ENVELOPE") {
+    gain.gain.value = 0; // an envelope will control it's own gain
+    const newGainInternal = {
+      gain,
+      analyser
+    };
+    return newGainInternal;
   } else if (block.blockType === "BIQUAD") {
     let filter;
     filter = audioCtx.createBiquadFilter();
@@ -186,6 +193,59 @@ filter${index}.Q.setValueAtTime(${block.values[1]}, audioCtx.currentTime);
 let gain${index} = audioCtx.createGain();
 gain${index}.gain.value = 1;
 filter${index}.connect(gain${index});`;
+      if (block.connected) {
+        if (block.isConnectedToOutput) {
+          // connected to speakers
+          connects += `gain${index}.connect(audioCtx.destination);\n`;
+        } else {
+          block.outputs.map(output => {
+            if (output.connectedToType === "gain" && output.isConnectedTo) {
+              window.console.log("WA", blocks[output.isConnectedTo]);
+              if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
+                connects += `gain${index}.connect(filter${
+                  output.isConnectedTo
+                });\n`;
+              } else if (blocks[output.isConnectedTo].blockType === "GAIN") {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                });\n`;
+              } else {
+                connects += `gain${index}.connect(gain${
+                  output.isConnectedTo
+                }.gain);\n`;
+              }
+            } else if (output.connectedToType === "freq") {
+              connects += `gain${index}.connect(osc${
+                output.isConnectedTo
+              }.frequency);\n`;
+            }
+          });
+        }
+      }
+      jsString += "\n\n";
+    } else if (block && block.blockType === "ENVELOPE") {
+      jsString += `// Creating envelope block
+let envelope${index} = {
+  attack: ${block.values[0]},
+  decay: ${block.values[0]},
+  sustain: ${block.values[0]},
+  release: ${block.values[0]}
+};
+
+// create a internal gain used with envelope object
+let gain${index} = audioCtx.createGain();
+gain${index}.gain.value = 0;
+
+envelope${index}.trigger = function() {
+    const { attack, decay, sustain, release } = envelope${index};
+    const now = audioCtx.currentTime;
+    gain${index}.gain.cancelScheduledValues(now);
+    gain${index}.gain.setValueAtTime(0, now);
+    gain${index}.gain.linearRampToValueAtTime(1, now + attack);
+    gain${index}.gain.linearRampToValueAtTime(sustain, now + attack + decay);
+    gain${index}.gain.linearRampToValueAtTime(0, now + attack + decay + release);
+}`;
+
       if (block.connected) {
         if (block.isConnectedToOutput) {
           // connected to speakers
