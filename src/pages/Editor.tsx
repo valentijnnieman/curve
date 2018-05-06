@@ -22,7 +22,7 @@ import { updateBlock } from "../actions/block";
 
 // helpers
 import { drawConnectionLines, genWACode } from "../lib/helpers/Editor";
-import { IconButton } from "material-ui";
+import { IconButton, Dialog, RaisedButton } from "material-ui";
 
 const SpeakerSVG = require("../speakers.svg");
 
@@ -44,6 +44,7 @@ interface EditorState {
   speakersAreConnected: boolean;
   mouseX?: number;
   mouseY?: number;
+  accessModalOpen: boolean;
 }
 
 export class Editor extends React.Component<EditorProps, EditorState> {
@@ -54,9 +55,15 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   constructor(props: EditorProps) {
     super(props);
 
+    let isRunning = false;
+    if (this.props.audioCtx.state !== "running") {
+      isRunning = true;
+    }
+
     this.state = {
       wantsToConnect: false,
-      speakersAreConnected: false
+      speakersAreConnected: false,
+      accessModalOpen: isRunning
     };
     // Build internal objects from blocks used with web audio
     this.code = genWACode(this.props.blocks);
@@ -233,6 +240,13 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       this.stopTryingToConnect();
     }
   };
+  toggleCtx = () => {
+    this.props.audioCtx.resume();
+    this.setState({ accessModalOpen: false });
+  };
+  handleAccessModalClose = () => {
+    this.setState({ accessModalOpen: false });
+  };
 
   render() {
     const synthElements = this.props.blocks.map(
@@ -339,6 +353,20 @@ export class Editor extends React.Component<EditorProps, EditorState> {
         </svg>
         {synthElements}
         <Code code={this.code} />
+        <Dialog
+          title="Allow Web Audio access"
+          modal={true}
+          open={this.state.accessModalOpen}
+          onRequestClose={this.handleAccessModalClose}
+          autoScrollBodyContent={true}
+          className="code-dialog"
+        >
+          <p>
+            Web Audio needs to be turned on - some browsers prevent autoplaying
+            audio.
+          </p>
+          <RaisedButton label="Turn on Web Audio" onClick={this.toggleCtx} />
+        </Dialog>
         <div className="card speakers">
           <div className="card-content speakers-content">
             <h6>Speakers</h6>

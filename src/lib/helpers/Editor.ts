@@ -125,7 +125,6 @@ osc${index}.start();`;
         } else {
           block.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              window.console.log("WA", blocks[output.isConnectedTo]);
               if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
                 connects += `gain${index}.connect(filter${
                   output.isConnectedTo
@@ -158,7 +157,6 @@ gain${index}.gain.value = ${block.values[0]};`;
         } else {
           block.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              window.console.log("WA", blocks[output.isConnectedTo]);
               if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
                 connects += `gain${index}.connect(filter${
                   output.isConnectedTo
@@ -200,7 +198,6 @@ filter${index}.connect(gain${index});`;
         } else {
           block.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              window.console.log("WA", blocks[output.isConnectedTo]);
               if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
                 connects += `gain${index}.connect(filter${
                   output.isConnectedTo
@@ -253,7 +250,6 @@ envelope${index}.trigger = function() {
         } else {
           block.outputs.map(output => {
             if (output.connectedToType === "gain" && output.isConnectedTo) {
-              window.console.log("WA", blocks[output.isConnectedTo]);
               if (blocks[output.isConnectedTo].blockType === "BIQUAD") {
                 connects += `gain${index}.connect(filter${
                   output.isConnectedTo
