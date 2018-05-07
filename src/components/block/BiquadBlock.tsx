@@ -7,7 +7,6 @@ import { BlockData } from "../../types/blockData";
 
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
-import ClearIcon from "material-ui/svg-icons/content/clear";
 
 import "../ui/Card.css";
 import "./Block.css";
