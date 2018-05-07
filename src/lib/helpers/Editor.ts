@@ -140,7 +140,10 @@ osc${index}.start();`;
                 connects += `gain${index}.connect(filter${
                   output.isConnectedTo
                 });\n`;
-              } else if (blockConnectedTo.blockType === "GAIN") {
+              } else if (
+                blockConnectedTo &&
+                blockConnectedTo.blockType === "GAIN"
+              ) {
                 connects += `gain${index}.connect(gain${
                   output.isConnectedTo
                 });\n`;
