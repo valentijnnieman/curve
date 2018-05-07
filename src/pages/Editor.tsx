@@ -18,7 +18,7 @@ import { StoreState } from "../types/storeState";
 
 import { connect } from "react-redux";
 
-import { updateBlock } from "../actions/block";
+import { updateBlock, deleteBlock } from "../actions/block";
 
 // helpers
 import { drawConnectionLines, genWACode } from "../lib/helpers/Editor";
@@ -30,6 +30,7 @@ interface EditorProps {
   blocks: Array<BlockData>;
   audioCtx: AudioContext;
   updateBlock: (block: BlockData) => void;
+  deleteBlock: (id: number) => void;
 }
 
 interface EditorState {
@@ -93,7 +94,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       };
       this.props.updateBlock(updatedBlock);
 
-      // update the node we're connecting to
+      // update the block we're connecting to
       // specifying it has an input from updatedNode
       const updatedBlockTo: BlockData = {
         ...blockToConnectTo,
@@ -116,9 +117,13 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     });
   };
   disconnect = (fromBlock: number, toBlock: number, outputId: number) => {
-    // update node info in store
-    const blockWithOutput = this.props.blocks[fromBlock];
-    const blockWithInput = this.props.blocks[toBlock];
+    // update block info in store
+    const blockWithOutput = this.props.blocks.find(
+      b => b.id === fromBlock
+    ) as BlockData;
+    const blockWithInput = this.props.blocks.find(
+      b => b.id === toBlock
+    ) as BlockData;
     const internal = blockWithOutput.internal;
     const updatedBlockWithOutput: BlockData = {
       ...blockWithOutput,
@@ -146,16 +151,11 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       });
     }
   };
-  tryToConnect = (node: BlockData, internal: InternalData, el: DOMRect) => {
-    // called from node that wants to connect it's output
-
-    // if it's already connected, disconnect it!
-    // if (node.connected) {
-    //   this.disconnect(node, internal);
-    // }
+  tryToConnect = (block: BlockData, internal: InternalData, el: DOMRect) => {
+    // called from block that wants to connect it's output
     this.setState({
       wantsToConnect: true,
-      blockToConnect: node,
+      blockToConnect: block,
       internalToConnect: internal,
       lineFrom: el,
       mouseX: el.x,
@@ -168,7 +168,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     outputType: string,
     el: DOMRect
   ) => {
-    // called form node that wants to be connected to
+    // called from block that wants to be connected to (ie block which input is clicked)
     if (this.state.wantsToConnect) {
       this.setState(
         {
@@ -247,6 +247,20 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   handleAccessModalClose = () => {
     this.setState({ accessModalOpen: false });
   };
+  deleteAndDisconnect = (id: number) => {
+    // stop internal WA objects from making sound
+    const blockToDelete = this.props.blocks.find(b => b.id === id) as BlockData;
+    if ("oscillator" in blockToDelete.internal) {
+      if (blockToDelete.running) {
+        blockToDelete.internal.oscillator.stop();
+      }
+    }
+    if ("gain" in blockToDelete.internal) {
+      blockToDelete.internal.gain.gain.value = 0;
+    }
+    // update redux store -> delete blockData object
+    this.props.deleteBlock(id);
+  };
 
   render() {
     const synthElements = this.props.blocks.map(
@@ -262,6 +276,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
                 tryToConnectTo={this.tryToConnectTo}
                 canConnect={this.state.wantsToConnect}
                 updateBlock={this.props.updateBlock}
+                deleteBlock={this.deleteAndDisconnect}
                 audioCtx={this.props.audioCtx}
               />
             );
@@ -275,6 +290,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
                 tryToConnectTo={this.tryToConnectTo}
                 canConnect={this.state.wantsToConnect}
                 updateBlock={this.props.updateBlock}
+                deleteBlock={this.deleteAndDisconnect}
                 audioCtx={this.props.audioCtx}
               />
             );
@@ -288,6 +304,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
                 tryToConnectTo={this.tryToConnectTo}
                 canConnect={this.state.wantsToConnect}
                 updateBlock={this.props.updateBlock}
+                deleteBlock={this.deleteAndDisconnect}
                 audioCtx={this.props.audioCtx}
               />
             );
@@ -301,6 +318,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
                 tryToConnectTo={this.tryToConnectTo}
                 canConnect={this.state.wantsToConnect}
                 updateBlock={this.props.updateBlock}
+                deleteBlock={this.deleteAndDisconnect}
                 audioCtx={this.props.audioCtx}
               />
             );
@@ -407,7 +425,11 @@ const mapStateToProps = ({ blocks, audioCtx }: StoreState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateBlock: (block: BlockData) => dispatch(updateBlock(block))
+    updateBlock: (block: BlockData) => dispatch(updateBlock(block)),
+    deleteBlock: (id: number) => {
+      // we need to handle internals here as well as updating the redux store.
+      dispatch(deleteBlock(id));
+    }
   };
 };
 

@@ -15,6 +15,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe("<OscBlock />", () => {
   const mockUpdate = jest.fn();
+  const mockDelete = jest.fn();
 
   const blockInstance = mockblocks[0] as BlockData;
   const wrapper = mount(
@@ -32,6 +33,7 @@ describe("<OscBlock />", () => {
         }}
         canConnect={false}
         updateBlock={mockUpdate}
+        deleteBlock={mockDelete}
         audioCtx={audioCtx}
         connectToAnalyser={jest.fn()}
         connectInternal={jest.fn()}

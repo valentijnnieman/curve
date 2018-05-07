@@ -79,6 +79,7 @@ describe("OscNode", () => {
         // We're testing the actual redux action elsewhere
         mockblocks[block.id].outputDOMRect = block.outputDOMRect;
       }}
+      deleteBlock={jest.fn()}
       audioCtx={audioCtx}
     />
   );

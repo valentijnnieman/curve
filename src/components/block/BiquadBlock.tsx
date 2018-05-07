@@ -7,6 +7,7 @@ import { BlockData } from "../../types/blockData";
 
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
+import ClearIcon from "material-ui/svg-icons/content/clear";
 
 import "../ui/Card.css";
 import "./Block.css";
@@ -110,6 +111,9 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
       this.props.updateBlock(updatedBlock);
     }
   };
+  removeBlock = () => {
+    this.props.deleteBlock(this.props.block.id);
+  };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
     const updatedBlock: BlockData = {
@@ -135,35 +139,6 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
           );
         }}
       >
-<<<<<<< Updated upstream
-        <div className="card">
-          <IconButton
-            tooltipPosition="bottom-left"
-            tooltip="Input"
-            className="io-button"
-            tooltipStyles={{ marginTop: "-40px" }}
-          >
-            <div
-              className={this.props.checkInputs("gain")}
-              onClick={() => this.tryToConnectTo("gain")}
-              ref={ref => {
-                this.gainInputElement = ref as HTMLDivElement;
-              }}
-            />
-          </IconButton>
-          <IconButton
-            tooltip="Modulate frequency input"
-            tooltipPosition="bottom-left"
-            className="io-button io-button--freq"
-            tooltipStyles={{ marginTop: "-40px" }}
-          >
-            <div
-              className={this.props.checkInputs("freq") + " io-element--freq"}
-              onClick={() => this.tryToConnectTo("freq")}
-              ref={ref => {
-                this.freqInputElement = ref as HTMLDivElement;
-              }}
-=======
         <IconButton
           tooltipPosition="bottom-left"
           tooltip="Input"
@@ -201,7 +176,6 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
               onChange={this.handleFreqChange}
               className="input"
               type="number"
->>>>>>> Stashed changes
             />
             <TextField
               id="q"

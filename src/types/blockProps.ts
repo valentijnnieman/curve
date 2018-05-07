@@ -8,6 +8,7 @@ export interface ComposedBlockProps {
   tryToConnectTo: any;
   canConnect: boolean;
   updateBlock: (node: BlockData) => void;
+  deleteBlock: (id: number) => void;
   audioCtx: AudioContext;
 }
 

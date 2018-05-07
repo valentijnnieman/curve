@@ -81,6 +81,9 @@ export class EnvelopeBlock extends React.Component<
     gain.linearRampToValueAtTime(sustain, now + attack + decay);
     gain.linearRampToValueAtTime(0, now + attack + decay + release);
   };
+  removeBlock = () => {
+    this.props.deleteBlock(this.props.block.id);
+  };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
     const updatedBlock: BlockData = {
@@ -103,21 +106,6 @@ export class EnvelopeBlock extends React.Component<
           )
         }
       >
-<<<<<<< Updated upstream
-        <div className="card">
-          <IconButton
-            tooltipPosition="bottom-left"
-            tooltip="Input"
-            className="io-button"
-            tooltipStyles={{ marginTop: "-40px" }}
-          >
-            <div
-              className={this.props.checkInputs("gain")}
-              onClick={this.tryToConnectTo}
-              ref={ref => {
-                this.gainInputElement = ref as HTMLDivElement;
-              }}
-=======
         <IconButton
           tooltipPosition="bottom-left"
           tooltip="Input"
@@ -148,7 +136,6 @@ export class EnvelopeBlock extends React.Component<
               type="number"
               step={0.1}
               className="input"
->>>>>>> Stashed changes
             />
             <TextField
               floatingLabelText="Decay"

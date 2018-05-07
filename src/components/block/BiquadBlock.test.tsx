@@ -15,6 +15,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe("<BiquadBlock />", () => {
   const mockUpdate = jest.fn();
+  const mockDelete = jest.fn();
 
   const blockInstance = mockblocks[3] as BlockData;
   const wrapper = mount(
@@ -32,6 +33,7 @@ describe("<BiquadBlock />", () => {
         }}
         canConnect={false}
         updateBlock={mockUpdate}
+        deleteBlock={mockDelete}
         audioCtx={audioCtx}
         connectToAnalyser={jest.fn()}
         connectInternal={jest.fn()}
