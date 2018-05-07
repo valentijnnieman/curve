@@ -1,12 +1,14 @@
 import { StoreState } from "../types/storeState";
-import { BlockDataOptions } from "../types/blockData";
+import { BlockDataOptions, BlockData } from "../types/blockData";
 import { buildInternal } from "../lib/helpers/Editor";
 
 const audioCtx = new AudioContext();
 
+let idCount = 0;
+
 const blockOptions: Array<BlockDataOptions> = [
   {
-    id: 0,
+    id: idCount++,
     blockType: "OSC",
     type: "sine" as OscillatorType,
     values: [220],
@@ -21,7 +23,7 @@ const blockOptions: Array<BlockDataOptions> = [
     outputDOMRect: new DOMRect(0, 0, 0, 0)
   },
   {
-    id: 1,
+    id: idCount++,
     blockType: "ENVELOPE",
     values: [0, 0.5, 0.5, 0.4],
     hasInternal: false,
@@ -34,7 +36,7 @@ const blockOptions: Array<BlockDataOptions> = [
     outputDOMRect: new DOMRect(0, 0, 0, 0)
   },
   {
-    id: 2,
+    id: idCount++,
     blockType: "BIQUAD",
     type: "lowpass" as BiquadFilterType,
     values: [440, 10],
@@ -48,7 +50,7 @@ const blockOptions: Array<BlockDataOptions> = [
     outputDOMRect: new DOMRect(0, 0, 0, 0)
   },
   {
-    id: 3,
+    id: idCount++,
     blockType: "GAIN",
     values: [1],
     hasInternal: false,
@@ -98,7 +100,19 @@ export default (state: StoreState = initialState, action: any): StoreState => {
     case "CREATE_BLOCK":
       return {
         ...state,
-        blocks: [...state.blocks, { ...action.block, id: state.blocks.length }]
+        blocks: [...state.blocks, { ...action.block, id: idCount++ }]
+      };
+    case "DELETE_BLOCK":
+      const blockToDelete = state.blocks.find(
+        b => b.id === action.id
+      ) as BlockData;
+      const index = state.blocks.indexOf(blockToDelete);
+      return {
+        ...state,
+        blocks: [
+          ...state.blocks.slice(0, index),
+          ...state.blocks.slice(index + 1)
+        ]
       };
     default:
       return state;

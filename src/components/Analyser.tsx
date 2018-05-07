@@ -38,8 +38,12 @@ export class Analyser extends React.Component<AnalyserProps> {
   };
 
   draw = () => {
-    this.drawScope();
-    requestAnimationFrame(this.draw);
+    try {
+      this.drawScope();
+      requestAnimationFrame(this.draw);
+    } catch {
+      //
+    }
   };
 
   componentDidMount() {

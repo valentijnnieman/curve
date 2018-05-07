@@ -7,6 +7,7 @@ import Draggable from "react-draggable";
 import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
+import ClearIcon from "material-ui/svg-icons/content/clear";
 
 import { BlockData } from "../../types/blockData";
 
@@ -82,6 +83,9 @@ export class EnvelopeBlock extends React.Component<
     gain.linearRampToValueAtTime(sustain, now + attack + decay);
     gain.linearRampToValueAtTime(0, now + attack + decay + release);
   };
+  removeBlock = () => {
+    this.props.deleteBlock(this.props.block.id);
+  };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
     const updatedBlock: BlockData = {
@@ -103,6 +107,9 @@ export class EnvelopeBlock extends React.Component<
         cancel="input"
       >
         <div className="card">
+          <IconButton className="card-close" onClick={this.removeBlock}>
+            <ClearIcon />
+          </IconButton>
           <IconButton
             tooltipPosition="bottom-left"
             tooltip="Input"

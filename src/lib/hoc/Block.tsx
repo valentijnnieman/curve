@@ -60,12 +60,16 @@ export const composedBlock = (
     checkInputs = (outputType: string) => {
       let allInputTypes: Array<string> = [];
       this.props.block.hasInputFrom.map(input => {
-        const inputFromBlock = this.props.allBlocks[input];
-        inputFromBlock.outputs
-          .filter(output => output.connectedToType === outputType)
-          .map(output => {
-            allInputTypes.push(output.connectedToType as string);
-          });
+        const inputFromBlock = this.props.allBlocks.find(
+          b => b.id === input
+        ) as BlockData;
+        if (inputFromBlock) {
+          inputFromBlock.outputs
+            .filter(output => output.connectedToType === outputType)
+            .map(output => {
+              allInputTypes.push(output.connectedToType as string);
+            });
+        }
       });
       if (allInputTypes.includes(outputType)) {
         return "io-element io-element--active";

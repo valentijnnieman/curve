@@ -8,6 +8,7 @@ import { BlockData } from "../../types/blockData";
 
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
+import ClearIcon from "material-ui/svg-icons/content/clear";
 
 import "../ui/Card.css";
 import "./Block.css";
@@ -110,6 +111,9 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
       this.props.updateBlock(updatedBlock);
     }
   };
+  removeBlock = () => {
+    this.props.deleteBlock(this.props.block.id);
+  };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
     const updatedBlock: BlockData = {
@@ -134,6 +138,9 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
         cancel="input"
       >
         <div className="card">
+          <IconButton className="card-close" onClick={this.removeBlock}>
+            <ClearIcon />
+          </IconButton>
           <IconButton
             tooltipPosition="bottom-left"
             tooltip="Input"
