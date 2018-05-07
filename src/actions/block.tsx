@@ -15,6 +15,11 @@ export interface CreateBlockAction {
   block: BlockData;
 }
 
+export interface DeleteBlockAction {
+  type: "DELETE_BLOCK";
+  id: number;
+}
+
 export function updateBlock(block: BlockData): UpdateBlockAction {
   return {
     type: "UPDATE_BLOCK",
@@ -26,5 +31,12 @@ export function createBlock(block: BlockData): CreateBlockAction {
   return {
     type: "CREATE_BLOCK",
     block
+  };
+}
+
+export function deleteBlock(id: number): DeleteBlockAction {
+  return {
+    type: "DELETE_BLOCK",
+    id
   };
 }

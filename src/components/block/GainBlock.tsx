@@ -14,6 +14,8 @@ import { GainBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton } from "material-ui";
 
+import ClearIcon from "material-ui/svg-icons/content/clear";
+
 export class GainBlock extends React.Component<GainBlockProps> {
   analyser: AnalyserNode;
 
@@ -50,6 +52,9 @@ export class GainBlock extends React.Component<GainBlockProps> {
     }
   };
 
+  removeBlock = () => {
+    this.props.deleteBlock(this.props.block.id);
+  };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
     const updatedBlock: BlockData = {
@@ -71,6 +76,9 @@ export class GainBlock extends React.Component<GainBlockProps> {
         cancel="input"
       >
         <div className="card" id="gain-block">
+          <IconButton className="card-close" onClick={this.removeBlock}>
+            <ClearIcon />
+          </IconButton>
           <IconButton
             tooltipPosition="bottom-left"
             tooltip="Input"

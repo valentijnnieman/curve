@@ -17,9 +17,15 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe("OscNode", () => {
   const mockUpdate = jest.fn();
+  const mockDelete = jest.fn();
 
   const wrapper = shallow(
-    <Editor blocks={mockblocks} updateBlock={mockUpdate} audioCtx={audioCtx} />
+    <Editor
+      blocks={mockblocks}
+      updateBlock={mockUpdate}
+      deleteBlock={mockDelete}
+      audioCtx={audioCtx}
+    />
   );
 
   const instance = wrapper.instance() as any;
