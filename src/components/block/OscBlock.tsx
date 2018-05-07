@@ -3,7 +3,6 @@ import Toggle from "material-ui/Toggle";
 
 import TextField from "material-ui/TextField";
 
-import Draggable from "react-draggable";
 import { BlockData } from "../../types/blockData";
 
 import { InternalOscData } from "../../types/internalData";
@@ -11,13 +10,13 @@ import { InternalOscData } from "../../types/internalData";
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
 
-import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
 
 import { OscBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton } from "material-ui";
+import { Card } from "../ui/Card";
 
 export class OscBlock extends React.Component<OscBlockProps> {
   freqInput: HTMLInputElement;
@@ -127,7 +126,10 @@ export class OscBlock extends React.Component<OscBlockProps> {
 
   render() {
     return (
-      <Draggable
+      <Card
+        removeBlock={() => {
+          this.props.deleteBlock(this.props.block.id);
+        }}
         onDrag={() => {
           this.props.onDragHandler(
             this.gainInputElement.getBoundingClientRect() as DOMRect,
@@ -135,8 +137,8 @@ export class OscBlock extends React.Component<OscBlockProps> {
             this.freqInputElement.getBoundingClientRect() as DOMRect
           );
         }}
-        cancel="input"
       >
+<<<<<<< Updated upstream
         <div className="card">
           <IconButton
             tooltipPosition="bottom-left"
@@ -184,45 +186,92 @@ export class OscBlock extends React.Component<OscBlockProps> {
               />
             </form>
             <DropDownMenu
+=======
+        <IconButton
+          tooltipPosition="bottom-left"
+          tooltip="Modulate gain input"
+          className="io-button"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={this.props.checkInputs("gain")}
+            onClick={() => this.tryToConnectTo("gain")}
+            ref={ref => {
+              this.gainInputElement = ref as HTMLDivElement;
+            }}
+          />
+        </IconButton>
+        <IconButton
+          tooltip="Modulate frequency input"
+          tooltipPosition="bottom-left"
+          className="io-button io-button--freq"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={this.props.checkInputs("freq") + " io-element--freq"}
+            onClick={() => this.tryToConnectTo("freq")}
+            ref={ref => {
+              this.freqInputElement = ref as HTMLDivElement;
+            }}
+          />
+        </IconButton>
+        <div className="card-content">
+          <Toggle
+            onClick={this.toggleOsc}
+            className="toggle"
+            thumbSwitchedStyle={{ backgroundColor: "#f50057" }}
+            trackSwitchedStyle={{ backgroundColor: "#ff9d9d" }}
+          />
+          <form onSubmit={e => e.preventDefault()} className="block-controls">
+            <TextField
+              id="freq"
+              floatingLabelText="Frequency"
+              defaultValue={this.props.block.values[0]}
+              onChange={this.handleFreqChange}
+>>>>>>> Stashed changes
               className="input"
-              value={this.props.block.type}
-              onChange={this.handleTypeChange}
-            >
-              <MenuItem value="sine" primaryText="Sine" />
-              <MenuItem value="square" primaryText="Square" />
-              <MenuItem value="triangle" primaryText="Triangle" />
-              <MenuItem value="sawtooth" primaryText="Sawtooth" />
-            </DropDownMenu>
-            <Analyser
-              analyser={this.props.block.internal.analyser}
-              backgroundColor="#53a857"
-              lineColor="#f8f8f8"
+              type="number"
             />
-          </div>
-          <IconButton
-            tooltip="Output"
-            tooltipPosition="bottom-right"
-            className="io-button io-button--right"
-            tooltipStyles={{ marginTop: "-40px" }}
+          </form>
+          <DropDownMenu
+            className="input"
+            value={this.props.block.type}
+            onChange={this.handleTypeChange}
           >
-            <div
-              className={
-                this.props.block.connected
-                  ? "io-element io-element--right io-element--active"
-                  : "io-element io-element--right"
-              }
-              onClick={() =>
-                this.props.tryToConnect(
-                  this.outputElement.getBoundingClientRect() as DOMRect
-                )
-              }
-              ref={ref => {
-                this.outputElement = ref as HTMLDivElement;
-              }}
-            />
-          </IconButton>
+            <MenuItem value="sine" primaryText="Sine" />
+            <MenuItem value="square" primaryText="Square" />
+            <MenuItem value="triangle" primaryText="Triangle" />
+            <MenuItem value="sawtooth" primaryText="Sawtooth" />
+          </DropDownMenu>
+          <Analyser
+            analyser={this.props.block.internal.analyser}
+            backgroundColor="#53a857"
+            lineColor="#f8f8f8"
+          />
         </div>
-      </Draggable>
+        <IconButton
+          tooltip="Output"
+          tooltipPosition="bottom-right"
+          className="io-button io-button--right"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={
+              this.props.block.connected
+                ? "io-element io-element--right io-element--active"
+                : "io-element io-element--right"
+            }
+            onClick={() =>
+              this.props.tryToConnect(
+                this.outputElement.getBoundingClientRect() as DOMRect
+              )
+            }
+            ref={ref => {
+              this.outputElement = ref as HTMLDivElement;
+            }}
+          />
+        </IconButton>
+      </Card>
     );
   }
 }

@@ -3,7 +3,6 @@ import * as React from "react";
 
 import TextField from "material-ui/TextField";
 
-import Draggable from "react-draggable";
 import { BlockData } from "../../types/blockData";
 
 import DropDownMenu from "material-ui/DropDownMenu";
@@ -17,6 +16,7 @@ import { BiquadBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { InternalBiquadData } from "../../types/internalData";
 import { IconButton } from "material-ui";
+import { Card } from "../ui/Card";
 
 export class BiquadBlock extends React.Component<BiquadBlockProps> {
   freqInput: HTMLInputElement;
@@ -123,7 +123,10 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
 
   render() {
     return (
-      <Draggable
+      <Card
+        removeBlock={() => {
+          this.props.deleteBlock(this.props.block.id);
+        }}
         onDrag={() => {
           this.props.onDragHandler(
             this.gainInputElement.getBoundingClientRect() as DOMRect,
@@ -131,8 +134,8 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
             this.freqInputElement.getBoundingClientRect() as DOMRect
           );
         }}
-        cancel="input"
       >
+<<<<<<< Updated upstream
         <div className="card">
           <IconButton
             tooltipPosition="bottom-left"
@@ -160,71 +163,98 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
               ref={ref => {
                 this.freqInputElement = ref as HTMLDivElement;
               }}
-            />
-          </IconButton>
-          <div className="card-content">
-            <form onSubmit={e => e.preventDefault()} className="block-controls">
-              <TextField
-                id="freq"
-                floatingLabelText="Frequency"
-                defaultValue={this.props.block.values[0]}
-                onChange={this.handleFreqChange}
-                className="input"
-                type="number"
-              />
-              <TextField
-                id="q"
-                floatingLabelText="Q"
-                defaultValue={this.props.block.values[1]}
-                onChange={this.handleQChange}
-                className="input"
-                type="number"
-              />
-            </form>
-            <DropDownMenu
+=======
+        <IconButton
+          tooltipPosition="bottom-left"
+          tooltip="Input"
+          className="io-button"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={this.props.checkInputs("gain")}
+            onClick={() => this.tryToConnectTo("gain")}
+            ref={ref => {
+              this.gainInputElement = ref as HTMLDivElement;
+            }}
+          />
+        </IconButton>
+        <IconButton
+          tooltip="Modulate frequency input"
+          tooltipPosition="bottom-left"
+          className="io-button io-button--freq"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={this.props.checkInputs("freq") + " io-element--freq"}
+            onClick={() => this.tryToConnectTo("freq")}
+            ref={ref => {
+              this.freqInputElement = ref as HTMLDivElement;
+            }}
+          />
+        </IconButton>
+        <div className="card-content">
+          <form onSubmit={e => e.preventDefault()} className="block-controls">
+            <TextField
+              id="freq"
+              floatingLabelText="Frequency"
+              defaultValue={this.props.block.values[0]}
+              onChange={this.handleFreqChange}
               className="input"
-              value={this.props.block.type}
-              onChange={this.handleTypeChange}
-            >
-              <MenuItem value="lowpass" primaryText="Lowpass" />
-              <MenuItem value="highpass" primaryText="Highpass" />
-              <MenuItem value="bandpass" primaryText="Bandpass" />
-              <MenuItem value="lowshelf" primaryText="Lowshelf" />
-              <MenuItem value="highshelf" primaryText="Highshelf" />
-              <MenuItem value="peaking" primaryText="Peaking" />
-              <MenuItem value="notch" primaryText="Notch" />
-              <MenuItem value="allpass" primaryText="Allpass" />
-            </DropDownMenu>
-            <Analyser
-              analyser={this.props.block.internal.analyser as AnalyserNode}
-              backgroundColor="#fdd835"
-              lineColor="#f8f8f8"
+              type="number"
+>>>>>>> Stashed changes
             />
-          </div>
-          <IconButton
-            tooltip="Output"
-            tooltipPosition="bottom-right"
-            className="io-button io-button--right"
-            tooltipStyles={{ marginTop: "-40px" }}
+            <TextField
+              id="q"
+              floatingLabelText="Q"
+              defaultValue={this.props.block.values[1]}
+              onChange={this.handleQChange}
+              className="input"
+              type="number"
+            />
+          </form>
+          <DropDownMenu
+            className="input"
+            value={this.props.block.type}
+            onChange={this.handleTypeChange}
           >
-            <div
-              className={
-                this.props.block.connected
-                  ? "io-element io-element--right io-element--active"
-                  : "io-element io-element--right"
-              }
-              onClick={() =>
-                this.props.tryToConnect(
-                  this.outputElement.getBoundingClientRect() as DOMRect
-                )
-              }
-              ref={ref => {
-                this.outputElement = ref as HTMLDivElement;
-              }}
-            />
-          </IconButton>
+            <MenuItem value="lowpass" primaryText="Lowpass" />
+            <MenuItem value="highpass" primaryText="Highpass" />
+            <MenuItem value="bandpass" primaryText="Bandpass" />
+            <MenuItem value="lowshelf" primaryText="Lowshelf" />
+            <MenuItem value="highshelf" primaryText="Highshelf" />
+            <MenuItem value="peaking" primaryText="Peaking" />
+            <MenuItem value="notch" primaryText="Notch" />
+            <MenuItem value="allpass" primaryText="Allpass" />
+          </DropDownMenu>
+          <Analyser
+            analyser={this.props.block.internal.analyser as AnalyserNode}
+            backgroundColor="#fdd835"
+            lineColor="#f8f8f8"
+          />
         </div>
-      </Draggable>
+        <IconButton
+          tooltip="Output"
+          tooltipPosition="bottom-right"
+          className="io-button io-button--right"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={
+              this.props.block.connected
+                ? "io-element io-element--right io-element--active"
+                : "io-element io-element--right"
+            }
+            onClick={() =>
+              this.props.tryToConnect(
+                this.outputElement.getBoundingClientRect() as DOMRect
+              )
+            }
+            ref={ref => {
+              this.outputElement = ref as HTMLDivElement;
+            }}
+          />
+        </IconButton>
+      </Card>
     );
   }
 }

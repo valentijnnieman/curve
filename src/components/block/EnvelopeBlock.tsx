@@ -2,8 +2,6 @@ import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
 import TextField from "material-ui/TextField";
 
-import Draggable from "react-draggable";
-
 import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
@@ -13,6 +11,7 @@ import { BlockData } from "../../types/blockData";
 import { EnvelopeBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton, FlatButton } from "material-ui";
+import { Card } from "../ui/Card";
 
 interface EnvelopeState {
   attack: number;
@@ -93,15 +92,18 @@ export class EnvelopeBlock extends React.Component<
   }
   render() {
     return (
-      <Draggable
+      <Card
+        removeBlock={() => {
+          this.props.deleteBlock(this.props.block.id);
+        }}
         onDrag={() =>
           this.props.onDragHandler(
             this.gainInputElement.getBoundingClientRect() as DOMRect,
             this.outputElement.getBoundingClientRect() as DOMRect
           )
         }
-        cancel="input"
       >
+<<<<<<< Updated upstream
         <div className="card">
           <IconButton
             tooltipPosition="bottom-left"
@@ -115,83 +117,96 @@ export class EnvelopeBlock extends React.Component<
               ref={ref => {
                 this.gainInputElement = ref as HTMLDivElement;
               }}
+=======
+        <IconButton
+          tooltipPosition="bottom-left"
+          tooltip="Input"
+          className="io-button"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={this.props.checkInputs("gain")}
+            onClick={this.tryToConnectTo}
+            ref={ref => {
+              this.gainInputElement = ref as HTMLDivElement;
+            }}
+          />
+        </IconButton>
+        <div className="card-content">
+          <FlatButton
+            label="Trigger"
+            primary={true}
+            onClick={this.handleTrigger}
+            style={{ fontSize: "12px" }}
+          />
+          <form onSubmit={e => e.preventDefault()}>
+            <TextField
+              floatingLabelText="Attack"
+              name="attack"
+              value={this.state.attack}
+              onChange={e => this.handleChange(e, 0)}
+              type="number"
+              step={0.1}
+              className="input"
+>>>>>>> Stashed changes
             />
-          </IconButton>
-          <div className="card-content">
-            <FlatButton
-              label="Trigger"
-              primary={true}
-              onClick={this.handleTrigger}
-              style={{ fontSize: "12px" }}
+            <TextField
+              floatingLabelText="Decay"
+              name="decay"
+              value={this.state.decay}
+              onChange={e => this.handleChange(e, 1)}
+              type="number"
+              step={0.1}
+              className="input"
             />
-            <form onSubmit={e => e.preventDefault()}>
-              <TextField
-                floatingLabelText="Attack"
-                name="attack"
-                value={this.state.attack}
-                onChange={e => this.handleChange(e, 0)}
-                type="number"
-                step={0.1}
-                className="input"
-              />
-              <TextField
-                floatingLabelText="Decay"
-                name="decay"
-                value={this.state.decay}
-                onChange={e => this.handleChange(e, 1)}
-                type="number"
-                step={0.1}
-                className="input"
-              />
-              <TextField
-                floatingLabelText="Sustain"
-                name="sustain"
-                value={this.state.sustain}
-                onChange={e => this.handleChange(e, 2)}
-                type="number"
-                step={0.1}
-                className="input"
-              />
-              <TextField
-                floatingLabelText="Release"
-                name="release"
-                value={this.state.release}
-                onChange={e => this.handleChange(e, 3)}
-                type="number"
-                step={0.1}
-                className="input"
-              />
-            </form>
-            <Analyser
-              analyser={this.props.block.internal.analyser as AnalyserNode}
-              backgroundColor="#e53935"
-              lineColor="#f8f8f8"
+            <TextField
+              floatingLabelText="Sustain"
+              name="sustain"
+              value={this.state.sustain}
+              onChange={e => this.handleChange(e, 2)}
+              type="number"
+              step={0.1}
+              className="input"
             />
-          </div>
-          <IconButton
-            tooltip="Output"
-            tooltipPosition="bottom-right"
-            className="io-button io-button--right"
-            tooltipStyles={{ marginTop: "-40px" }}
-          >
-            <div
-              className={
-                this.props.block.connected
-                  ? "io-element io-element--right io-element--active"
-                  : "io-element io-element--right"
-              }
-              onClick={() =>
-                this.props.tryToConnect(
-                  this.outputElement.getBoundingClientRect() as DOMRect
-                )
-              }
-              ref={ref => {
-                this.outputElement = ref as HTMLSpanElement;
-              }}
+            <TextField
+              floatingLabelText="Release"
+              name="release"
+              value={this.state.release}
+              onChange={e => this.handleChange(e, 3)}
+              type="number"
+              step={0.1}
+              className="input"
             />
-          </IconButton>
+          </form>
+          <Analyser
+            analyser={this.props.block.internal.analyser as AnalyserNode}
+            backgroundColor="#e53935"
+            lineColor="#f8f8f8"
+          />
         </div>
-      </Draggable>
+        <IconButton
+          tooltip="Output"
+          tooltipPosition="bottom-right"
+          className="io-button io-button--right"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={
+              this.props.block.connected
+                ? "io-element io-element--right io-element--active"
+                : "io-element io-element--right"
+            }
+            onClick={() =>
+              this.props.tryToConnect(
+                this.outputElement.getBoundingClientRect() as DOMRect
+              )
+            }
+            ref={ref => {
+              this.outputElement = ref as HTMLSpanElement;
+            }}
+          />
+        </IconButton>
+      </Card>
     );
   }
 }

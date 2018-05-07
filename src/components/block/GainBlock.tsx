@@ -2,8 +2,6 @@ import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
 import TextField from "material-ui/TextField";
 
-import Draggable from "react-draggable";
-
 import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
@@ -14,6 +12,11 @@ import { GainBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton } from "material-ui";
 
+<<<<<<< Updated upstream
+=======
+import { Card } from "../ui/Card";
+
+>>>>>>> Stashed changes
 export class GainBlock extends React.Component<GainBlockProps> {
   analyser: AnalyserNode;
 
@@ -61,15 +64,18 @@ export class GainBlock extends React.Component<GainBlockProps> {
   }
   render() {
     return (
-      <Draggable
+      <Card
+        removeBlock={() => {
+          this.props.deleteBlock(this.props.block.id);
+        }}
         onDrag={() =>
           this.props.onDragHandler(
             this.gainInputElement.getBoundingClientRect() as DOMRect,
             this.outputElement.getBoundingClientRect() as DOMRect
           )
         }
-        cancel="input"
       >
+<<<<<<< Updated upstream
         <div className="card" id="gain-block">
           <IconButton
             tooltipPosition="bottom-left"
@@ -122,10 +128,62 @@ export class GainBlock extends React.Component<GainBlockProps> {
               ref={ref => {
                 this.outputElement = ref as HTMLSpanElement;
               }}
+=======
+        <IconButton
+          tooltipPosition="bottom-left"
+          tooltip="Input"
+          className="io-button"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={this.props.checkInputs("gain")}
+            onClick={this.tryToConnectTo}
+            ref={ref => {
+              this.gainInputElement = ref as HTMLDivElement;
+            }}
+          />
+        </IconButton>
+        <div className="card-content">
+          <form onSubmit={e => e.preventDefault()}>
+            <TextField
+              floatingLabelText="Gain"
+              defaultValue={this.props.block.values[0]}
+              onChange={this.handleGainChange}
+              type="number"
+              step={0.1}
+              className="input"
+>>>>>>> Stashed changes
             />
-          </IconButton>
+          </form>
+          <Analyser
+            analyser={this.props.block.internal.analyser as AnalyserNode}
+            backgroundColor="#337ab7"
+            lineColor="#f8f8f8"
+          />
         </div>
-      </Draggable>
+        <IconButton
+          tooltip="Output"
+          tooltipPosition="bottom-right"
+          className="io-button io-button--right"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={
+              this.props.block.connected
+                ? "io-element io-element--right io-element--active"
+                : "io-element io-element--right"
+            }
+            onClick={() =>
+              this.props.tryToConnect(
+                this.outputElement.getBoundingClientRect() as DOMRect
+              )
+            }
+            ref={ref => {
+              this.outputElement = ref as HTMLSpanElement;
+            }}
+          />
+        </IconButton>
+      </Card>
     );
   }
 }
