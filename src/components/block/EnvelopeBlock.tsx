@@ -127,44 +127,46 @@ export class EnvelopeBlock extends React.Component<
             onClick={this.handleTrigger}
             style={{ fontSize: "12px" }}
           />
-          <form onSubmit={e => e.preventDefault()}>
-            <TextField
-              floatingLabelText="Attack"
-              name="attack"
-              value={this.state.attack}
-              onChange={e => this.handleChange(e, 0)}
-              type="number"
-              step={0.1}
-              className="input"
-            />
-            <TextField
-              floatingLabelText="Decay"
-              name="decay"
-              value={this.state.decay}
-              onChange={e => this.handleChange(e, 1)}
-              type="number"
-              step={0.1}
-              className="input"
-            />
-            <TextField
-              floatingLabelText="Sustain"
-              name="sustain"
-              value={this.state.sustain}
-              onChange={e => this.handleChange(e, 2)}
-              type="number"
-              step={0.1}
-              className="input"
-            />
-            <TextField
-              floatingLabelText="Release"
-              name="release"
-              value={this.state.release}
-              onChange={e => this.handleChange(e, 3)}
-              type="number"
-              step={0.1}
-              className="input"
-            />
-          </form>
+          <div className="block-controls">
+            <form onSubmit={e => e.preventDefault()}>
+              <TextField
+                floatingLabelText="Attack"
+                name="attack"
+                value={this.state.attack}
+                onChange={e => this.handleChange(e, 0)}
+                type="number"
+                step={0.1}
+                className="input"
+              />
+              <TextField
+                floatingLabelText="Decay"
+                name="decay"
+                value={this.state.decay}
+                onChange={e => this.handleChange(e, 1)}
+                type="number"
+                step={0.1}
+                className="input"
+              />
+              <TextField
+                floatingLabelText="Sustain"
+                name="sustain"
+                value={this.state.sustain}
+                onChange={e => this.handleChange(e, 2)}
+                type="number"
+                step={0.1}
+                className="input"
+              />
+              <TextField
+                floatingLabelText="Release"
+                name="release"
+                value={this.state.release}
+                onChange={e => this.handleChange(e, 3)}
+                type="number"
+                step={0.1}
+                className="input"
+              />
+            </form>
+          </div>
           <Analyser
             analyser={this.props.block.internal.analyser as AnalyserNode}
             backgroundColor="#e53935"

@@ -170,32 +170,34 @@ export class OscBlock extends React.Component<OscBlockProps> {
           />
         </IconButton>
         <div className="card-content">
-          <Toggle
-            onClick={this.toggleOsc}
-            className="toggle"
-            thumbSwitchedStyle={{ backgroundColor: "#f50057" }}
-            trackSwitchedStyle={{ backgroundColor: "#ff9d9d" }}
-          />
-          <form onSubmit={e => e.preventDefault()} className="block-controls">
-            <TextField
-              id="freq"
-              floatingLabelText="Frequency"
-              defaultValue={this.props.block.values[0]}
-              onChange={this.handleFreqChange}
-              className="input"
-              type="number"
+          <div className="block-controls">
+            <Toggle
+              onClick={this.toggleOsc}
+              className="toggle"
+              thumbSwitchedStyle={{ backgroundColor: "#f50057" }}
+              trackSwitchedStyle={{ backgroundColor: "#ff9d9d" }}
             />
-          </form>
-          <DropDownMenu
-            className="input"
-            value={this.props.block.type}
-            onChange={this.handleTypeChange}
-          >
-            <MenuItem value="sine" primaryText="Sine" />
-            <MenuItem value="square" primaryText="Square" />
-            <MenuItem value="triangle" primaryText="Triangle" />
-            <MenuItem value="sawtooth" primaryText="Sawtooth" />
-          </DropDownMenu>
+            <form onSubmit={e => e.preventDefault()}>
+              <TextField
+                id="freq"
+                floatingLabelText="Frequency"
+                defaultValue={this.props.block.values[0]}
+                onChange={this.handleFreqChange}
+                className="input"
+                type="number"
+              />
+            </form>
+            <DropDownMenu
+              className="input"
+              value={this.props.block.type}
+              onChange={this.handleTypeChange}
+            >
+              <MenuItem value="sine" primaryText="Sine" />
+              <MenuItem value="square" primaryText="Square" />
+              <MenuItem value="triangle" primaryText="Triangle" />
+              <MenuItem value="sawtooth" primaryText="Sawtooth" />
+            </DropDownMenu>
+          </div>
           <Analyser
             analyser={this.props.block.internal.analyser}
             backgroundColor="#53a857"

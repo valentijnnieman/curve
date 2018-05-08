@@ -11,6 +11,25 @@
   transition: none !important;
   /* overflow: hidden; */
 }
+.block-controls {
+  transition: all 0.2s;
+  overflow: hidden;
+}
+.card .block-controls {
+  height: 100%;
+}
+.card--collapsed .block-controls {
+  height: 0px;
+}
+.card--collapsed .card-content {
+  height: 24px;
+}
+.card--collapsed .io-button {
+  top: -2px !important;
+}
+.card--collapsed .io-button--freq {
+  top: 32px !important;
+}
 .card-close {
   visibility: hidden;
   opacity: 0;
@@ -26,6 +45,9 @@
   width: 16px !important;
   height: 16px !important;
 }
+.card-collapse {
+  left: 80px !important;
+}
 .card-content {
   padding-top: 16px;
   background-color: white;
@@ -35,6 +57,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  transition: all 0.2s;
 }
 canvas {
   margin-top: 16px;

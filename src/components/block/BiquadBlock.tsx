@@ -167,38 +167,40 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
           />
         </IconButton>
         <div className="card-content">
-          <form onSubmit={e => e.preventDefault()} className="block-controls">
-            <TextField
-              id="freq"
-              floatingLabelText="Frequency"
-              defaultValue={this.props.block.values[0]}
-              onChange={this.handleFreqChange}
+          <div className="block-controls">
+            <form onSubmit={e => e.preventDefault()}>
+              <TextField
+                id="freq"
+                floatingLabelText="Frequency"
+                defaultValue={this.props.block.values[0]}
+                onChange={this.handleFreqChange}
+                className="input"
+                type="number"
+              />
+              <TextField
+                id="q"
+                floatingLabelText="Q"
+                defaultValue={this.props.block.values[1]}
+                onChange={this.handleQChange}
+                className="input"
+                type="number"
+              />
+            </form>
+            <DropDownMenu
               className="input"
-              type="number"
-            />
-            <TextField
-              id="q"
-              floatingLabelText="Q"
-              defaultValue={this.props.block.values[1]}
-              onChange={this.handleQChange}
-              className="input"
-              type="number"
-            />
-          </form>
-          <DropDownMenu
-            className="input"
-            value={this.props.block.type}
-            onChange={this.handleTypeChange}
-          >
-            <MenuItem value="lowpass" primaryText="Lowpass" />
-            <MenuItem value="highpass" primaryText="Highpass" />
-            <MenuItem value="bandpass" primaryText="Bandpass" />
-            <MenuItem value="lowshelf" primaryText="Lowshelf" />
-            <MenuItem value="highshelf" primaryText="Highshelf" />
-            <MenuItem value="peaking" primaryText="Peaking" />
-            <MenuItem value="notch" primaryText="Notch" />
-            <MenuItem value="allpass" primaryText="Allpass" />
-          </DropDownMenu>
+              value={this.props.block.type}
+              onChange={this.handleTypeChange}
+            >
+              <MenuItem value="lowpass" primaryText="Lowpass" />
+              <MenuItem value="highpass" primaryText="Highpass" />
+              <MenuItem value="bandpass" primaryText="Bandpass" />
+              <MenuItem value="lowshelf" primaryText="Lowshelf" />
+              <MenuItem value="highshelf" primaryText="Highshelf" />
+              <MenuItem value="peaking" primaryText="Peaking" />
+              <MenuItem value="notch" primaryText="Notch" />
+              <MenuItem value="allpass" primaryText="Allpass" />
+            </DropDownMenu>
+          </div>
           <Analyser
             analyser={this.props.block.internal.analyser as AnalyserNode}
             backgroundColor="#fdd835"

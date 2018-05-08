@@ -90,16 +90,18 @@ export class GainBlock extends React.Component<GainBlockProps> {
           />
         </IconButton>
         <div className="card-content">
-          <form onSubmit={e => e.preventDefault()}>
-            <TextField
-              floatingLabelText="Gain"
-              defaultValue={this.props.block.values[0]}
-              onChange={this.handleGainChange}
-              type="number"
-              step={0.1}
-              className="input"
-            />
-          </form>
+          <div className="block-controls">
+            <form onSubmit={e => e.preventDefault()}>
+              <TextField
+                floatingLabelText="Gain"
+                defaultValue={this.props.block.values[0]}
+                onChange={this.handleGainChange}
+                type="number"
+                step={0.1}
+                className="input"
+              />
+            </form>
+          </div>
           <Analyser
             analyser={this.props.block.internal.analyser as AnalyserNode}
             backgroundColor="#337ab7"
