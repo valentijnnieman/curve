@@ -9,7 +9,8 @@
   },
   "cacheDirectories": ["node_modules", "react-ui/node_modules"],
   "dependencies": {
-    "express": "^4.14.1"
+    "express": "^4.14.1",
+    "canvas-prebuilt": "^1.6.5-prerelease.1"
   },
   "repository": {
     "type": "git",
