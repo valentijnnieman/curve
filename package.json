@@ -1,9 +1,6 @@
 {
   "name": "curve-visual",
   "version": "0.1.0",
-  "engines": {
-    "node": "8.9.x"
-  },
   "scripts": {
     "start": "node server",
     "test": "cd react-ui/ && npm run test",
