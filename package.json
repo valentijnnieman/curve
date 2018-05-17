@@ -4,27 +4,17 @@
   "scripts": {
     "start": "node server",
     "test": "cd react-ui/ && npm run test",
-    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "heroku-postbuild":
+      "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
-  "cacheDirectories": [
-    "node_modules",
-    "react-ui/node_modules"
-  ],
+  "cacheDirectories": ["node_modules", "react-ui/node_modules"],
   "dependencies": {
     "express": "^4.14.1"
-  },
-  "devDependencies": {
-    "canvas-prebuilt": "^2.0.0-alpha.12"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/valentijnnieman/curve.git"
   },
-  "keywords": [
-    "web audio",
-    "react",
-    "visual",
-    "curve"
-  ],
+  "keywords": ["web audio", "react", "visual", "curve"],
   "license": "MIT"
 }
