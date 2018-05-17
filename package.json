@@ -11,8 +11,10 @@
     "react-ui/node_modules"
   ],
   "dependencies": {
-    "canvas-prebuilt": "^1.6.5-prerelease.1",
     "express": "^4.14.1"
+  },
+  "devDependencies": {
+    "canvas-prebuilt": "^1.6.5-prerelease.1"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,5 @@
     "visual",
     "curve"
   ],
-  "license": "MIT",
-  "devDependencies": {}
+  "license": "MIT"
 }
