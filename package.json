@@ -1,63 +1,24 @@
 {
   "name": "curve-visual",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@types/material-ui": "^0.21.1",
-    "@types/react-bootstrap": "^0.32.6",
-    "@types/react-grid-layout": "^0.16.4",
-    "@types/react-joyride": "^1.10.2",
-    "@types/react-redux": "^5.0.15",
-    "@types/react-router": "^4.0.22",
-    "@types/react-router-dom": "^4.2.4",
-    "@types/react-syntax-highlighter": "0.0.5",
-    "@types/redux": "^3.6.0",
-    "material-ui": "^0.20.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-draggable": "^3.0.5",
-    "react-grid-layout": "^0.16.6",
-    "react-joyride": "^1.11.4",
-    "react-redux": "^5.0.7",
-    "react-router": "^4.2.0",
-    "react-router-dom": "^4.2.2",
-    "react-scripts-ts": "2.14.0",
-    "react-svg-pathline": "^0.5.0",
-    "react-syntax-highlighter": "^7.0.2",
-    "redux": "^3.7.2",
-    "tslint": "^5.10.0"
+  "engines": {
+    "node": "8.9.x"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject",
-    "standard": "standard index.js"
+    "start": "node server",
+    "test": "cd react-ui/ && npm run test",
+    "heroku-postbuild":
+      "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
-  "devDependencies": {
-    "@types/enzyme": "^3.1.9",
-    "@types/enzyme-adapter-react-16": "^1.0.2",
-    "@types/jest": "^22.2.0",
-    "@types/node": "^9.4.7",
-    "@types/react": "^16.0.40",
-    "@types/react-dom": "^16.0.4",
-    "@types/react-test-renderer": "^16.0.1",
-    "@types/redux-mock-store": "0.0.13",
-    "canvas-prebuilt": "^1.6.5-prerelease.1",
-    "co-exec": "^1.0",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
-    "nyc": "^10.0.0",
-    "react-test-renderer": "^16.3.1",
-    "redux-mock-store": "^1.5.1",
-    "standard": "^8.4.0",
-    "tslint-config-prettier": "^1.10.0",
-    "typescript": "^2.7.2",
-    "web-audio-test-api": "^0.5.2"
+  "cacheDirectories": ["node_modules", "react-ui/node_modules"],
+  "dependencies": {
+    "express": "^4.14.1"
   },
-  "config": {
-    "ghooks": {
-      "pre-commit": "npm run standard"
-    }
-  }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/valentijnnieman/curve.git"
+  },
+  "keywords": ["web audio", "react", "visual", "curve"],
+  "license": "MIT",
+  "devDependencies": {}
 }
