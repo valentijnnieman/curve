@@ -8,33 +8,31 @@ interface AnalyserProps {
 
 export class Analyser extends React.Component<AnalyserProps> {
   analyserCanvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
 
   drawScope = () => {
-    let ctx = this.analyserCanvas.getContext("2d") as CanvasRenderingContext2D;
-    let width = ctx.canvas.width;
-    let height = ctx.canvas.height;
+    let width = this.ctx.canvas.width;
+    let height = this.ctx.canvas.height;
     let timeData = new Uint8Array(this.props.analyser.frequencyBinCount);
     let scaling = height / 256;
     let risingEdge = 0;
 
     this.props.analyser.getByteTimeDomainData(timeData);
 
-    ctx.fillStyle = this.props.backgroundColor;
-    ctx.fillRect(0, 0, width, height);
+    this.ctx.fillStyle = this.props.backgroundColor;
+    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = this.props.lineColor;
-    ctx.beginPath();
+    this.ctx.beginPath();
 
     for (
       let x = risingEdge;
       x < timeData.length && x - risingEdge < width;
       x++
     ) {
-      ctx.lineTo(x - risingEdge, height - timeData[x] * scaling);
+      this.ctx.lineTo(x, height - timeData[x] * scaling);
     }
 
-    ctx.stroke();
+    this.ctx.stroke();
   };
 
   draw = () => {
@@ -47,6 +45,14 @@ export class Analyser extends React.Component<AnalyserProps> {
   };
 
   componentDidMount() {
+    this.ctx = this.analyserCanvas.getContext("2d") as CanvasRenderingContext2D;
+
+    this.ctx.fillStyle = this.props.backgroundColor;
+    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeStyle = this.props.lineColor;
+
     this.draw();
   }
 

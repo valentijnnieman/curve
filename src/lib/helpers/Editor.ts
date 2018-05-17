@@ -10,7 +10,7 @@ export const buildInternal = (
   let gain = audioCtx.createGain();
   gain.gain.value = 1;
   let analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 1024;
+  analyser.fftSize = 512;
   if (block.blockType === "OSC") {
     let oscillator;
     oscillator = audioCtx.createOscillator();
