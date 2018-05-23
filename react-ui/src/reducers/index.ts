@@ -128,6 +128,17 @@ export default (state: StoreState = initialState, action: any): StoreState => {
       };
       window.console.log("loadedstate", loadedState);
       return loadedState;
+    case "RETRIEVE_BLOCKS":
+      // retrieves blocks without internals - for storing in database
+      return {
+        blocks: [
+          ...state.blocks.map(block => {
+            delete block.internal;
+            return block;
+          })
+        ],
+        audioCtx
+      };
     default:
       return state;
   }

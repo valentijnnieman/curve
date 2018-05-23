@@ -20,9 +20,10 @@ export function fetchState(name: string) {
         error => window.console.log("Error: ", error)
       )
       .then(json => {
-        window.console.log(json[0].data);
-        window.console.log(typeof json[0].data);
         dispatch(loadState(json[0].data));
+      })
+      .catch(e => {
+        window.console.log(e);
       });
   };
 }
