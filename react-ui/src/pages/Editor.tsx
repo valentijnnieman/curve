@@ -58,10 +58,11 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   constructor(props: EditorProps) {
     super(props);
 
-    const { name } = this.props.match.params;
-    if (name && name !== undefined) {
-      window.console.log("Let's load: ", name);
-      this.props.fetchState(name);
+    if (this.props.match.params) {
+      const { name } = this.props.match.params;
+      if (name && name !== undefined) {
+        this.props.fetchState(name);
+      }
     }
 
     let isRunning = false;
@@ -213,7 +214,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   };
   componentWillReceiveProps(nextProps: EditorProps) {
     this.props = nextProps;
-    window.console.log("NEW PROPS", this.props);
     this.lines = drawConnectionLines(
       this.props.blocks,
       this.speakersDOMRect.getBoundingClientRect() as DOMRect
@@ -257,12 +257,10 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   };
 
   render() {
-    window.console.log("rendering!", this.props.blocks);
     const synthElements = this.props.blocks.map(
       (block: BlockData, index: number) => {
         if (block.internal) {
           if (block.blockType === "OSC") {
-            window.console.log("creaing osckblock: ", block);
             return (
               <OscBlock
                 key={index}

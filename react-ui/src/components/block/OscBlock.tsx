@@ -28,8 +28,6 @@ export class OscBlock extends React.Component<OscBlockProps> {
 
   constructor(props: OscBlockProps) {
     super(props);
-
-    window.console.log("constructing oscblock", props.block);
   }
   toggleOsc = () => {
     const internal = this.props.block.internal;
@@ -108,7 +106,6 @@ export class OscBlock extends React.Component<OscBlockProps> {
   };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
-    window.console.log("mounted: ", this.props.block);
     const updatedBlock: BlockData = {
       ...this.props.block,
       gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
