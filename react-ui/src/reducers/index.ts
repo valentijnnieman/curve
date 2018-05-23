@@ -11,7 +11,7 @@ const blockOptions: Array<BlockDataOptions> = [
     id: idCount++,
     blockType: "OSC",
     type: "sine" as OscillatorType,
-    values: [220],
+    values: [440],
     hasInternal: false,
     running: false,
     connected: false,
@@ -114,6 +114,20 @@ export default (state: StoreState = initialState, action: any): StoreState => {
           ...state.blocks.slice(index + 1)
         ]
       };
+    case "LOAD_STATE":
+      const loadedState = {
+        blocks: [
+          ...action.blockOptions.map((option: BlockDataOptions) => {
+            return {
+              ...option,
+              internal: buildInternal(option, audioCtx)
+            };
+          })
+        ],
+        audioCtx
+      };
+      window.console.log("loadedstate", loadedState);
+      return loadedState;
     default:
       return state;
   }

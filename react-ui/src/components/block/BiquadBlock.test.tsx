@@ -48,7 +48,7 @@ describe("<BiquadBlock />", () => {
   // const props = wrapper.children().instance().props;
   test("tryToConnectTo()", () => {
     instance.tryToConnectTo("gain");
-    instance.tryToConnectTo("freq");
+    instance.tryToConnectTo("FREQ");
     instance.tryToConnectTo("default");
   });
   test("handleFreqChange()", () => {

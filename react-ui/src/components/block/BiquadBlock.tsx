@@ -36,29 +36,18 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
   }
 
   tryToConnectTo = (outputType: string) => {
-    let outputToConnectTo, inputElement;
+    let inputElement;
     switch (outputType) {
-      case "gain":
-        outputToConnectTo = (this.props.block.internal as InternalBiquadData)
-          .filter;
+      case "GAIN":
         inputElement = this.gainInputElement.getBoundingClientRect();
         break;
-      case "freq":
-        outputToConnectTo = (this.props.block.internal as InternalBiquadData)
-          .filter.frequency;
+      case "FREQ":
         inputElement = this.freqInputElement.getBoundingClientRect();
         break;
       default:
-        outputToConnectTo = (this.props.block.internal as InternalBiquadData)
-          .filter;
         inputElement = this.gainInputElement.getBoundingClientRect();
     }
-    this.props.tryToConnectTo(
-      this.props.block,
-      outputToConnectTo,
-      outputType,
-      inputElement
-    );
+    this.props.tryToConnectTo(this.props.block, outputType, inputElement);
   };
 
   handleFreqChange = (e: any) => {
@@ -159,8 +148,8 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
           tooltipStyles={{ marginTop: "-40px" }}
         >
           <div
-            className={this.props.checkInputs("freq") + " io-element--freq"}
-            onClick={() => this.tryToConnectTo("freq")}
+            className={this.props.checkInputs("FREQ") + " io-element--freq"}
+            onClick={() => this.tryToConnectTo("FREQ")}
             ref={ref => {
               this.freqInputElement = ref as HTMLDivElement;
             }}

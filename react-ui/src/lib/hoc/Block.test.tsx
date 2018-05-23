@@ -64,7 +64,7 @@ describe("OscNode", () => {
           case "gain":
             expect(outputToConnectTo).toEqual(internalInstance.gain.gain);
             break;
-          case "freq":
+          case "FREQ":
             expect(outputToConnectTo).toEqual(
               internalInstance.oscillator.frequency
             );

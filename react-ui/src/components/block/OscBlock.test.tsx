@@ -61,7 +61,7 @@ describe("<OscBlock />", () => {
   });
   test("tryToConnectTo()", () => {
     instance.tryToConnectTo("gain");
-    instance.tryToConnectTo("freq");
+    instance.tryToConnectTo("FREQ");
     instance.tryToConnectTo("default");
   });
   test("handleFreqChange()", () => {

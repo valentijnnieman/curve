@@ -12,6 +12,8 @@ import {
 } from "../lib/helpers/Mocks";
 import { Editor } from "./Editor";
 import { shallow } from "enzyme";
+import { match } from "react-router";
+import { Location, History } from "history";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -24,7 +26,11 @@ describe("OscNode", () => {
       blocks={mockblocks}
       updateBlock={mockUpdate}
       deleteBlock={mockDelete}
+      fetchState={jest.fn()}
       audioCtx={audioCtx}
+      match={{} as match<any>}
+      location={{} as Location}
+      history={{} as History}
     />
   );
 
@@ -55,15 +61,13 @@ describe("OscNode", () => {
     expect(instance.state.lineFrom).toEqual(outputDOMRect);
   });
   test("tryToConnectTo() -> testConnect() can't connect output to own input", () => {
-    const outputToConnectTo = testInternal.gain.gain;
     instance.tryToConnect(testBlock, testInternal, outputDOMRect);
-    instance.tryToConnectTo(testBlock, outputToConnectTo, "gain", inputDOMRect);
+    instance.tryToConnectTo(testBlock, "gain", inputDOMRect);
     expect(testBlock.outputs.length).toEqual(0);
     expect(instance.state.wantsToConnect).toBe(false);
     expect(instance.state.blockToConnect).toBe(undefined);
     expect(instance.state.blockToConnectTo).toBe(undefined);
     expect(instance.state.internalToConnect).toBe(undefined);
-    expect(instance.state.outputToConnectTo).toBe(undefined);
     expect(instance.state.lineFrom).toBe(undefined);
     expect(instance.state.lineTo).toBe(undefined);
   });
@@ -71,21 +75,14 @@ describe("OscNode", () => {
   test("tryToConnectTo() -> testConnect() connects", () => {
     const blockToConnectTo = props.blocks[1];
     blockToConnectTo.hasInternal = true; // this gets set with the buildInternals helper -> updateBlock redux action
-    const outputToConnectTo = blockToConnectTo.internal.gain.gain;
     instance.tryToConnect(testBlock, testInternal, outputDOMRect);
-    instance.tryToConnectTo(
-      blockToConnectTo,
-      outputToConnectTo,
-      "gain",
-      inputDOMRect
-    );
+    instance.tryToConnectTo(blockToConnectTo, "gain", inputDOMRect);
     const expectedBlockToConnect = {
       ...testBlock,
       connected: true,
       outputs: [
         {
           connectedToType: "gain",
-          destination: outputToConnectTo,
           id: 0,
           isConnectedTo: 1
         }
@@ -103,14 +100,8 @@ describe("OscNode", () => {
     );
   });
   test("disconnect()", () => {
-    const outputToConnectTo = props.blocks[1].internal.gain.gain;
     instance.tryToConnect(testBlock, testInternal, outputDOMRect);
-    instance.tryToConnectTo(
-      props.blocks[1],
-      outputToConnectTo,
-      "gain",
-      inputDOMRect
-    );
+    instance.tryToConnectTo(props.blocks[1], "gain", inputDOMRect);
     const expectedBlockWithOutput = {
       ...testBlock,
       connected: false,

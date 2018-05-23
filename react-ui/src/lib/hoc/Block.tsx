@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { BlockData } from "../../types/blockData";
 import { ComposedBlockProps, BlockProps } from "../../types/blockProps";
+import { InternalOscData, InternalBiquadData } from "../../types/internalData";
 
 export const composedBlock = (
   BlockToCompose: React.ComponentClass<BlockProps>
@@ -20,8 +21,38 @@ export const composedBlock = (
       block.internal.gain.disconnect();
       this.connectToAnalyser();
       block.outputs.map(output => {
-        if (output !== undefined) {
-          block.internal.gain.connect(output.destination as AudioParam);
+        if (output !== undefined && output.isConnectedTo !== -1) {
+          // check which block it's connected to & to witch input type
+          const blockToConnectTo = this.props.allBlocks[output.isConnectedTo];
+          let destination;
+          switch (output.connectedToType) {
+            case "GAIN":
+              destination = blockToConnectTo.internal.gain;
+              break;
+            case "GAIN_MOD":
+              destination = blockToConnectTo.internal.gain.gain;
+              break;
+            case "FREQ":
+              switch (blockToConnectTo.blockType) {
+                case "OSC":
+                  destination = (blockToConnectTo.internal as InternalOscData)
+                    .oscillator.frequency;
+                  break;
+                case "BIQUAD":
+                  destination = (blockToConnectTo.internal as InternalBiquadData)
+                    .filter.frequency;
+                  break;
+                default:
+                  destination = (blockToConnectTo.internal as InternalOscData)
+                    .oscillator.frequency;
+                  break;
+              }
+              break;
+            default:
+              destination = blockToConnectTo.internal.gain;
+              break;
+          }
+          block.internal.gain.connect(destination as AudioParam);
         }
       });
       if (block.isConnectedToOutput) {

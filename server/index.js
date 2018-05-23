@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 const cluster = require("cluster");
+const bodyParser = require("body-parser");
+
 const numCPUs = require("os").cpus().length;
 
 const PORT = process.env.PORT || 5000;
@@ -24,6 +26,9 @@ if (cluster.isMaster) {
 } else {
   const app = express();
 
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, "../react-ui/build")));
 
@@ -32,6 +37,12 @@ if (cluster.isMaster) {
     res.set("Content-Type", "application/json");
     res.send('{"message":"Hello from the custom server!"}');
   });
+
+  // Create synth route
+  app.post("/synth", require("./controllers/synth").create);
+
+  // Get synth route
+  app.get("/synth/:name", require("./controllers/synth").query);
 
   // All remaining requests return the React app, so it can handle routing.
   app.get("*", function(request, response) {

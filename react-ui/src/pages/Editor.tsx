@@ -23,14 +23,17 @@ import { updateBlock, deleteBlock } from "../actions/block";
 // helpers
 import { drawConnectionLines, genWACode } from "../lib/helpers/Editor";
 import { IconButton, Dialog, RaisedButton } from "material-ui";
+import { RouteComponentProps } from "react-router";
+import { fetchState } from "../actions/state";
 
 const SpeakerSVG = require("../speakers.svg");
 
-interface EditorProps {
+interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
   audioCtx: AudioContext;
   updateBlock: (block: BlockData) => void;
   deleteBlock: (id: number) => void;
+  fetchState: (name: string) => void;
 }
 
 interface EditorState {
@@ -38,7 +41,6 @@ interface EditorState {
   blockToConnect?: BlockData;
   blockToConnectTo?: BlockData;
   internalToConnect?: InternalOscData | InternalData | InternalBiquadData;
-  outputToConnectTo?: AudioParam | AudioDestinationNode;
   outputType?: string;
   lineFrom?: DOMRect;
   lineTo?: DOMRect;
@@ -56,6 +58,12 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   constructor(props: EditorProps) {
     super(props);
 
+    const { name } = this.props.match.params;
+    if (name && name !== undefined) {
+      window.console.log("Let's load: ", name);
+      this.props.fetchState(name);
+    }
+
     let isRunning = false;
     if (this.props.audioCtx.state !== "running") {
       isRunning = true;
@@ -71,13 +79,8 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   }
   testConnect = () => {
     // checks if connection can be made & updates blocks info
-    const {
-      blockToConnect,
-      blockToConnectTo,
-      outputToConnectTo,
-      outputType
-    } = this.state;
-    if (blockToConnect && blockToConnectTo && outputToConnectTo) {
+    const { blockToConnect, blockToConnectTo, outputType } = this.state;
+    if (blockToConnect && blockToConnectTo) {
       // update node info in store
       const updatedBlock: BlockData = {
         ...blockToConnect,
@@ -86,7 +89,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           ...blockToConnect.outputs,
           {
             id: blockToConnect.outputs.length, // TO-DO: find a better solution
-            destination: outputToConnectTo,
             connectedToType: outputType,
             isConnectedTo: blockToConnectTo.id
           } as OutputData
@@ -111,7 +113,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       blockToConnect: undefined,
       blockToConnectTo: undefined,
       internalToConnect: undefined,
-      outputToConnectTo: undefined,
       lineFrom: undefined,
       lineTo: undefined
     });
@@ -162,18 +163,12 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       mouseY: el.y
     });
   };
-  tryToConnectTo = (
-    block: BlockData,
-    output: AudioParam,
-    outputType: string,
-    el: DOMRect
-  ) => {
+  tryToConnectTo = (block: BlockData, outputType: string, el: DOMRect) => {
     // called from block that wants to be connected to (ie block which input is clicked)
     if (this.state.wantsToConnect) {
       this.setState(
         {
           blockToConnectTo: block,
-          outputToConnectTo: output,
           outputType: outputType,
           lineTo: el
         },
@@ -197,7 +192,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     if (blockToConnect) {
       this.setState({
         lineTo: e.target.getBoundingClientRect(),
-        outputToConnectTo: this.props.audioCtx.destination,
         speakersAreConnected: true
       });
       const updatedNode: BlockData = {
@@ -208,8 +202,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           ...blockToConnect.outputs,
           {
             id: blockToConnect.outputs.length, // TO-DO: maybe find a better solution
-            destination: this.props.audioCtx.destination,
-            connectedToType: "gain",
+            connectedToType: "GAIN",
             isConnectedTo: -1 // speakers are -1
           } as OutputData
         ]
@@ -220,6 +213,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   };
   componentWillReceiveProps(nextProps: EditorProps) {
     this.props = nextProps;
+    window.console.log("NEW PROPS", this.props);
     this.lines = drawConnectionLines(
       this.props.blocks,
       this.speakersDOMRect.getBoundingClientRect() as DOMRect
@@ -263,10 +257,12 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   };
 
   render() {
+    window.console.log("rendering!", this.props.blocks);
     const synthElements = this.props.blocks.map(
       (block: BlockData, index: number) => {
         if (block.internal) {
           if (block.blockType === "OSC") {
+            window.console.log("creaing osckblock: ", block);
             return (
               <OscBlock
                 key={index}
@@ -429,6 +425,9 @@ const mapDispatchToProps = (dispatch: any) => {
     deleteBlock: (id: number) => {
       // we need to handle internals here as well as updating the redux store.
       dispatch(deleteBlock(id));
+    },
+    fetchState: (name: string) => {
+      dispatch(fetchState(name));
     }
   };
 };

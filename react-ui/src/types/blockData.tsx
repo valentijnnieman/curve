@@ -24,7 +24,6 @@ export interface BlockData extends BlockDataOptions {
 
 export interface OutputData {
   id: number;
-  destination: AudioDestinationNode | AudioParam; // the web audio node we're connecting to
   isConnectedTo: number; // the id of the block we're connecting to
-  connectedToType: "gain" | "freq"; // which parameter of the block we're connecting to
+  connectedToType: "GAIN" | "GAIN_MOD" | "FREQ"; // which parameter of the block we're connecting to
 }

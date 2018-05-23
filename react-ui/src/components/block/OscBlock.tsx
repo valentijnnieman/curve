@@ -29,8 +29,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
   constructor(props: OscBlockProps) {
     super(props);
 
-    (this.props.block.internal as InternalOscData).oscillator.connect(this.props
-      .block.internal.gain as GainNode);
+    window.console.log("constructing oscblock", props.block);
   }
   toggleOsc = () => {
     const internal = this.props.block.internal;
@@ -58,27 +57,18 @@ export class OscBlock extends React.Component<OscBlockProps> {
   };
 
   tryToConnectTo = (outputType: string) => {
-    const internal = this.props.block.internal as InternalOscData;
-    let outputToConnectTo, inputElement;
+    let inputElement;
     switch (outputType) {
-      case "gain":
-        outputToConnectTo = internal.gain.gain;
+      case "GAIN_MOD":
         inputElement = this.gainInputElement.getBoundingClientRect();
         break;
-      case "freq":
-        outputToConnectTo = internal.oscillator.frequency;
+      case "FREQ":
         inputElement = this.freqInputElement.getBoundingClientRect();
         break;
       default:
-        outputToConnectTo = internal.gain.gain;
         inputElement = this.gainInputElement.getBoundingClientRect();
     }
-    this.props.tryToConnectTo(
-      this.props.block,
-      outputToConnectTo,
-      outputType,
-      inputElement
-    );
+    this.props.tryToConnectTo(this.props.block, outputType, inputElement);
   };
 
   handleFreqChange = (e: any) => {
@@ -118,6 +108,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
   };
   componentDidMount() {
     // when component has mounted and refs are set, we update the store
+    window.console.log("mounted: ", this.props.block);
     const updatedBlock: BlockData = {
       ...this.props.block,
       gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
@@ -125,6 +116,11 @@ export class OscBlock extends React.Component<OscBlockProps> {
       outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect
     };
     this.props.updateBlock(updatedBlock);
+  }
+  componentWillReceiveProps(nextProps: OscBlockProps) {
+    this.props = nextProps;
+    (this.props.block.internal as InternalOscData).oscillator.connect(this.props
+      .block.internal.gain as GainNode);
   }
 
   render() {
@@ -148,8 +144,8 @@ export class OscBlock extends React.Component<OscBlockProps> {
           tooltipStyles={{ marginTop: "-40px" }}
         >
           <div
-            className={this.props.checkInputs("gain")}
-            onClick={() => this.tryToConnectTo("gain")}
+            className={this.props.checkInputs("GAIN_MOD")}
+            onClick={() => this.tryToConnectTo("GAIN_MOD")}
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
             }}
@@ -162,8 +158,8 @@ export class OscBlock extends React.Component<OscBlockProps> {
           tooltipStyles={{ marginTop: "-40px" }}
         >
           <div
-            className={this.props.checkInputs("freq") + " io-element--freq"}
-            onClick={() => this.tryToConnectTo("freq")}
+            className={this.props.checkInputs("FREQ") + " io-element--freq"}
+            onClick={() => this.tryToConnectTo("FREQ")}
             ref={ref => {
               this.freqInputElement = ref as HTMLDivElement;
             }}
@@ -178,9 +174,9 @@ export class OscBlock extends React.Component<OscBlockProps> {
           />
           <form onSubmit={e => e.preventDefault()} className="block-controls">
             <TextField
-              id="freq"
+              id="FREQ"
               floatingLabelText="Frequency"
-              defaultValue={this.props.block.values[0]}
+              value={this.props.block.values[0]}
               onChange={this.handleFreqChange}
               className="input"
               type="number"

@@ -14,7 +14,8 @@ class App extends React.Component {
         <Router>
           <MuiThemeProvider>
             <Topbar />
-            <Route path="/" component={Editor} />
+            <Route path="/" exact={true} component={Editor} />
+            <Route path="/:name" exact={true} component={Editor} />
           </MuiThemeProvider>
         </Router>
       </Provider>

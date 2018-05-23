@@ -77,10 +77,10 @@ export const drawConnectionLines = (
           ) as BlockData;
           if (blockConnectedTo) {
             switch (output.connectedToType) {
-              case "gain":
+              case "GAIN" || "GAIN_MOD":
                 inputDOMRect = blockConnectedTo.gainInputDOMRect;
                 break;
-              case "freq":
+              case "FREQ":
                 inputDOMRect = blockConnectedTo.freqInputDOMRect as DOMRect;
                 break;
               default:
@@ -131,7 +131,7 @@ osc${index}.start();`;
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
           block.outputs.map(output => {
-            if (output.connectedToType === "gain" && output.isConnectedTo) {
+            if (output.connectedToType === "GAIN" && output.isConnectedTo) {
               // get block it's connected to
               const blockConnectedTo = blocks.find(
                 b => b.id === output.isConnectedTo
@@ -152,7 +152,7 @@ osc${index}.start();`;
                   output.isConnectedTo
                 }.gain);\n`;
               }
-            } else if (output.connectedToType === "freq") {
+            } else if (output.connectedToType === "FREQ") {
               connects += `gain${index}.connect(osc${
                 output.isConnectedTo
               }.frequency);\n`;
@@ -176,7 +176,7 @@ gain${index}.gain.value = ${block.values[0]};`;
             ) as BlockData;
             if (
               blockConnectedTo &&
-              output.connectedToType === "gain" &&
+              output.connectedToType === "GAIN" &&
               output.isConnectedTo
             ) {
               if (blockConnectedTo.blockType === "BIQUAD") {
@@ -192,7 +192,7 @@ gain${index}.gain.value = ${block.values[0]};`;
                   output.isConnectedTo
                 }.gain);\n`;
               }
-            } else if (output.connectedToType === "freq") {
+            } else if (output.connectedToType === "FREQ") {
               connects += `gain${index}.connect(osc${
                 output.isConnectedTo
               }.frequency);\n`;
@@ -225,7 +225,7 @@ filter${index}.connect(gain${index});`;
             ) as BlockData;
             if (
               blockConnectedTo &&
-              output.connectedToType === "gain" &&
+              output.connectedToType === "GAIN" &&
               output.isConnectedTo
             ) {
               if (blockConnectedTo.blockType === "BIQUAD") {
@@ -241,7 +241,7 @@ filter${index}.connect(gain${index});`;
                   output.isConnectedTo
                 }.gain);\n`;
               }
-            } else if (output.connectedToType === "freq") {
+            } else if (output.connectedToType === "FREQ") {
               connects += `gain${index}.connect(osc${
                 output.isConnectedTo
               }.frequency);\n`;
@@ -285,7 +285,7 @@ envelope${index}.trigger = function() {
             ) as BlockData;
             if (
               blockConnectedTo &&
-              output.connectedToType === "gain" &&
+              output.connectedToType === "GAIN" &&
               output.isConnectedTo
             ) {
               if (blockConnectedTo.blockType === "BIQUAD") {
@@ -301,7 +301,7 @@ envelope${index}.trigger = function() {
                   output.isConnectedTo
                 }.gain);\n`;
               }
-            } else if (output.connectedToType === "freq") {
+            } else if (output.connectedToType === "FREQ") {
               connects += `gain${index}.connect(osc${
                 output.isConnectedTo
               }.frequency);\n`;

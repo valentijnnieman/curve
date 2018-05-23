@@ -34,9 +34,8 @@ describe("drawConnectionLines()", () => {
     mockblocks[0].outputs = [
       {
         id: 0,
-        destination: mockblocks[1].internal.gain.gain,
         isConnectedTo: 1,
-        connectedToType: "gain"
+        connectedToType: "GAIN"
       }
     ];
     let lines = drawConnectionLines(mockblocks, speakersDOMRect);

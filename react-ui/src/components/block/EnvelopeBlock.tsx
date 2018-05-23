@@ -42,8 +42,7 @@ export class EnvelopeBlock extends React.Component<
   tryToConnectTo = () => {
     this.props.tryToConnectTo(
       this.props.block,
-      this.props.block.internal.gain,
-      "gain",
+      "GAIN",
       this.gainInputElement.getBoundingClientRect()
     );
   };
@@ -113,7 +112,7 @@ export class EnvelopeBlock extends React.Component<
           tooltipStyles={{ marginTop: "-40px" }}
         >
           <div
-            className={this.props.checkInputs("gain")}
+            className={this.props.checkInputs("GAIN")}
             onClick={this.tryToConnectTo}
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
