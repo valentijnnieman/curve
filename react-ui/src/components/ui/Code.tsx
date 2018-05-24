@@ -1,8 +1,9 @@
 import * as React from "react";
-import { RaisedButton, Dialog } from "material-ui";
+import { RaisedButton, Dialog, FloatingActionButton } from "material-ui";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/styles/hljs";
-import "./Code.css";
+import "./Dropdown.css";
+import ContentAdd from "material-ui/svg-icons/action/code";
 
 interface CodeProps {
   code: string;
@@ -38,11 +39,13 @@ export class Code extends React.Component<CodeProps, CodeState> {
   render() {
     return (
       <div>
-        <RaisedButton
+        <FloatingActionButton
+          mini={true}
           className="code-dialog-button"
-          label="Generate code"
           onClick={this.handleOpen}
-        />
+        >
+          <ContentAdd />
+        </FloatingActionButton>
         <Dialog
           title="Generated Web Audio code (experimental)"
           modal={false}

@@ -9,10 +9,12 @@ import { connect } from "react-redux";
 
 import { BlockData } from "../../types/blockData";
 import { createBlock } from "../../actions/block";
-import { Dropdown } from "./Dropdown";
 
 import FlatButton from "material-ui/FlatButton";
 import { StoreState } from "../../types/storeState";
+import { CreateBlock } from "./CreateBlock";
+import { Code } from "./Code";
+import { genWACode } from "../../lib/helpers/Editor";
 
 const CurveSVG = require("../../curve.svg");
 
@@ -22,16 +24,24 @@ interface TopbarState {
 
 interface TopbarProps {
   audioCtx: AudioContext;
+  blocks: Array<BlockData>;
   createBlock: (block: BlockData) => void;
 }
 
 class Topbar extends React.Component<TopbarProps, TopbarState> {
   joyride: Joyride;
+  code: string;
   constructor(props: TopbarProps) {
     super(props);
     this.state = {
       joyrideIsRunning: false
     };
+    // Build internal objects from blocks used with web audio
+    this.code = genWACode(this.props.blocks);
+  }
+  componentWillReceiveProps(nextProps: TopbarProps) {
+    this.props = nextProps;
+    this.code = genWACode(this.props.blocks);
   }
   render() {
     return (
@@ -46,6 +56,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           />
         }
       >
+        <Code code={this.code} />
         <Joyride
           ref={c => (this.joyride = c as Joyride)}
           run={this.state.joyrideIsRunning} // or some other boolean for when you want to start it
@@ -54,7 +65,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           type="continuous"
           autoStart={true}
         />
-        <Dropdown
+        <CreateBlock
           audioCtx={this.props.audioCtx}
           createBlock={this.props.createBlock}
         />
@@ -62,8 +73,9 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
     );
   }
 }
-const mapStateToProps = ({ audioCtx }: StoreState) => {
+const mapStateToProps = ({ blocks, audioCtx }: StoreState) => {
   return {
+    blocks,
     audioCtx
   };
 };

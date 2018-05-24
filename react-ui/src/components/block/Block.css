@@ -5,7 +5,7 @@
   /* border-top-left-radius: 110px; 100px of height + 10px of border */
   opacity: 0.8 !important;
   border: 1px solid transparent;
-  background-color: #e2e2e2;
+  background-color: #f2f2f2;
   border-left: 0 !important;
   position: absolute !important;
   transition: transform 0.2s;

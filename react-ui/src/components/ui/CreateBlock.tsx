@@ -9,12 +9,12 @@ import ContentAdd from "material-ui/svg-icons/content/add";
 
 import { buildInternal } from "../../lib/helpers/Editor";
 
-interface DropdownProps {
+interface CreateBlockProps {
   audioCtx: AudioContext;
   createBlock: (node: BlockData) => void;
 }
 
-export class Dropdown extends React.Component<DropdownProps, any> {
+export class CreateBlock extends React.Component<CreateBlockProps, any> {
   constructor(props: any) {
     super(props);
 
@@ -45,7 +45,7 @@ export class Dropdown extends React.Component<DropdownProps, any> {
         <FloatingActionButton
           secondary={true}
           onClick={this.handleClick}
-          className="dropdown-button"
+          className="createblock-button"
         >
           <ContentAdd />
         </FloatingActionButton>

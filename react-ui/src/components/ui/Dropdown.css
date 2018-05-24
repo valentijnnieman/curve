@@ -1,5 +1,11 @@
-.dropdown-button {
+.createblock-button {
   position: fixed;
   bottom: 32px;
   right: 32px;
+}
+
+.code-dialog-button {
+  position: fixed;
+  bottom: 112px;
+  right: 39px;
 }

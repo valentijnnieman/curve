@@ -5,7 +5,6 @@ import OscBlock from "../components/block/OscBlock";
 import GainBlock from "../components/block/GainBlock";
 import BiquadBlock from "../components/block/BiquadBlock";
 import EnvelopeBlock from "../components/block/EnvelopeBlock";
-import { Code } from "../components/ui/Code";
 // import OutputNode from "../components/block/OutputNode";
 import {
   InternalOscData,
@@ -21,7 +20,7 @@ import { connect } from "react-redux";
 import { updateBlock, deleteBlock } from "../actions/block";
 
 // helpers
-import { drawConnectionLines, genWACode } from "../lib/helpers/Editor";
+import { drawConnectionLines } from "../lib/helpers/Editor";
 import { IconButton, Dialog, RaisedButton } from "material-ui";
 import { RouteComponentProps } from "react-router";
 import { fetchState } from "../actions/state";
@@ -52,7 +51,6 @@ interface EditorState {
 
 export class Editor extends React.Component<EditorProps, EditorState> {
   output: InternalData;
-  code: string;
   lines: Array<Line> = [];
   speakersDOMRect: HTMLDivElement;
   constructor(props: EditorProps) {
@@ -75,8 +73,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       speakersAreConnected: false,
       accessModalOpen: isRunning
     };
-    // Build internal objects from blocks used with web audio
-    this.code = genWACode(this.props.blocks);
   }
   testConnect = () => {
     // checks if connection can be made & updates blocks info
@@ -218,7 +214,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       this.props.blocks,
       this.speakersDOMRect.getBoundingClientRect() as DOMRect
     );
-    this.code = genWACode(this.props.blocks);
   }
   onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (this.state.wantsToConnect) {
@@ -364,7 +359,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           {lineToMouse}
         </svg>
         {synthElements}
-        <Code code={this.code} />
         <Dialog
           title="Allow Web Audio access"
           modal={true}
@@ -381,7 +375,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
         </Dialog>
         <div className="card speakers">
           <div className="card-content speakers-content">
-            <h6>Speakers</h6>
             <img className="speakers-svg" src={SpeakerSVG} width={100} />
           </div>
           <IconButton
