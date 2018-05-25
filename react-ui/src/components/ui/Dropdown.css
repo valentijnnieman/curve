@@ -6,6 +6,12 @@
 
 .code-dialog-button {
   position: fixed;
-  bottom: 112px;
-  right: 39px;
+  bottom: 118px;
+  right: 40px;
+}
+
+.share-menu-button {
+  position: fixed;
+  bottom: 186px;
+  right: 40px;
 }

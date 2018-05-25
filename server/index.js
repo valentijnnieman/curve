@@ -39,7 +39,7 @@ if (cluster.isMaster) {
   });
 
   // Create synth route
-  app.post("/synth", require("./controllers/synth").create);
+  app.post("/synth/create", require("./controllers/synth").create);
 
   // Get synth route
   app.get("/synth/:name", require("./controllers/synth").query);

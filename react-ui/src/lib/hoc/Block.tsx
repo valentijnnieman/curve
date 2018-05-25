@@ -23,7 +23,9 @@ export const composedBlock = (
       block.outputs.map(output => {
         if (output !== undefined && output.isConnectedTo !== -1) {
           // check which block it's connected to & to witch input type
-          const blockToConnectTo = this.props.allBlocks[output.isConnectedTo];
+          const blockToConnectTo = this.props.allBlocks.find(
+            b => b.id === output.isConnectedTo
+          ) as BlockData;
           let destination;
           switch (output.connectedToType) {
             case "GAIN":

@@ -8,15 +8,27 @@
 .topbar h1 {
   font-weight: 100 !important;
   font-size: 32 !important;
-  color: black !important;
+  color: #212121 !important;
   height: 48px !important;
   line-height: 52px !important;
 }
 
 .topbar button {
-  color: black !important;
+  color: #212121 !important;
 }
 
 .logo {
   width: 32px !important;
+}
+
+.success-text {
+  margin-top: 48px;
+}
+
+.share-form {
+  width: 400px;
+  padding: 0px;
+}
+.share-form input {
+  margin-bottom: 32px;
 }

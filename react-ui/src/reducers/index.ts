@@ -64,6 +64,8 @@ const blockOptions: Array<BlockDataOptions> = [
 ];
 
 const initialState = {
+  name: "Unnamed synth",
+  slug: "",
   blocks: [
     {
       ...blockOptions[0],
@@ -82,7 +84,9 @@ const initialState = {
       internal: buildInternal(blockOptions[3], audioCtx)
     }
   ],
-  audioCtx
+  audioCtx,
+  error: "",
+  success: ""
 };
 
 export default (state: StoreState = initialState, action: any): StoreState => {
@@ -116,6 +120,8 @@ export default (state: StoreState = initialState, action: any): StoreState => {
       };
     case "LOAD_STATE":
       const loadedState = {
+        name: action.name,
+        slug: action.slug,
         blocks: [
           ...action.blockOptions.map((option: BlockDataOptions) => {
             return {
@@ -124,20 +130,22 @@ export default (state: StoreState = initialState, action: any): StoreState => {
             };
           })
         ],
-        audioCtx
+        audioCtx,
+        error: initialState.error,
+        success: initialState.success
       };
-      window.console.log("loadedstate", loadedState);
       return loadedState;
-    case "RETRIEVE_BLOCKS":
-      // retrieves blocks without internals - for storing in database
+    case "FETCH_ERRORS":
       return {
-        blocks: [
-          ...state.blocks.map(block => {
-            delete block.internal;
-            return block;
-          })
-        ],
-        audioCtx
+        ...state,
+        error: action.message
+      };
+    case "FETCH_SUCCESS":
+      return {
+        ...state,
+        success: action.message,
+        name: action.name,
+        slug: action.slug
       };
     default:
       return state;
