@@ -32,7 +32,14 @@ export const composedBlock = (
           let destination;
           switch (output.connectedToType) {
             case "GAIN":
-              destination = blockToConnectTo.internal.gain;
+              switch (blockToConnectTo.blockType) {
+                case "BIQUAD":
+                  destination = (blockToConnectTo.internal as InternalBiquadData)
+                    .filter;
+                default:
+                  destination = blockToConnectTo.internal.gain;
+                  break;
+              }
               break;
             case "GAIN_MOD":
               destination = blockToConnectTo.internal.gain.gain;
