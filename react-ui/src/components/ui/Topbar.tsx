@@ -102,6 +102,8 @@ const mapStateToProps = ({
   });
   const blocksWithoutInternals = copiedBlocks.map(block => {
     delete block.internal;
+    // To prevent autoplaying audio on loading, i.e. for Chrome's autoplay policy:
+    block.running = false;
     return block;
   });
   return {

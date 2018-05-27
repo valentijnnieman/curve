@@ -131,7 +131,6 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         ]
       };
     case "LOAD_STATE":
-      window.console.log(action);
       const loadedState = {
         name: action.name,
         slug: action.slug,

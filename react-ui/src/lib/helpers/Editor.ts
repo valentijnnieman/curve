@@ -23,6 +23,7 @@ export const buildInternal = (
     };
     return newOscInternal;
   } else if (block.blockType === "GAIN") {
+    gain.gain.value = block.values[0]; // a gain block has a controllable gain parameter
     const newGainInternal = {
       gain,
       analyser
