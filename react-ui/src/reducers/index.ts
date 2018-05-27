@@ -9,6 +9,8 @@ let idCount = 0;
 const blockOptions: Array<BlockDataOptions> = [
   {
     id: idCount++,
+    x: 0,
+    y: 0,
     blockType: "OSC",
     type: "sine" as OscillatorType,
     values: [440],
@@ -24,6 +26,8 @@ const blockOptions: Array<BlockDataOptions> = [
   },
   {
     id: idCount++,
+    x: 0,
+    y: 0,
     blockType: "ENVELOPE",
     values: [0, 0.5, 0.5, 0.4],
     hasInternal: false,
@@ -37,6 +41,8 @@ const blockOptions: Array<BlockDataOptions> = [
   },
   {
     id: idCount++,
+    x: 0,
+    y: 0,
     blockType: "BIQUAD",
     type: "lowpass" as BiquadFilterType,
     values: [440, 10],
@@ -51,6 +57,8 @@ const blockOptions: Array<BlockDataOptions> = [
   },
   {
     id: idCount++,
+    x: 0,
+    y: 0,
     blockType: "GAIN",
     values: [1],
     hasInternal: false,
@@ -102,9 +110,13 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         })
       };
     case "CREATE_BLOCK":
+      // id's can be all over the place - we'll get the highest one
+      const allIds = state.blocks.map(block => block.id);
+      const newId = Math.max(...allIds) + 1;
+      window.console.log(newId);
       return {
         ...state,
-        blocks: [...state.blocks, { ...action.block, id: idCount++ }]
+        blocks: [...state.blocks, { ...action.block, id: newId }]
       };
     case "DELETE_BLOCK":
       const blockToDelete = state.blocks.find(
@@ -119,6 +131,7 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         ]
       };
     case "LOAD_STATE":
+      window.console.log(action);
       const loadedState = {
         name: action.name,
         slug: action.slug,
@@ -145,7 +158,8 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         ...state,
         success: action.message,
         name: action.name,
-        slug: action.slug
+        slug: action.slug,
+        error: ""
       };
     default:
       return state;

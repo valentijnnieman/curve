@@ -3,11 +3,14 @@ import * as React from "react";
 import { BlockData } from "../../types/blockData";
 import { ComposedBlockProps, BlockProps } from "../../types/blockProps";
 import { InternalOscData, InternalBiquadData } from "../../types/internalData";
+import { DraggableData } from "react-draggable";
 
 export const composedBlock = (
   BlockToCompose: React.ComponentClass<BlockProps>
 ) => {
   return class extends React.Component<ComposedBlockProps> {
+    position: HTMLDivElement;
+
     constructor(props: ComposedBlockProps) {
       super(props);
     }
@@ -62,6 +65,7 @@ export const composedBlock = (
       }
     };
     onDragHandler = (
+      data: DraggableData,
       gainInputElement: DOMRect,
       outputElement: DOMRect,
       freqInputElement?: DOMRect
@@ -69,6 +73,8 @@ export const composedBlock = (
       if (freqInputElement) {
         const updatedBlock: BlockData = {
           ...this.props.block,
+          x: data.x,
+          y: data.y,
           gainInputDOMRect: gainInputElement,
           freqInputDOMRect: freqInputElement as DOMRect,
           outputDOMRect: outputElement
@@ -77,6 +83,8 @@ export const composedBlock = (
       } else {
         const updatedBlock: BlockData = {
           ...this.props.block,
+          x: data.x,
+          y: data.y,
           gainInputDOMRect: gainInputElement,
           outputDOMRect: outputElement
         };

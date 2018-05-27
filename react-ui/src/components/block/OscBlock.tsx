@@ -17,6 +17,7 @@ import { OscBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton } from "material-ui";
 import { Card } from "../ui/Card";
+import { DraggableData } from "react-draggable";
 
 export class OscBlock extends React.Component<OscBlockProps> {
   freqInput: HTMLInputElement;
@@ -126,13 +127,15 @@ export class OscBlock extends React.Component<OscBlockProps> {
         removeBlock={() => {
           this.props.deleteBlock(this.props.block.id);
         }}
-        onDrag={() => {
+        onDrag={(data: DraggableData) => {
           this.props.onDragHandler(
+            data,
             this.gainInputElement.getBoundingClientRect() as DOMRect,
             this.outputElement.getBoundingClientRect() as DOMRect,
             this.freqInputElement.getBoundingClientRect() as DOMRect
           );
         }}
+        block={this.props.block}
       >
         <IconButton
           tooltipPosition="bottom-left"

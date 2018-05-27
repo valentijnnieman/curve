@@ -1,4 +1,5 @@
 import { BlockData } from "../types/blockData";
+import { DraggableData } from "react-draggable";
 
 // The props of the composed HOC - what we use in Editor.jsx
 export interface ComposedBlockProps {
@@ -25,6 +26,7 @@ export interface BlockProps extends ComposedBlockProps {
 // block specific props - not all blocks have a freqInputElement for example
 export interface OscBlockProps extends BlockProps {
   onDragHandler: (
+    data: DraggableData,
     gainInputElement: DOMRect,
     outputElement: DOMRect,
     freqInputElement?: DOMRect
@@ -33,6 +35,7 @@ export interface OscBlockProps extends BlockProps {
 
 export interface BiquadBlockProps extends BlockProps {
   onDragHandler: (
+    data: DraggableData,
     gainInputElement: DOMRect,
     outputElement: DOMRect,
     freqInputElement?: DOMRect
@@ -40,11 +43,16 @@ export interface BiquadBlockProps extends BlockProps {
 }
 
 export interface GainBlockProps extends BlockProps {
-  onDragHandler: (gainInputElement: DOMRect, outputElement: DOMRect) => void;
+  onDragHandler: (
+    data: DraggableData,
+    gainInputElement: DOMRect,
+    outputElement: DOMRect
+  ) => void;
 }
 
 export interface EnvelopeBlockProps extends BlockProps {
   onDragHandler: (
+    data: DraggableData,
     gainInputElement: DOMRect,
     outputElement: DOMRect,
     freqInputElement?: DOMRect

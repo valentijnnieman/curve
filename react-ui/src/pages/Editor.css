@@ -1,5 +1,5 @@
 .grid-svg {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
@@ -10,14 +10,13 @@
 
 .speakers {
   position: absolute;
-  top: 48px;
+  top: 35vh;
   right: 0px;
   display: flex;
   justify-content: center;
   height: 78px !important;
   padding: 0 !important;
   margin: 24px !important;
-  margin-top: 42px !important;
   width: 92px !important;
   padding-top: 12px !important;
 }

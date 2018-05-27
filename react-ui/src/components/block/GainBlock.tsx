@@ -13,6 +13,7 @@ import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton } from "material-ui";
 
 import { Card } from "../ui/Card";
+import { DraggableData } from "react-draggable";
 
 export class GainBlock extends React.Component<GainBlockProps> {
   analyser: AnalyserNode;
@@ -67,12 +68,14 @@ export class GainBlock extends React.Component<GainBlockProps> {
         removeBlock={() => {
           this.props.deleteBlock(this.props.block.id);
         }}
-        onDrag={() =>
+        onDrag={(data: DraggableData) =>
           this.props.onDragHandler(
+            data,
             this.gainInputElement.getBoundingClientRect() as DOMRect,
             this.outputElement.getBoundingClientRect() as DOMRect
           )
         }
+        block={this.props.block}
       >
         <IconButton
           tooltipPosition="bottom-left"

@@ -12,6 +12,7 @@ import { EnvelopeBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton, FlatButton } from "material-ui";
 import { Card } from "../ui/Card";
+import { DraggableData } from "react-draggable";
 
 interface EnvelopeState {
   attack: number;
@@ -98,12 +99,14 @@ export class EnvelopeBlock extends React.Component<
         removeBlock={() => {
           this.props.deleteBlock(this.props.block.id);
         }}
-        onDrag={() =>
+        onDrag={(data: DraggableData) =>
           this.props.onDragHandler(
+            data,
             this.gainInputElement.getBoundingClientRect() as DOMRect,
             this.outputElement.getBoundingClientRect() as DOMRect
           )
         }
+        block={this.props.block}
       >
         <IconButton
           tooltipPosition="bottom-left"

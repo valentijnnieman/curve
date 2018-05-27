@@ -1,17 +1,17 @@
 .createblock-button {
   position: fixed;
   bottom: 32px;
-  right: 32px;
+  right: 22px;
 }
 
 .code-dialog-button {
   position: fixed;
   bottom: 118px;
-  right: 40px;
+  right: 30px;
 }
 
 .share-menu-button {
   position: fixed;
   bottom: 186px;
-  right: 40px;
+  right: 30px;
 }

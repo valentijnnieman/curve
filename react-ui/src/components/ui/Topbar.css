@@ -23,6 +23,7 @@
 
 .success-text {
   margin-top: 48px;
+  color: rgb(0, 188, 212);
 }
 
 .share-form {
@@ -30,5 +31,4 @@
   padding: 0px;
 }
 .share-form input {
-  margin-bottom: 32px;
 }

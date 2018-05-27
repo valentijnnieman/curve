@@ -5,6 +5,8 @@ import {
 } from "./internalData";
 export interface BlockDataOptions {
   id: number;
+  x: number;
+  y: number;
   blockType: "OSC" | "GAIN" | "BIQUAD" | "ENVELOPE";
   type?: OscillatorType | BiquadFilterType;
   values: Array<number>;

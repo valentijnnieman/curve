@@ -28,6 +28,8 @@ export const speakersDOMRect = {
 const mockblockOptions: Array<BlockDataOptions> = [
   {
     id: 0,
+    x: 0,
+    y: 0,
     blockType: "OSC",
     type: "sine" as OscillatorType,
     values: [220],
@@ -43,6 +45,8 @@ const mockblockOptions: Array<BlockDataOptions> = [
   },
   {
     id: 1,
+    x: 0,
+    y: 0,
     blockType: "GAIN",
     values: [1],
     hasInternal: false,
@@ -55,6 +59,8 @@ const mockblockOptions: Array<BlockDataOptions> = [
   },
   {
     id: 2,
+    x: 0,
+    y: 0,
     blockType: "GAIN",
     values: [1],
     hasInternal: false,
@@ -67,6 +73,8 @@ const mockblockOptions: Array<BlockDataOptions> = [
   },
   {
     id: 3,
+    x: 0,
+    y: 0,
     blockType: "BIQUAD",
     type: "lowpass" as BiquadFilterType,
     values: [1000, 10],
@@ -81,6 +89,8 @@ const mockblockOptions: Array<BlockDataOptions> = [
   },
   {
     id: 3,
+    x: 0,
+    y: 0,
     blockType: "ENVELOPE",
     values: [0, 0.5, 0.5, 0.4],
     connected: false,

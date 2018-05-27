@@ -92,8 +92,10 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
               type="text"
             />
             <RaisedButton
+              primary={true}
               label="Save"
               style={{ marginTop: "32px", marginBottom: "32px" }}
+              type="submit"
             />
           </form>
           {successElement}

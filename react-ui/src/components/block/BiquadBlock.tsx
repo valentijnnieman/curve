@@ -17,6 +17,7 @@ import { composedBlock } from "../../lib/hoc/Block";
 import { InternalBiquadData } from "../../types/internalData";
 import { IconButton } from "material-ui";
 import { Card } from "../ui/Card";
+import { DraggableData } from "react-draggable";
 
 export class BiquadBlock extends React.Component<BiquadBlockProps> {
   freqInput: HTMLInputElement;
@@ -119,13 +120,15 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
         removeBlock={() => {
           this.props.deleteBlock(this.props.block.id);
         }}
-        onDrag={() => {
+        onDrag={(data: DraggableData) => {
           this.props.onDragHandler(
+            data,
             this.gainInputElement.getBoundingClientRect() as DOMRect,
             this.outputElement.getBoundingClientRect() as DOMRect,
             this.freqInputElement.getBoundingClientRect() as DOMRect
           );
         }}
+        block={this.props.block}
       >
         <IconButton
           tooltipPosition="bottom-left"

@@ -104,7 +104,7 @@ export function fetchState(name: string) {
         error => window.console.log("Error: ", error)
       )
       .then(json => {
-        dispatch(loadState(json[0].data, json.name, json.slug));
+        dispatch(loadState(json[0].data, json[0].name, json[0].slug));
       })
       .catch(e => {
         window.console.log(e);

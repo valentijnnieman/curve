@@ -1,3 +1,7 @@
+.block-container {
+  display: inline-block;
+  position: absolute;
+}
 .io-element {
   display: block !important;
   width: 6px !important;

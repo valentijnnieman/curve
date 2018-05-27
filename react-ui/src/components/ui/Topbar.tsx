@@ -54,7 +54,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
   render() {
     return (
       <AppBar
-        title="Curve"
+        title={this.props.name}
         className="topbar"
         iconElementLeft={<img src={CurveSVG} width={48} className="logo" />}
         iconElementRight={
@@ -72,7 +72,6 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           type="continuous"
           autoStart={true}
         />
-        <Code code={this.code} />
         <ShareMenu
           blocksToSave={this.props.blocksWithoutInternals}
           saveState={this.props.saveState}
@@ -81,6 +80,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           name={this.props.name}
           slug={this.props.slug}
         />
+        <Code code={this.code} />
         <CreateBlock
           audioCtx={this.props.audioCtx}
           createBlock={this.props.createBlock}
