@@ -36,6 +36,7 @@ export const composedBlock = (
                 case "BIQUAD":
                   destination = (blockToConnectTo.internal as InternalBiquadData)
                     .filter;
+                  break;
                 default:
                   destination = blockToConnectTo.internal.gain;
                   break;
