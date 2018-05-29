@@ -3,7 +3,7 @@ import "web-audio-test-api";
 import { drawConnectionLines, genWACode } from "./Editor";
 import { InternalOscData } from "../../types/internalData";
 import { Line } from "../../types/lineData";
-import { mockblocks, speakersDOMRect } from "./Mocks";
+import { mockblocks } from "./Mocks";
 
 describe("buildInternal()", () => {
   let internalToTest: InternalOscData;
@@ -38,7 +38,7 @@ describe("drawConnectionLines()", () => {
         connectedToType: "GAIN"
       }
     ];
-    let lines = drawConnectionLines(mockblocks, speakersDOMRect);
+    let lines = drawConnectionLines(mockblocks);
     let fromRect = mockblocks[0].outputDOMRect as DOMRect;
     let toRect = mockblocks[1].gainInputDOMRect;
     let expectedLine = {
@@ -56,7 +56,7 @@ describe("drawConnectionLines()", () => {
   });
   test("no lines are drawn if not connected", () => {
     mockblocks[0].connected = false;
-    let lines = drawConnectionLines(mockblocks, speakersDOMRect);
+    let lines = drawConnectionLines(mockblocks);
 
     expect(lines.length).toEqual(0);
   });

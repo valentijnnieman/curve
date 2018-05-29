@@ -83,13 +83,6 @@ describe("OscNode", () => {
       audioCtx={audioCtx}
     />
   );
-  // const newOscBlock: OscBlock = new OscBlock({
-  // } as OscBlockProps);
-
-  // mock refs here
-  // MockBlock.gainInputElement = document.createElement("div");
-  // oscNode.freqInputElement = document.createElement("div");
-  // oscNode.outputElement = document.createElement("div");
 
   const instance = wrapper.instance() as any;
 
@@ -109,15 +102,14 @@ describe("OscNode", () => {
     instance.props.block.outputs = [
       {
         id: 0,
-        destination: mockblocks[1].internal.gain.gain,
         isConnectedTo: 1,
-        connectedToType: "gain",
+        connectedToType: "GAIN",
         connectedToEl: inputDOMRect,
         connectedFromEl: outputDOMRect
       }
     ];
     const newOutputRect = { ...outputDOMRect, x: 999 };
-    instance.onDragHandler(inputDOMRect, newOutputRect);
+    instance.onDragHandler({}, inputDOMRect, newOutputRect);
     expect(instance.props.block.outputDOMRect).toEqual(newOutputRect);
   });
 });

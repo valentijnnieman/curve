@@ -14,7 +14,7 @@
   background-color: transparent !important;
   /* margin-bottom: 32px; */
 }
-.topbar-title {
+.topbar-title-container {
   height: 100%;
   display: -ms-flexbox;
   display: flex;
@@ -23,12 +23,11 @@
   justify-content: space-around;
   align-items: center;
 }
-.topbar h1 {
+.topbar-title {
   font-weight: 100 !important;
   font-size: 32 !important;
-  color: #212121 !important;
-  height: 48px !important;
-  line-height: 52px !important;
+  color: #9e9e9e !important;
+  margin-left: 8px;
 }
 
 .topbar button {

@@ -59,38 +59,30 @@ export const buildInternal = (
 };
 
 // draws lines between connected blocks
-export const drawConnectionLines = (
-  blocks: Array<BlockData>,
-  speakersDOMRect: DOMRect
-) => {
+export const drawConnectionLines = (blocks: Array<BlockData>) => {
   let allNewLines: Array<Line> = [];
   blocks.map(block => {
     if (block.connected) {
       block.outputs.map(output => {
         let inputDOMRect;
-        if (output.isConnectedTo === -1) {
-          // if it's smaller than 0 it's connected to the output (speakers)
-          inputDOMRect = speakersDOMRect;
-        } else {
-          // get block it's connected to
-          const blockConnectedTo = blocks.find(
-            b => b.id === output.isConnectedTo
-          ) as BlockData;
-          if (blockConnectedTo) {
-            switch (output.connectedToType) {
-              case "GAIN" || "GAIN_MOD":
-                inputDOMRect = blockConnectedTo.gainInputDOMRect;
-                break;
-              case "FREQ":
-                inputDOMRect = blockConnectedTo.freqInputDOMRect as DOMRect;
-                break;
-              default:
-                inputDOMRect = blockConnectedTo.gainInputDOMRect;
-                break;
-            }
+        // get block it's connected to
+        const blockConnectedTo = blocks.find(
+          b => b.id === output.isConnectedTo
+        ) as BlockData;
+        if (blockConnectedTo) {
+          switch (output.connectedToType) {
+            case "GAIN" || "GAIN_MOD":
+              inputDOMRect = blockConnectedTo.gainInputDOMRect;
+              break;
+            case "FREQ":
+              inputDOMRect = blockConnectedTo.freqInputDOMRect as DOMRect;
+              break;
+            default:
+              inputDOMRect = blockConnectedTo.gainInputDOMRect;
+              break;
           }
         }
-        if (inputDOMRect) {
+        if (inputDOMRect && block.outputDOMRect) {
           const newLineCoords = {
             x1: block.outputDOMRect.x + block.outputDOMRect.width / 2,
             y1: block.outputDOMRect.y + block.outputDOMRect.height / 2,

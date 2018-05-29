@@ -54,9 +54,9 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
     return (
       <div className="topbar-container">
         <div className="topbar">
-          <div className="topbar-title">
+          <div className="topbar-title-container">
             <img src={CurveSVG} width={48} className="logo" />
-            <h2 className="thin">
+            <h2 className="topbar-title thin">
               <i>{this.props.name}</i>
             </h2>
           </div>

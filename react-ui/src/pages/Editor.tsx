@@ -5,6 +5,7 @@ import OscBlock from "../components/block/OscBlock";
 import GainBlock from "../components/block/GainBlock";
 import BiquadBlock from "../components/block/BiquadBlock";
 import EnvelopeBlock from "../components/block/EnvelopeBlock";
+import DestinationBlock from "../components/block/DestinationBlock";
 // import OutputNode from "../components/block/OutputNode";
 import {
   InternalOscData,
@@ -14,6 +15,7 @@ import {
 import { BlockData, OutputData } from "../types/blockData";
 import { Line } from "../types/lineData";
 import { StoreState } from "../types/storeState";
+import { Dialog, RaisedButton } from "material-ui";
 
 import { connect } from "react-redux";
 
@@ -21,11 +23,8 @@ import { updateBlock, deleteBlock } from "../actions/block";
 
 // helpers
 import { drawConnectionLines } from "../lib/helpers/Editor";
-import { IconButton, Dialog, RaisedButton } from "material-ui";
 import { RouteComponentProps } from "react-router";
 import { fetchState } from "../actions/state";
-
-const SpeakerSVG = require("../speakers.svg");
 
 interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
@@ -210,10 +209,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   };
   componentWillReceiveProps(nextProps: EditorProps) {
     this.props = nextProps;
-    this.lines = drawConnectionLines(
-      this.props.blocks,
-      this.speakersDOMRect.getBoundingClientRect() as DOMRect
-    );
+    this.lines = drawConnectionLines(this.props.blocks);
   }
   onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (this.state.wantsToConnect) {
@@ -311,6 +307,20 @@ export class Editor extends React.Component<EditorProps, EditorState> {
                 audioCtx={this.props.audioCtx}
               />
             );
+          } else if (block.blockType === "DESTINATION") {
+            return (
+              <DestinationBlock
+                key={index}
+                block={block}
+                allBlocks={this.props.blocks}
+                tryToConnect={this.tryToConnect}
+                tryToConnectTo={this.tryToConnectTo}
+                canConnect={this.state.wantsToConnect}
+                updateBlock={this.props.updateBlock}
+                deleteBlock={this.deleteAndDisconnect}
+                audioCtx={this.props.audioCtx}
+              />
+            );
           } else {
             return null;
           }
@@ -373,7 +383,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           </p>
           <RaisedButton label="Turn on Web Audio" onClick={this.toggleCtx} />
         </Dialog>
-        <div className="card speakers">
+        {/* <div className="card speakers">
           <div className="card-content speakers-content">
             <img className="speakers-svg" src={SpeakerSVG} width={100} />
           </div>
@@ -397,7 +407,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
               }}
             />
           </IconButton>
-        </div>
+        </div> */}
       </div>
     );
   }

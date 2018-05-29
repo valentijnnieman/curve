@@ -50,6 +50,10 @@ export interface GainBlockProps extends BlockProps {
   ) => void;
 }
 
+export interface DestinationBlockProps extends BlockProps {
+  onDragHandler: (data: DraggableData, gainInputElement: DOMRect) => void;
+}
+
 export interface EnvelopeBlockProps extends BlockProps {
   onDragHandler: (
     data: DraggableData,

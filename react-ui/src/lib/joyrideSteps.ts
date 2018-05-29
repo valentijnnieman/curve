@@ -35,10 +35,10 @@ export const joyrideSteps = [
     isFixed: true
   },
   {
-    title: "Oscillator blocks",
+    title: "Destination blocks",
     text:
       "To hear their output, try connecting the output of a block to the input of the speakers, here!",
-    selector: ".speakers-content",
+    selector: "#destination",
     position: "bottom-right",
     type: "hover",
     isFixed: true

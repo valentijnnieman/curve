@@ -61,6 +61,13 @@ export const composedBlock = (
                   break;
               }
               break;
+            case "DESTINATION":
+              destination = blockToConnectTo.internal.gain;
+              // connect internal gain to destination (speakers)
+              blockToConnectTo.internal.gain.connect(
+                this.props.audioCtx.destination
+              );
+              break;
             default:
               destination = blockToConnectTo.internal.gain;
               break;

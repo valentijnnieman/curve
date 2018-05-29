@@ -68,6 +68,19 @@ const blockOptions: Array<BlockDataOptions> = [
     outputs: [],
     gainInputDOMRect: new DOMRect(0, 0, 0, 0),
     outputDOMRect: new DOMRect(0, 0, 0, 0)
+  },
+  {
+    id: idCount++,
+    x: 0,
+    y: 0,
+    blockType: "DESTINATION",
+    values: [1],
+    hasInternal: false,
+    hasInputFrom: [],
+    isConnectedToOutput: false,
+    connected: false,
+    outputs: [],
+    gainInputDOMRect: new DOMRect(0, 0, 0, 0)
   }
 ];
 
@@ -89,6 +102,10 @@ const initialState = {
     },
     {
       ...blockOptions[3],
+      internal: buildInternal(blockOptions[3], audioCtx)
+    },
+    {
+      ...blockOptions[4],
       internal: buildInternal(blockOptions[3], audioCtx)
     }
   ],

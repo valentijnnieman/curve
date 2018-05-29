@@ -1,6 +1,6 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
-import TextField from "material-ui/TextField";
+const SpeakerSVG = require("../../speakers.svg");
 
 import "../ui/Card.css";
 import "./Block.css";
@@ -8,27 +8,26 @@ import { Analyser } from "../Analyser";
 
 import { BlockData } from "../../types/blockData";
 
-import { GainBlockProps } from "../../types/blockProps";
+import { DestinationBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton } from "material-ui";
 
 import { Card } from "../ui/Card";
 import { DraggableData } from "react-draggable";
 
-export class GainBlock extends React.Component<GainBlockProps> {
+export class DestinationBlock extends React.Component<DestinationBlockProps> {
   analyser: AnalyserNode;
 
   gainInputElement: HTMLDivElement;
-  outputElement: HTMLDivElement;
 
-  constructor(props: GainBlockProps) {
+  constructor(props: DestinationBlockProps) {
     super(props);
     this.props.connectInternal();
   }
   tryToConnectTo = () => {
     this.props.tryToConnectTo(
       this.props.block,
-      "GAIN",
+      "DESTINATION",
       this.gainInputElement.getBoundingClientRect()
     );
   };
@@ -57,8 +56,7 @@ export class GainBlock extends React.Component<GainBlockProps> {
     // when component has mounted and refs are set, we update the store
     const updatedBlock: BlockData = {
       ...this.props.block,
-      gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
-      outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect
+      gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect
     };
     this.props.updateBlock(updatedBlock);
   }
@@ -66,13 +64,12 @@ export class GainBlock extends React.Component<GainBlockProps> {
     return (
       <Card
         removeBlock={() => {
-          this.props.deleteBlock(this.props.block.id);
+          // can't delete speaker output block
         }}
         onDrag={(data: DraggableData) =>
           this.props.onDragHandler(
             data,
-            this.gainInputElement.getBoundingClientRect() as DOMRect,
-            this.outputElement.getBoundingClientRect() as DOMRect
+            this.gainInputElement.getBoundingClientRect() as DOMRect
           )
         }
         block={this.props.block}
@@ -84,55 +81,25 @@ export class GainBlock extends React.Component<GainBlockProps> {
           tooltipStyles={{ marginTop: "-40px" }}
         >
           <div
-            className={this.props.checkInputs("GAIN")}
+            className={this.props.checkInputs("DESTINATION")}
             onClick={this.tryToConnectTo}
+            id="destination"
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
             }}
           />
         </IconButton>
         <div className="card-content">
-          <form onSubmit={e => e.preventDefault()}>
-            <TextField
-              floatingLabelText="Gain"
-              defaultValue={this.props.block.values[0]}
-              onChange={this.handleGainChange}
-              type="number"
-              step={0.1}
-              className="input"
-            />
-          </form>
+          <img className="speakers-svg" src={SpeakerSVG} width={100} />
           <Analyser
             analyser={this.props.block.internal.analyser as AnalyserNode}
-            backgroundColor="#337ab7"
+            backgroundColor="#e91e63"
             lineColor="#f8f8f8"
           />
         </div>
-        <IconButton
-          tooltip="Output"
-          tooltipPosition="bottom-right"
-          className="io-button io-button--right"
-          tooltipStyles={{ marginTop: "-40px" }}
-        >
-          <div
-            className={
-              this.props.block.connected
-                ? "io-element io-element--right io-element--active"
-                : "io-element io-element--right"
-            }
-            onClick={() =>
-              this.props.tryToConnect(
-                this.outputElement.getBoundingClientRect() as DOMRect
-              )
-            }
-            ref={ref => {
-              this.outputElement = ref as HTMLDivElement;
-            }}
-          />
-        </IconButton>
       </Card>
     );
   }
 }
 
-export default composedBlock(GainBlock);
+export default composedBlock(DestinationBlock);
