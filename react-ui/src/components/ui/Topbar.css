@@ -1,0 +1,55 @@
+.topbar-container {
+}
+.topbar {
+  z-index: 999;
+  position: sticky;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 52px;
+  width: 98%;
+  padding: 0px 1%;
+  justify-content: space-between;
+  -webkit-box-shadow: none !important;
+  background-color: transparent !important;
+  /* margin-bottom: 32px; */
+}
+.topbar-title-container {
+  height: 100%;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+.topbar-title {
+  font-weight: 100 !important;
+  font-size: 32 !important;
+  color: #9e9e9e !important;
+  margin-left: 8px;
+}
+
+.topbar button {
+  color: #212121 !important;
+}
+
+.logo {
+  width: 32px !important;
+}
+
+.thin {
+  font-weight: 100;
+}
+
+.success-text {
+  margin-top: 48px;
+  color: rgb(0, 188, 212);
+}
+
+.share-form {
+  width: 400px;
+  padding: 0px;
+}
+.share-form input {
+}

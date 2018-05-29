@@ -18,9 +18,30 @@ You can create oscillator or gain blocks by clicking the '+' button in the botto
 
 You can click the "Generate code" button to see the Web Audio code output. You can build a crazy synth and save the outputted code for later! This is still experimental and might not always work as intended.
 
-# WIP
+## Running Curve on local
 
-This is still very much work in progress! :) I use Typescript with create-react-app to build the editor, and Redux to keep state. Pull the project, and run `npm start` or `yarn start`.
+Install the server:
+
+* Run `npm install` in the root folder
+
+Setting up the database:
+
+* Create a development database using `createdb curve-dev`. The `createdb` command comes from the `pg` package installed by npm.
+* Enter your development database credentials in `server/config/config.json`, under `development`
+* Run migrations using `sequelize db:migrate`
+
+Run the server:
+
+* Run `npm start` in the root folder
+  The server is an express app that handles saving and sharing synths! It hosts the main React app in `react-ui` on the '/' route.
+
+Run the app:
+
+* `cd react-ui`
+* `npm install`
+* `npm start`
+
+The `react-ui` app is the frontend. On the server, `npm run build` is run, and the express app (server) handles everything. On local however, it's nice to make use of the webpack dev tools, so we run it independently!
 
 ## Roadmap
 
@@ -29,6 +50,6 @@ Here is some stuff I would love to implement next:
 * [x] A tutorial/walkthrough explaining what does what
 * [x] Better performance! The drawing of the connection lines is quite slow.
 * [x] Filter blocks
-* [ ] Envelope blocks
-* [ ] Saving a 'project'
+* [x] Envelope blocks
+* [x] Saving a 'project'
 * [ ] Cookbook recipes showing off cool synth ideas

@@ -1,9 +1,11 @@
 sudo: false
 language: node_js
 node_js:
-# - stable
-- "9"
+- stable
+# - "9"
 script:
+- cd react-ui
+- npm i
 - npm test
 deploy:
   provider: heroku
