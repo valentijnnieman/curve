@@ -137,8 +137,8 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
           tooltipStyles={{ marginTop: "-40px" }}
         >
           <div
-            className={this.props.checkInputs("gain")}
-            onClick={() => this.tryToConnectTo("gain")}
+            className={this.props.checkInputs("GAIN")}
+            onClick={() => this.tryToConnectTo("GAIN")}
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
             }}

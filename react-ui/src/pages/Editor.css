@@ -11,7 +11,7 @@
 .speakers {
   position: absolute;
   top: 35vh;
-  right: 0px;
+  right: 110px;
   display: flex;
   justify-content: center;
   height: 78px !important;

@@ -1,16 +1,19 @@
 .createblock-button {
+  z-index: 999;
   position: fixed;
   bottom: 32px;
   right: 22px;
 }
 
 .code-dialog-button {
+  z-index: 999;
   position: fixed;
   bottom: 118px;
   right: 30px;
 }
 
 .share-menu-button {
+  z-index: 999;
   position: fixed;
   bottom: 186px;
   right: 30px;

@@ -1,5 +1,4 @@
 import * as React from "react";
-import AppBar from "material-ui/AppBar";
 import "./Topbar.css";
 
 import Joyride, { Step } from "react-joyride";
@@ -53,17 +52,19 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
   }
   render() {
     return (
-      <AppBar
-        title={this.props.name}
-        className="topbar"
-        iconElementLeft={<img src={CurveSVG} width={48} className="logo" />}
-        iconElementRight={
+      <div className="topbar-container">
+        <div className="topbar">
+          <div className="topbar-title">
+            <img src={CurveSVG} width={48} className="logo" />
+            <h2 className="thin">
+              <i>{this.props.name}</i>
+            </h2>
+          </div>
           <FlatButton
-            label="Take a tour"
+            label="Tour"
             onClick={() => this.setState({ joyrideIsRunning: true })}
           />
-        }
-      >
+        </div>
         <Joyride
           ref={c => (this.joyride = c as Joyride)}
           run={this.state.joyrideIsRunning} // or some other boolean for when you want to start it
@@ -85,7 +86,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           audioCtx={this.props.audioCtx}
           createBlock={this.props.createBlock}
         />
-      </AppBar>
+      </div>
     );
   }
 }
