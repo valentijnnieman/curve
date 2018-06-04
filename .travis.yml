@@ -5,8 +5,9 @@ node_js:
 # - "9"
 script:
 - cd react-ui
-- npm install --only=dev --no-shrinkwrap
+- npm i
 - npm test
+- rm -rf ./node_modules
 - cd ../
 deploy:
   provider: heroku
