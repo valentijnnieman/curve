@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@types/material-ui": "^0.21.1",
-    "@types/react-bootstrap": "^0.32.6",
     "@types/react-grid-layout": "^0.16.4",
     "@types/react-joyride": "^1.10.2",
     "@types/react-redux": "^5.0.15",
