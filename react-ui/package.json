@@ -27,16 +27,7 @@
     "react-syntax-highlighter": "^7.0.2",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "tslint": "^5.10.0"
-  },
-  "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject",
-    "standard": "standard index.js"
-  },
-  "devDependencies": {
+    "tslint": "^5.10.0",
     "@types/enzyme": "^3.1.9",
     "@types/enzyme-adapter-react-16": "^1.0.2",
     "@types/jest": "^22.2.0",
@@ -55,6 +46,13 @@
     "tslint-config-prettier": "^1.10.0",
     "typescript": "^2.7.2",
     "web-audio-test-api": "^0.5.2"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject",
+    "standard": "standard index.js"
   },
   "proxy": "http://localhost:5000"
 }
