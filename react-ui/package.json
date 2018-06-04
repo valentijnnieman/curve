@@ -1,5 +1,5 @@
 {
-  "name": "curve-visual",
+  "name": "curve-visual-react-ui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -56,5 +56,6 @@
     "tslint-config-prettier": "^1.10.0",
     "typescript": "^2.7.2",
     "web-audio-test-api": "^0.5.2"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
