@@ -5,6 +5,7 @@ node_js:
 # - "9"
 script:
 - cd react-ui
+- npm install --only=dev --no-shrinkwrap
 - npm test
 - cd ../
 deploy:
