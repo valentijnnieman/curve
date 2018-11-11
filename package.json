@@ -7,8 +7,7 @@
     "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "cacheDirectories": [
-    "node_modules",
-    "react-ui/node_modules"
+    "node_modules"
   ],
   "dependencies": {
     "@types/jest": "^23.3.9",
