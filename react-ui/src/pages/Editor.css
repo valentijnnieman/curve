@@ -6,11 +6,6 @@
   width: 100%;
   height: 100%;
   background-color: transparent;
-  z-index: 1;
-  pointer-events: none;
-}
-.grid-svg line {
-  pointer-events: all;
 }
 
 .speakers {
