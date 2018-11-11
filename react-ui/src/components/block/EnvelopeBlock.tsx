@@ -1,6 +1,7 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
 import TextField from "material-ui/TextField";
+import 'jest-canvas-mock';
 
 import "../ui/Card.css";
 import "./Block.css";
