@@ -7,7 +7,7 @@ script:
 - cd react-ui
 - npm i
 - npm test
-- rm -rf ./node_modules
+# - rm -rf ./node_modules
 - cd ../
 deploy:
   provider: heroku
