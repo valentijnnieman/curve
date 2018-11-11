@@ -64,6 +64,10 @@ form {
   font-size: 10px !important;
   width: 100% !important;
   display: block !important;
+  color: white !important;
+}
+.input label, .input input, .input div {
+  color: white !important;
 }
 
 .toggle {

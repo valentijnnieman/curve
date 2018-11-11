@@ -26,16 +26,17 @@
 .topbar-title {
   font-weight: 100 !important;
   font-size: 32 !important;
-  color: #9e9e9e !important;
+  color: white !important;
   margin-left: 8px;
 }
 
 .topbar button {
-  color: #212121 !important;
+  color: white !important;
 }
 
 .logo {
   width: 32px !important;
+  filter: invert(1);
 }
 
 .thin {

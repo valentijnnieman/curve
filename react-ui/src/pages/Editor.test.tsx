@@ -21,35 +21,37 @@ describe("OscNode", () => {
   const mockUpdate = jest.fn();
   const mockDelete = jest.fn();
 
-  const wrapper = shallow(
-    <Editor
-      blocks={mockblocks}
-      updateBlock={mockUpdate}
-      deleteBlock={mockDelete}
-      fetchState={jest.fn()}
-      audioCtx={audioCtx}
-      match={{} as match<any>}
-      location={{} as Location}
-      history={{} as History}
-    />
-  );
+  let wrapper;
+  let instance;
+  let props;
+  let testInternal;
+  let testBlock;
+  beforeEach(() => {
+    wrapper = shallow(
+      <Editor
+        blocks={mockblocks}
+        updateBlock={mockUpdate}
+        deleteBlock={mockDelete}
+        fetchState={jest.fn()}
+        audioCtx={audioCtx}
+        match={{} as match<any>}
+        location={{} as Location}
+        history={{} as History}
+      />
+    );
 
-  const instance = wrapper.instance() as any;
-  const props = instance.props;
+    instance = wrapper.instance() as any;
+    props = instance.props;
 
-  let testBlock = props.blocks[0];
-  const testInternal = testBlock.internal;
+    testBlock = props.blocks[0];
+    testInternal = testBlock.internal;
 
-  const resetState = () => {
-    instance.state = {
-      wantsToConnect: false,
-      speakersAreConnected: false
-    };
-  };
-
-  afterEach(() => {
-    resetState();
-    testBlock = mockblocks[0];
+    // resetState = () => {
+    //   instance.state = {
+    //     wantsToConnect: false,
+    //     speakersAreConnected: false
+    //   };
+    // };
   });
 
   test("tryToConnect()", () => {

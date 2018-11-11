@@ -4,11 +4,9 @@ import { buildInternal } from "../lib/helpers/Editor";
 
 const audioCtx = new AudioContext();
 
-let idCount = 0;
-
 const blockOptions: Array<BlockDataOptions> = [
   {
-    id: idCount++,
+    id: 0,
     x: 0,
     y: 0,
     blockType: "OSC",
@@ -25,7 +23,7 @@ const blockOptions: Array<BlockDataOptions> = [
     outputDOMRect: new DOMRect(0, 0, 0, 0)
   },
   {
-    id: idCount++,
+    id: 1,
     x: 0,
     y: 0,
     blockType: "ENVELOPE",
@@ -40,7 +38,7 @@ const blockOptions: Array<BlockDataOptions> = [
     outputDOMRect: new DOMRect(0, 0, 0, 0)
   },
   {
-    id: idCount++,
+    id: 2,
     x: 0,
     y: 0,
     blockType: "BIQUAD",
@@ -56,7 +54,7 @@ const blockOptions: Array<BlockDataOptions> = [
     outputDOMRect: new DOMRect(0, 0, 0, 0)
   },
   {
-    id: idCount++,
+    id: 3,
     x: 0,
     y: 0,
     blockType: "GAIN",
@@ -70,7 +68,7 @@ const blockOptions: Array<BlockDataOptions> = [
     outputDOMRect: new DOMRect(0, 0, 0, 0)
   },
   {
-    id: idCount++,
+    id: 4,
     x: 0,
     y: 0,
     blockType: "DESTINATION",
@@ -129,6 +127,7 @@ export default (state: StoreState = initialState, action: any): StoreState => {
     case "CREATE_BLOCK":
       // id's can be all over the place - we'll get the highest one
       const allIds = state.blocks.map(block => block.id);
+      window.console.log(allIds);
       const newId = Math.max(...allIds) + 1;
       window.console.log(newId);
       return {

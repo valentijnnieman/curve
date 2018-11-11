@@ -17,20 +17,15 @@ describe("<OscBlock />", () => {
   const mockUpdate = jest.fn();
   const mockDelete = jest.fn();
 
+  const mockTryToConnectTo = jest.fn();
+
   const blockInstance = mockblocks[0] as BlockData;
   const wrapper = mount(
     <MuiThemeProvider>
       <OscBlock
         block={blockInstance}
         allBlocks={mockblocks}
-        tryToConnectTo={(
-          block: BlockData,
-          outputToConnectTo: AudioParam,
-          outputType: string,
-          inputElement: DOMRect
-        ) => {
-          //
-        }}
+        tryToConnectTo={mockTryToConnectTo}
         canConnect={false}
         updateBlock={mockUpdate}
         deleteBlock={mockDelete}
@@ -59,10 +54,20 @@ describe("<OscBlock />", () => {
     expect(mockUpdate.mock.calls[0][0].internal.gain.gain.value).toEqual(0);
     expect(mockUpdate.mock.calls[0][0].running).toBe(false);
   });
-  test("tryToConnectTo()", () => {
-    instance.tryToConnectTo("gain");
+  test.only("tryToConnectTo('GAIN_MOD')", () => {
+    instance.tryToConnectTo("GAIN_MOD");
+    expect(mockTryToConnectTo.mock.calls[0][0]).toEqual(blockInstance);
+    expect(mockTryToConnectTo.mock.calls[0][1]).toEqual("GAIN_MOD");
+  });
+  test.only("tryToConnectTo('FREQ')", () => {
     instance.tryToConnectTo("FREQ");
+    expect(mockTryToConnectTo.mock.calls[1][0]).toEqual(blockInstance);
+    expect(mockTryToConnectTo.mock.calls[1][1]).toEqual("FREQ");
+  });
+  test.only("tryToConnectTo('default')", () => {
     instance.tryToConnectTo("default");
+    expect(mockTryToConnectTo.mock.calls[2][0]).toEqual(blockInstance);
+    expect(mockTryToConnectTo.mock.calls[2][1]).toEqual("default");
   });
   test("handleFreqChange()", () => {
     instance.handleFreqChange({

@@ -115,10 +115,10 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   };
   disconnect = (fromBlock: number, toBlock: number, outputId: number) => {
     // update block info in store
-    const blockWithOutput = this.props.blocks.find(
+    const blockWithOutput: BlockData = this.props.blocks.find(
       b => b.id === fromBlock
     ) as BlockData;
-    const blockWithInput = this.props.blocks.find(
+    const blockWithInput: BlockData = this.props.blocks.find(
       b => b.id === toBlock
     ) as BlockData;
     const internal = blockWithOutput.internal;
@@ -243,6 +243,17 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     if ("gain" in blockToDelete.internal) {
       blockToDelete.internal.gain.gain.value = 0;
     }
+
+    // disconnect blocks connected to the block we're deleting
+    this.props.blocks.map(block => {
+      if (block.connected) {
+        block.outputs.map(out => {
+          if (out.isConnectedTo === blockToDelete.id) {
+            this.disconnect(block.id, blockToDelete.id, out.id);
+          }
+        });
+      }
+    });
     // update redux store -> delete blockData object
     this.props.deleteBlock(id);
   };
@@ -433,4 +444,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Editor);

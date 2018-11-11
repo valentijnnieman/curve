@@ -19,7 +19,8 @@ export class Analyser extends React.Component<AnalyserProps> {
 
     this.props.analyser.getByteTimeDomainData(timeData);
 
-    this.ctx.fillStyle = this.props.backgroundColor;
+    // this.ctx.fillStyle = this.props.backgroundColor;
+    this.ctx.fillStyle = "#363636";
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
     this.ctx.beginPath();
@@ -47,11 +48,13 @@ export class Analyser extends React.Component<AnalyserProps> {
   componentDidMount() {
     this.ctx = this.analyserCanvas.getContext("2d") as CanvasRenderingContext2D;
 
-    this.ctx.fillStyle = this.props.backgroundColor;
+    // this.ctx.fillStyle = this.props.backgroundColor;
+    this.ctx.fillStyle = "#363636";
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
     this.ctx.lineWidth = 2;
-    this.ctx.strokeStyle = this.props.lineColor;
+    // this.ctx.strokeStyle = this.props.lineColor;
+    this.ctx.strokeStyle = this.props.backgroundColor;
 
     this.draw();
   }

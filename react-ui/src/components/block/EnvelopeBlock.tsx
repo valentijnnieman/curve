@@ -54,20 +54,25 @@ export class EnvelopeBlock extends React.Component<
     const name = e.target.name;
     if (newValue >= 0 && typeof newValue === "number") {
       // set internal state
-      this.setState({
-        [name]: newValue
-      });
-      // update block info in store
-      const updatedNode: BlockData = {
-        ...this.props.block,
-        values: this.props.block.values.map((value, index) => {
-          if (index === id) {
-            return newValue;
-          }
-          return value;
-        })
-      };
-      this.props.updateBlock(updatedNode);
+      this.setState(
+        {
+          ...this.state,
+          [name]: newValue
+        },
+        () => {
+          // update block info in store
+          const updatedNode: BlockData = {
+            ...this.props.block,
+            values: [
+              this.state.attack,
+              this.state.decay,
+              this.state.sustain,
+              this.state.release
+            ]
+          };
+          this.props.updateBlock(updatedNode);
+        }
+      );
     }
   };
 
