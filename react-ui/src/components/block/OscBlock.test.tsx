@@ -1,8 +1,8 @@
 import * as React from "react";
 import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
-import "jest-canvas-mock";
 
+import "jest-canvas-mock";
 import "web-audio-test-api";
 import { audioCtx, mockblocks } from "../../lib/helpers/Mocks";
 import { BlockData } from "../../types/blockData";
