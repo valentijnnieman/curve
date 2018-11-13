@@ -88,7 +88,7 @@ const mockblockOptions: Array<BlockDataOptions> = [
     outputDOMRect: outputDOMRect
   },
   {
-    id: 3,
+    id: 4,
     x: 0,
     y: 0,
     blockType: "ENVELOPE",
@@ -101,7 +101,24 @@ const mockblockOptions: Array<BlockDataOptions> = [
     gainInputDOMRect: inputDOMRect,
     freqInputDOMRect: inputDOMRect,
     outputDOMRect: outputDOMRect
-  }
+  },
+  {
+    id: 5,
+    x: 0,
+    y: 0,
+    blockType: "OSC",
+    type: "sine" as OscillatorType,
+    values: [220],
+    hasInternal: false,
+    running: false,
+    connected: true,
+    hasInputFrom: [],
+    isConnectedToOutput: false,
+    outputs: [],
+    gainInputDOMRect: inputDOMRect,
+    freqInputDOMRect: inputDOMRect,
+    outputDOMRect: outputDOMRect
+  },
 ];
 export const mockblocks: Array<BlockData> = [
   {
@@ -126,6 +143,10 @@ export const mockblocks: Array<BlockData> = [
   {
     ...mockblockOptions[4],
     internal: buildInternal(mockblockOptions[4], audioCtx)
+  },
+  {
+    ...mockblockOptions[5],
+    internal: buildInternal(mockblockOptions[5], audioCtx)
   }
 ];
 

@@ -17,16 +17,17 @@ import { Location, History } from "history";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("OscNode", () => {
-  const mockUpdate = jest.fn();
-  const mockDelete = jest.fn();
-
+describe("Editor", () => {
+  let mockUpdate, mockDelete;
   let wrapper;
   let instance;
   let props;
   let testInternal;
   let testBlock;
   beforeEach(() => {
+    mockUpdate = jest.fn();
+    mockDelete = jest.fn();
+
     wrapper = shallow(
       <Editor
         blocks={mockblocks}
@@ -45,13 +46,6 @@ describe("OscNode", () => {
 
     testBlock = props.blocks[0];
     testInternal = testBlock.internal;
-
-    // resetState = () => {
-    //   instance.state = {
-    //     wantsToConnect: false,
-    //     speakersAreConnected: false
-    //   };
-    // };
   });
 
   test("tryToConnect()", () => {
@@ -106,23 +100,75 @@ describe("OscNode", () => {
     instance.tryToConnectTo(props.blocks[1], "gain", inputDOMRect);
     const expectedBlockWithOutput = {
       ...testBlock,
-      connected: false,
+      connected: true,
       isConnectedToOutput: false,
-      outputs: []
+      outputs: [
+        {
+          connectedToType: "gain",
+          id: 0,
+          isConnectedTo: 1
+        }
+      ]
     };
+    expect(mockUpdate.mock.calls[0][0]).toEqual(expectedBlockWithOutput);
     const expectedBlockWithInput = {
-      ...props.blocks[1],
-      hasInputFrom: []
+      ...props.blocks[1]
     };
+    expect(mockUpdate.mock.calls.length).toEqual(2);
+    expect(mockUpdate.mock.calls[1][0]).toEqual({
+      ...expectedBlockWithInput,
+      hasInputFrom: [0]
+    });
+
     instance.disconnect(0, 1, 0);
+
     // the update for the block that wants to disconnect it's output is run first
-    expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 2][0]).toEqual(
-      expectedBlockWithOutput
-    );
     // then the update for the block that receives input
-    expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 1][0]).toEqual(
-      expectedBlockWithInput
-    );
+    expect(mockUpdate.mock.calls[2][0]).toEqual({
+      ...expectedBlockWithOutput,
+      connected: false,
+      outputs: []
+    });
+    expect(mockUpdate.mock.calls[3][0]).toEqual(expectedBlockWithInput);
+  });
+  test("disconnect() osc from osc", () => {
+    instance.tryToConnect(testBlock, testInternal, outputDOMRect);
+    instance.tryToConnectTo(props.blocks[5], "gain", inputDOMRect);
+    const expectedBlockWithOutput = {
+      ...testBlock,
+      connected: true,
+      isConnectedToOutput: false,
+      outputs: [
+        {
+          connectedToType: "gain",
+          id: 0,
+          isConnectedTo: 5
+        }
+      ]
+    };
+    expect(mockUpdate.mock.calls[0][0]).toEqual(expectedBlockWithOutput);
+
+    const expectedBlockWithInput = {
+      ...props.blocks[5],
+      hasInputFrom: [0]
+    };
+    expect(mockUpdate.mock.calls[1][0]).toEqual(expectedBlockWithInput);
+
+    instance.disconnect(0, 5, 0);
+
+    // the update for the block that wants to disconnect it's output is run first
+    // then the update for the block that receives input
+
+    expect(mockUpdate.mock.calls[2][0]).toEqual({
+      ...expectedBlockWithOutput,
+      connected: false,
+      outputs: []
+    });
+
+    expect(mockUpdate.mock.calls[3][0]).toEqual({
+      ...expectedBlockWithInput,
+      hasInputFrom: []
+    });
   });
   test("disconnect() only one", () => {
     testBlock.connected = true;

@@ -143,14 +143,14 @@ export const composedBlock = (
     }
     render() {
       return (
-        <BlockToCompose
-          {...this.props as ComposedBlockProps}
-          connectToAnalyser={this.connectToAnalyser}
-          connectInternal={this.connectInternal}
-          tryToConnect={this.tryToConnect}
-          onDragHandler={this.onDragHandler}
-          checkInputs={this.checkInputs}
-        />
+          <BlockToCompose
+            {...this.props as ComposedBlockProps}
+            connectToAnalyser={this.connectToAnalyser}
+            connectInternal={this.connectInternal}
+            tryToConnect={this.tryToConnect}
+            onDragHandler={this.onDragHandler}
+            checkInputs={this.checkInputs}
+          />
       );
     }
   };

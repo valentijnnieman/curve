@@ -118,10 +118,13 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     const blockWithOutput: BlockData = this.props.blocks.find(
       b => b.id === fromBlock
     ) as BlockData;
+
     const blockWithInput: BlockData = this.props.blocks.find(
       b => b.id === toBlock
     ) as BlockData;
+
     const internal = blockWithOutput.internal;
+
     const updatedBlockWithOutput: BlockData = {
       ...blockWithOutput,
       connected: blockWithOutput.outputs.length > 1 ? true : false,
@@ -131,11 +134,13 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     this.props.updateBlock(updatedBlockWithOutput);
 
     if (!blockWithOutput.isConnectedToOutput) {
-      const indexOfInput = blockWithInput.hasInputFrom.indexOf(fromBlock);
+      // const indexOfInput = blockWithInput.hasInputFrom.indexOf(fromBlock);
 
-      blockWithInput.hasInputFrom.splice(indexOfInput, 1);
+      // blockWithInput.hasInputFrom.splice(indexOfInput, 1);
+
       const updatedBlockWithInput: BlockData = {
-        ...blockWithInput
+        ...blockWithInput,
+        hasInputFrom: blockWithInput.hasInputFrom.filter(id => id !== fromBlock)
       };
       this.props.updateBlock(updatedBlockWithInput);
 

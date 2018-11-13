@@ -1,5 +1,5 @@
 import { StoreState } from "../types/storeState";
-import { BlockDataOptions, BlockData } from "../types/blockData";
+import { BlockDataOptions } from "../types/blockData";
 import { buildInternal } from "../lib/helpers/Editor";
 
 const audioCtx = new AudioContext();
@@ -7,8 +7,8 @@ const audioCtx = new AudioContext();
 const blockOptions: Array<BlockDataOptions> = [
   {
     id: 0,
-    x: 0,
-    y: 0,
+    x: 20,
+    y: 60,
     blockType: "OSC",
     type: "sine" as OscillatorType,
     values: [440],
@@ -24,8 +24,8 @@ const blockOptions: Array<BlockDataOptions> = [
   },
   {
     id: 1,
-    x: 0,
-    y: 0,
+    x: 220,
+    y: 60,
     blockType: "ENVELOPE",
     values: [0, 0.5, 0.5, 0.4],
     hasInternal: false,
@@ -39,8 +39,8 @@ const blockOptions: Array<BlockDataOptions> = [
   },
   {
     id: 2,
-    x: 0,
-    y: 0,
+    x: 420,
+    y: 69,
     blockType: "BIQUAD",
     type: "lowpass" as BiquadFilterType,
     values: [440, 10],
@@ -55,8 +55,8 @@ const blockOptions: Array<BlockDataOptions> = [
   },
   {
     id: 3,
-    x: 0,
-    y: 0,
+    x: 620,
+    y: 80,
     blockType: "GAIN",
     values: [1],
     hasInternal: false,
@@ -69,8 +69,8 @@ const blockOptions: Array<BlockDataOptions> = [
   },
   {
     id: 4,
-    x: 0,
-    y: 0,
+    x: 820,
+    y: 69,
     blockType: "DESTINATION",
     values: [1],
     hasInternal: false,
@@ -104,12 +104,13 @@ const initialState = {
     },
     {
       ...blockOptions[4],
-      internal: buildInternal(blockOptions[3], audioCtx)
+      internal: buildInternal(blockOptions[4], audioCtx)
     }
   ],
   audioCtx,
   error: "",
-  success: ""
+  success: "",
+  lastId: 4
 };
 
 export default (state: StoreState = initialState, action: any): StoreState => {
@@ -125,26 +126,15 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         })
       };
     case "CREATE_BLOCK":
-      // id's can be all over the place - we'll get the highest one
-      const allIds = state.blocks.map(block => block.id);
-      window.console.log(allIds);
-      const newId = Math.max(...allIds) + 1;
-      window.console.log(newId);
       return {
         ...state,
-        blocks: [...state.blocks, { ...action.block, id: newId }]
+        blocks: [...state.blocks, { ...action.block, id: state.lastId + 1 }],
+        lastId: state.lastId + 1
       };
     case "DELETE_BLOCK":
-      const blockToDelete = state.blocks.find(
-        b => b.id === action.id
-      ) as BlockData;
-      const index = state.blocks.indexOf(blockToDelete);
       return {
         ...state,
-        blocks: [
-          ...state.blocks.slice(0, index),
-          ...state.blocks.slice(index + 1)
-        ]
+        blocks: state.blocks.filter(block => block.id !== action.id)
       };
     case "LOAD_STATE":
       const loadedState = {
@@ -160,7 +150,8 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         ],
         audioCtx,
         error: initialState.error,
-        success: initialState.success
+        success: initialState.success,
+        lastId: initialState.lastId
       };
       return loadedState;
     case "FETCH_ERRORS":

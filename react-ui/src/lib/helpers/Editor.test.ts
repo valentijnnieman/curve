@@ -115,6 +115,16 @@ envelope4.trigger = function() {
     gain4.gain.linearRampToValueAtTime(0, now + attack + decay + release);
 }
 
+// Creating oscillator block
+let osc5 = audioCtx.createOscillator();
+osc5.type = \"sine\";
+osc5.frequency.setValueAtTime(220, audioCtx.currentTime);
+// create a internal gain used with oscillator object
+let gain5 = audioCtx.createGain();
+gain5.gain.value = 1;
+osc5.connect(gain5);
+osc5.start();
+
 `;
     expect(code).toEqual(expectedCode);
   });
