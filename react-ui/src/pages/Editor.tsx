@@ -42,7 +42,6 @@ interface EditorState {
   outputType?: string;
   lineFrom?: DOMRect;
   lineTo?: DOMRect;
-  speakersAreConnected: boolean;
   mouseX?: number;
   mouseY?: number;
   accessModalOpen: boolean;
@@ -62,15 +61,14 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       }
     }
 
-    let isRunning = false;
+    let isRunning = true;
     if (this.props.audioCtx.state !== "running") {
-      isRunning = true;
+      isRunning = false;
     }
 
     this.state = {
       wantsToConnect: false,
-      speakersAreConnected: false,
-      accessModalOpen: isRunning
+      accessModalOpen: !isRunning
     };
   }
   testConnect = () => {
@@ -128,29 +126,18 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     const updatedBlockWithOutput: BlockData = {
       ...blockWithOutput,
       connected: blockWithOutput.outputs.length > 1 ? true : false,
-      isConnectedToOutput: false,
       outputs: blockWithOutput.outputs.filter(output => output.id !== outputId)
     };
     this.props.updateBlock(updatedBlockWithOutput);
 
-    if (!blockWithOutput.isConnectedToOutput) {
-      // const indexOfInput = blockWithInput.hasInputFrom.indexOf(fromBlock);
+    const updatedBlockWithInput: BlockData = {
+      ...blockWithInput,
+      hasInputFrom: blockWithInput.hasInputFrom.filter(id => id !== fromBlock)
+    };
+    this.props.updateBlock(updatedBlockWithInput);
 
-      // blockWithInput.hasInputFrom.splice(indexOfInput, 1);
-
-      const updatedBlockWithInput: BlockData = {
-        ...blockWithInput,
-        hasInputFrom: blockWithInput.hasInputFrom.filter(id => id !== fromBlock)
-      };
-      this.props.updateBlock(updatedBlockWithInput);
-
-      if (internal) {
-        internal.gain.disconnect();
-      }
-    } else {
-      this.setState({
-        speakersAreConnected: false
-      });
+    if (internal) {
+      internal.gain.disconnect();
     }
   };
   tryToConnect = (block: BlockData, internal: InternalData, el: DOMRect) => {
@@ -186,30 +173,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           }
         }
       );
-    }
-  };
-  connectToSpeakers = (e: any) => {
-    const { blockToConnect } = this.state;
-    if (blockToConnect) {
-      this.setState({
-        lineTo: e.target.getBoundingClientRect(),
-        speakersAreConnected: true
-      });
-      const updatedNode: BlockData = {
-        ...(blockToConnect as BlockData),
-        connected: true,
-        isConnectedToOutput: true,
-        outputs: [
-          ...blockToConnect.outputs,
-          {
-            id: blockToConnect.outputs.length, // TO-DO: maybe find a better solution
-            connectedToType: "GAIN",
-            isConnectedTo: -1 // speakers are -1
-          } as OutputData
-        ]
-      };
-      this.props.updateBlock(updatedNode);
-      this.testConnect();
     }
   };
   componentWillReceiveProps(nextProps: EditorProps) {
@@ -399,31 +362,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           </p>
           <RaisedButton label="Turn on Web Audio" onClick={this.toggleCtx} />
         </Dialog>
-        {/* <div className="card speakers">
-          <div className="card-content speakers-content">
-            <img className="speakers-svg" src={SpeakerSVG} width={100} />
-          </div>
-          <IconButton
-            tooltip="Speakers input"
-            tooltipPosition="bottom-left"
-            className="io-button"
-            tooltipStyles={{ marginTop: "-40px" }}
-          >
-            <div
-              className={
-                this.state.speakersAreConnected
-                  ? "io-element io-element--active"
-                  : "io-element"
-              }
-              onClick={e => {
-                this.connectToSpeakers(e);
-              }}
-              ref={ref => {
-                this.speakersDOMRect = ref as HTMLDivElement;
-              }}
-            />
-          </IconButton>
-        </div> */}
       </div>
     );
   }

@@ -37,7 +37,6 @@ const mockblockOptions: Array<BlockDataOptions> = [
     running: false,
     connected: true,
     hasInputFrom: [],
-    isConnectedToOutput: false,
     outputs: [],
     gainInputDOMRect: inputDOMRect,
     freqInputDOMRect: inputDOMRect,
@@ -51,7 +50,6 @@ const mockblockOptions: Array<BlockDataOptions> = [
     values: [1],
     hasInternal: false,
     hasInputFrom: [],
-    isConnectedToOutput: false,
     outputs: [],
     connected: false,
     gainInputDOMRect: inputDOMRect,
@@ -65,7 +63,6 @@ const mockblockOptions: Array<BlockDataOptions> = [
     values: [1],
     hasInternal: false,
     hasInputFrom: [],
-    isConnectedToOutput: false,
     outputs: [],
     connected: false,
     gainInputDOMRect: inputDOMRect,
@@ -81,7 +78,6 @@ const mockblockOptions: Array<BlockDataOptions> = [
     connected: false,
     hasInternal: false,
     hasInputFrom: [],
-    isConnectedToOutput: false,
     outputs: [],
     gainInputDOMRect: inputDOMRect,
     freqInputDOMRect: inputDOMRect,
@@ -96,7 +92,6 @@ const mockblockOptions: Array<BlockDataOptions> = [
     connected: false,
     hasInternal: false,
     hasInputFrom: [],
-    isConnectedToOutput: false,
     outputs: [],
     gainInputDOMRect: inputDOMRect,
     freqInputDOMRect: inputDOMRect,
@@ -113,12 +108,11 @@ const mockblockOptions: Array<BlockDataOptions> = [
     running: false,
     connected: true,
     hasInputFrom: [],
-    isConnectedToOutput: false,
     outputs: [],
     gainInputDOMRect: inputDOMRect,
     freqInputDOMRect: inputDOMRect,
     outputDOMRect: outputDOMRect
-  },
+  }
 ];
 export const mockblocks: Array<BlockData> = [
   {

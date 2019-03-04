@@ -24,7 +24,7 @@ export const composedBlock = (
       block.internal.gain.disconnect();
       this.connectToAnalyser();
       block.outputs.map(output => {
-        if (output !== undefined && output.isConnectedTo !== -1) {
+        if (output !== undefined) {
           // check which block it's connected to & to witch input type
           const blockToConnectTo = this.props.allBlocks.find(
             b => b.id === output.isConnectedTo
@@ -62,7 +62,7 @@ export const composedBlock = (
               }
               break;
             case "DESTINATION":
-              destination = blockToConnectTo.internal.gain;
+              destination = this.props.audioCtx.destination;
               // connect internal gain to destination (speakers)
               blockToConnectTo.internal.gain.connect(
                 this.props.audioCtx.destination
@@ -75,9 +75,6 @@ export const composedBlock = (
           block.internal.gain.connect(destination as AudioParam);
         }
       });
-      if (block.isConnectedToOutput) {
-        block.internal.gain.connect(this.props.audioCtx.destination);
-      }
     };
     onDragHandler = (
       data: DraggableData,
@@ -143,14 +140,14 @@ export const composedBlock = (
     }
     render() {
       return (
-          <BlockToCompose
-            {...this.props as ComposedBlockProps}
-            connectToAnalyser={this.connectToAnalyser}
-            connectInternal={this.connectInternal}
-            tryToConnect={this.tryToConnect}
-            onDragHandler={this.onDragHandler}
-            checkInputs={this.checkInputs}
-          />
+        <BlockToCompose
+          {...this.props as ComposedBlockProps}
+          connectToAnalyser={this.connectToAnalyser}
+          connectInternal={this.connectInternal}
+          tryToConnect={this.tryToConnect}
+          onDragHandler={this.onDragHandler}
+          checkInputs={this.checkInputs}
+        />
       );
     }
   };

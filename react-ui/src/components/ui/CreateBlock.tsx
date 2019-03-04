@@ -70,7 +70,6 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
                   hasInternal: false,
                   running: false,
                   hasInputFrom: [],
-                  isConnectedToOutput: false,
                   connected: false,
                   outputs: [],
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
@@ -97,7 +96,6 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
                   connected: false,
                   hasInternal: false,
                   hasInputFrom: [],
-                  isConnectedToOutput: false,
                   outputs: [],
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
                   freqInputDOMRect: new DOMRect(0, 0, 0, 0),
@@ -122,7 +120,6 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
                   connected: false,
                   hasInternal: false,
                   hasInputFrom: [],
-                  isConnectedToOutput: false,
                   outputs: [],
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
                   outputDOMRect: new DOMRect(0, 0, 0, 0)
@@ -146,7 +143,6 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
                   connected: false,
                   hasInternal: false,
                   hasInputFrom: [],
-                  isConnectedToOutput: false,
                   outputs: [],
                   gainInputDOMRect: new DOMRect(0, 0, 0, 0),
                   outputDOMRect: new DOMRect(0, 0, 0, 0)

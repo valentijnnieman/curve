@@ -14,7 +14,6 @@ export interface BlockDataOptions {
   running?: boolean;
   hasInputFrom: Array<number>;
   connected: boolean;
-  isConnectedToOutput: boolean;
   outputs: Array<OutputData>;
   gainInputDOMRect: DOMRect; // the DOM element we're connecing to (x2, y2 of line)
   freqInputDOMRect?: DOMRect; // the DOM element we're connecing to (x2, y2 of line)

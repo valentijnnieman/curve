@@ -119,7 +119,11 @@ gain${index}.gain.value = 1;
 osc${index}.connect(gain${index});
 osc${index}.start();`;
       if (block.connected) {
-        if (block.isConnectedToOutput) {
+        if (
+          block.outputs.filter(
+            output => output.connectedToType === "DESTINATION"
+          ).length > 0
+        ) {
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
@@ -158,7 +162,11 @@ osc${index}.start();`;
       jsString += `let gain${index} = audioCtx.createGain();
 gain${index}.gain.value = ${block.values[0]};`;
       if (block.connected) {
-        if (block.isConnectedToOutput) {
+        if (
+          block.outputs.filter(
+            output => output.connectedToType === "DESTINATION"
+          ).length > 0
+        ) {
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
@@ -207,7 +215,11 @@ let gain${index} = audioCtx.createGain();
 gain${index}.gain.value = 1;
 filter${index}.connect(gain${index});`;
       if (block.connected) {
-        if (block.isConnectedToOutput) {
+        if (
+          block.outputs.filter(
+            output => output.connectedToType === "DESTINATION"
+          ).length > 0
+        ) {
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
@@ -267,7 +279,11 @@ envelope${index}.trigger = function() {
 }`;
 
       if (block.connected) {
-        if (block.isConnectedToOutput) {
+        if (
+          block.outputs.filter(
+            output => output.connectedToType === "DESTINATION"
+          ).length > 0
+        ) {
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {

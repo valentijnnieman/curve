@@ -101,7 +101,6 @@ describe("Editor", () => {
     const expectedBlockWithOutput = {
       ...testBlock,
       connected: true,
-      isConnectedToOutput: false,
       outputs: [
         {
           connectedToType: "gain",
@@ -137,7 +136,6 @@ describe("Editor", () => {
     const expectedBlockWithOutput = {
       ...testBlock,
       connected: true,
-      isConnectedToOutput: false,
       outputs: [
         {
           connectedToType: "gain",
@@ -192,7 +190,6 @@ describe("Editor", () => {
     const expectedBlock = {
       ...testBlock,
       connected: true,
-      isConnectedToOutput: false,
       outputs: [
         {
           connectedToType: "gain",
@@ -206,31 +203,5 @@ describe("Editor", () => {
     expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 2][0]).toEqual(
       expectedBlock
     );
-  });
-  test("disconnect() from speakers", () => {
-    testBlock.connected = true;
-    testBlock.isConnectedToOutput = true;
-    instance.state.speakersAreConnected = true;
-    testBlock.outputs = [
-      {
-        connectedToType: "gain",
-        destination: audioCtx.destination,
-        id: 0,
-        isConnectedTo: -1 // speakers are -1
-      }
-    ];
-    instance.disconnect(0, -1, 0);
-
-    const expectedBlock = {
-      ...testBlock,
-      connected: false,
-      isConnectedToOutput: false,
-      outputs: []
-    };
-
-    expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 1][0]).toEqual(
-      expectedBlock
-    );
-    expect(instance.state.speakersAreConnected).toBe(false);
   });
 });
