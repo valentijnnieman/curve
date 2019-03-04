@@ -87,7 +87,7 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
               value={this.state.name}
               onChange={this.handleNameChange}
               floatingLabelText="Name"
-              className="input"
+              className="input input--black"
               errorText={this.props.error}
               type="text"
             />

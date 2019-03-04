@@ -66,8 +66,13 @@ form {
   display: block !important;
   color: white !important;
 }
-.input label, .input input, .input div {
+.input label,
+.input input,
+.input div {
   color: white !important;
+}
+.input--black input {
+  color: black !important;
 }
 
 .toggle {
