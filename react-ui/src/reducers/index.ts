@@ -7,8 +7,8 @@ const audioCtx = new AudioContext();
 const blockOptions: Array<BlockDataOptions> = [
   {
     id: 0,
-    x: window.screenLeft,
-    y: window.screenTop,
+    x: 0,
+    y: 0,
     blockType: "DESTINATION",
     values: [1],
     hasInternal: false,

@@ -1,15 +1,15 @@
 import * as React from "react";
 import "./Topbar.css";
 
-import Joyride, { Step } from "react-joyride";
-import { joyrideSteps } from "../../lib/joyrideSteps";
+// import Joyride, { Step } from "react-joyride";
+// import { joyrideSteps } from "../../lib/joyrideSteps";
 
 import { connect } from "react-redux";
 
 import { BlockData, BlockDataOptions } from "../../types/blockData";
 import { createBlock } from "../../actions/block";
 
-import FlatButton from "material-ui/FlatButton";
+// import FlatButton from "material-ui/FlatButton";
 import { StoreState } from "../../types/storeState";
 import { CreateBlock } from "./CreateBlock";
 import { Code } from "./Code";
@@ -36,7 +36,7 @@ interface TopbarProps {
 }
 
 class Topbar extends React.Component<TopbarProps, TopbarState> {
-  joyride: Joyride;
+  // joyride: Joyride;
   code: string;
   constructor(props: TopbarProps) {
     super(props);
@@ -60,19 +60,19 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
               <i>{this.props.name}</i>
             </h2>
           </div>
-          <FlatButton
+          {/* <FlatButton
             label="Tour"
             onClick={() => this.setState({ joyrideIsRunning: true })}
-          />
+          /> */}
         </div>
-        <Joyride
+        {/* <Joyride
           ref={c => (this.joyride = c as Joyride)}
           run={this.state.joyrideIsRunning} // or some other boolean for when you want to start it
           debug={false}
           steps={joyrideSteps as Step[]}
           type="continuous"
           autoStart={true}
-        />
+        /> */}
         <ShareMenu
           blocksToSave={this.props.blocksWithoutInternals}
           saveState={this.props.saveState}

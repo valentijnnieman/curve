@@ -25,6 +25,7 @@ import { updateBlock, deleteBlock } from "../actions/block";
 import { drawConnectionLines } from "../lib/helpers/Editor";
 import { RouteComponentProps } from "react-router";
 import { fetchState } from "../actions/state";
+import { LineGrid } from "src/components/LineGrid";
 
 interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
@@ -318,45 +319,21 @@ export class Editor extends React.Component<EditorProps, EditorState> {
         }
       }
     );
-    const lineElements = this.lines.map((line, index) => {
-      return (
-        <g key={index}>
-          <line
-            x1={line.x1}
-            y1={line.y1}
-            x2={line.x2}
-            y2={line.y2}
-            stroke="#f50057"
-            strokeWidth={4}
-            strokeDasharray="4, 4"
-            className="connection-line"
-            onClick={e =>
-              this.disconnect(line.fromBlock, line.toBlock, line.outputId)
-            }
-          />
-        </g>
-      );
-    });
-    let lineToMouse;
-    if (this.state.wantsToConnect && this.state.lineFrom) {
-      lineToMouse = (
-        <line
-          x1={this.state.lineFrom.x}
-          y1={this.state.lineFrom.y + 12}
-          x2={this.state.mouseX}
-          y2={this.state.mouseY}
-          strokeDasharray="4, 4"
-          stroke="#f50057"
-          strokeWidth={4}
-        />
-      );
-    }
     return (
       <div onMouseMove={e => this.onMouseMove(e)}>
-        <svg className="grid-svg" onClick={e => this.stopMouseLine(e)}>
+        {/* <svg className="grid-svg" onClick={e => this.stopMouseLine(e)}>
           {lineElements}
           {lineToMouse}
-        </svg>
+        </svg> */}
+        <LineGrid
+          stopMouseLine={this.stopMouseLine}
+          disconnect={this.disconnect}
+          lines={this.lines}
+          wantsToConnect={this.state.wantsToConnect}
+          lineFrom={this.state.lineFrom}
+          mouseX={this.state.mouseX}
+          mouseY={this.state.mouseY}
+        />
         {synthElements}
         <Dialog
           title="Allow Web Audio access"
