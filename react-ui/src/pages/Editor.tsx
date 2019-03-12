@@ -25,7 +25,7 @@ import { updateBlock, deleteBlock } from "../actions/block";
 import { drawConnectionLines } from "../lib/helpers/Editor";
 import { RouteComponentProps } from "react-router";
 import { fetchState } from "../actions/state";
-import { LineGrid } from "src/components/LineGrid";
+import { LineGrid } from "../components/LineGrid";
 
 interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
