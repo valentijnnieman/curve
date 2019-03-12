@@ -1,10 +1,12 @@
-# <img src="https://raw.githubusercontent.com/valentijnnieman/curve/master/src/curve.svg?sanitize=true" width="48" /> Curve
+# <img src="https://raw.githubusercontent.com/valentijnnieman/curve/master/react-ui/src/curve.svg?sanitize=true" width="48" /> Curve
 
 [![Build](https://travis-ci.org/valentijnnieman/curve.svg?branch=master)](https://travis-ci.org/valentijnnieman/curve)
 
 A visual synth-design tool for Web Audio
 
 [Play around with it here!](https://curve-visual.herokuapp.com/)
+
+<img src="https://github.com/valentijnnieman/curve/blob/master/react-ui/public/all_screen.png?raw=true" />
 
 # What is this?
 
