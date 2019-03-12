@@ -59,6 +59,6 @@ export interface EnvelopeBlockProps extends BlockProps {
     data: DraggableData,
     gainInputElement: DOMRect,
     outputElement: DOMRect,
-    freqInputElement?: DOMRect
+    triggerInputElement?: DOMRect
   ) => void;
 }

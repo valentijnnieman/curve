@@ -19,6 +19,7 @@ interface EnvelopeState {
   decay: number;
   sustain: number;
   release: number;
+  inputTriggered: boolean;
 }
 
 export class EnvelopeBlock extends React.Component<
@@ -27,25 +28,61 @@ export class EnvelopeBlock extends React.Component<
 > {
   analyser: AnalyserNode;
 
-  gainInputElement: HTMLSpanElement;
-  outputElement: HTMLSpanElement;
+  gainInputElement: HTMLDivElement;
+  triggerInputElement: HTMLDivElement;
+  outputElement: HTMLDivElement;
+
+  timeData: Uint8Array;
 
   constructor(props: EnvelopeBlockProps) {
     super(props);
     this.props.connectInternal();
+
     this.state = {
       attack: this.props.block.values[0],
       decay: this.props.block.values[1],
       sustain: this.props.block.values[2],
-      release: this.props.block.values[3]
+      release: this.props.block.values[3],
+      inputTriggered: false
     };
+    this.timeData = new Uint8Array(1);
   }
-  tryToConnectTo = () => {
-    this.props.tryToConnectTo(
-      this.props.block,
-      "GAIN",
-      this.gainInputElement.getBoundingClientRect()
-    );
+  readTriggerInput = () => {
+    this.props.block.internal.analyser.getByteTimeDomainData(this.timeData);
+
+    if (this.timeData.some(data => data >= 250) && !this.state.inputTriggered) {
+      this.setState(
+        {
+          ...this.state,
+          inputTriggered: true
+        },
+        () => {
+          this.handleTrigger();
+        }
+      );
+    }
+    if (this.timeData.some(data => data <= 20)) {
+      this.setState({
+        ...this.state,
+        inputTriggered: false
+      });
+    }
+    setTimeout(this.readTriggerInput, 10);
+  };
+  tryToConnectTo = (connectionType: string) => {
+    if (connectionType === "GAIN") {
+      this.props.tryToConnectTo(
+        this.props.block,
+        "GAIN",
+        this.gainInputElement.getBoundingClientRect()
+      );
+    } else if (connectionType === "TRIGGER") {
+      this.props.tryToConnectTo(
+        this.props.block,
+        "TRIGGER",
+        this.triggerInputElement.getBoundingClientRect()
+      );
+    }
   };
   handleChange = (e: any, id: number) => {
     e.preventDefault();
@@ -94,9 +131,31 @@ export class EnvelopeBlock extends React.Component<
     const updatedBlock: BlockData = {
       ...this.props.block,
       gainInputDOMRect: this.gainInputElement.getBoundingClientRect() as DOMRect,
-      outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect
+      outputDOMRect: this.outputElement.getBoundingClientRect() as DOMRect,
+      triggerInputDOMRect: this.triggerInputElement.getBoundingClientRect() as DOMRect
     };
     this.props.updateBlock(updatedBlock);
+  }
+  componentWillReceiveProps(newProps: EnvelopeBlockProps) {
+    if (newProps.block.hasInputFrom.length > 0) {
+      for (var i = 0; i < this.props.block.hasInputFrom.length; i++) {
+        const blockConnectedToThis = this.props.allBlocks[
+          this.props.block.hasInputFrom[i]
+        ];
+        if (
+          blockConnectedToThis &&
+          blockConnectedToThis.outputs &&
+          blockConnectedToThis.outputs.length > 0
+        ) {
+          for (var j = 0; j < blockConnectedToThis.outputs.length; j++) {
+            const output = blockConnectedToThis.outputs[j];
+            if (output.connectedToType === "TRIGGER") {
+              this.readTriggerInput();
+            }
+          }
+        }
+      }
+    }
   }
   render() {
     return (
@@ -108,7 +167,8 @@ export class EnvelopeBlock extends React.Component<
           this.props.onDragHandler(
             data,
             this.gainInputElement.getBoundingClientRect() as DOMRect,
-            this.outputElement.getBoundingClientRect() as DOMRect
+            this.outputElement.getBoundingClientRect() as DOMRect,
+            this.triggerInputElement.getBoundingClientRect() as DOMRect
           )
         }
         block={this.props.block}
@@ -121,9 +181,23 @@ export class EnvelopeBlock extends React.Component<
         >
           <div
             className={this.props.checkInputs("GAIN")}
-            onClick={this.tryToConnectTo}
+            onClick={() => this.tryToConnectTo("GAIN")}
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
+            }}
+          />
+        </IconButton>
+        <IconButton
+          tooltipPosition="bottom-left"
+          tooltip="Trigger"
+          className="io-button io-button--freq"
+          tooltipStyles={{ marginTop: "-40px" }}
+        >
+          <div
+            className={this.props.checkInputs("TRIGGER")}
+            onClick={() => this.tryToConnectTo("TRIGGER")}
+            ref={ref => {
+              this.triggerInputElement = ref as HTMLDivElement;
             }}
           />
         </IconButton>
@@ -196,7 +270,7 @@ export class EnvelopeBlock extends React.Component<
               )
             }
             ref={ref => {
-              this.outputElement = ref as HTMLSpanElement;
+              this.outputElement = ref as HTMLDivElement;
             }}
           />
         </IconButton>

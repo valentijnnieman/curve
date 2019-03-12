@@ -7,66 +7,8 @@ const audioCtx = new AudioContext();
 const blockOptions: Array<BlockDataOptions> = [
   {
     id: 0,
-    x: 20,
-    y: 60,
-    blockType: "OSC",
-    type: "sine" as OscillatorType,
-    values: [440],
-    hasInternal: false,
-    running: false,
-    connected: false,
-    hasInputFrom: [],
-    outputs: [],
-    gainInputDOMRect: new DOMRect(0, 0, 0, 0),
-    freqInputDOMRect: new DOMRect(0, 0, 0, 0),
-    outputDOMRect: new DOMRect(0, 0, 0, 0)
-  },
-  {
-    id: 1,
-    x: 220,
-    y: 60,
-    blockType: "ENVELOPE",
-    values: [0, 0.5, 0.5, 0.4],
-    hasInternal: false,
-    running: false,
-    hasInputFrom: [],
-    connected: false,
-    outputs: [],
-    gainInputDOMRect: new DOMRect(0, 0, 0, 0),
-    outputDOMRect: new DOMRect(0, 0, 0, 0)
-  },
-  {
-    id: 2,
-    x: 420,
-    y: 69,
-    blockType: "BIQUAD",
-    type: "lowpass" as BiquadFilterType,
-    values: [440, 10],
-    hasInternal: false,
-    running: false,
-    hasInputFrom: [],
-    connected: false,
-    outputs: [],
-    gainInputDOMRect: new DOMRect(0, 0, 0, 0),
-    outputDOMRect: new DOMRect(0, 0, 0, 0)
-  },
-  {
-    id: 3,
-    x: 620,
-    y: 80,
-    blockType: "GAIN",
-    values: [1],
-    hasInternal: false,
-    hasInputFrom: [],
-    connected: false,
-    outputs: [],
-    gainInputDOMRect: new DOMRect(0, 0, 0, 0),
-    outputDOMRect: new DOMRect(0, 0, 0, 0)
-  },
-  {
-    id: 4,
-    x: 820,
-    y: 69,
+    x: window.screenLeft,
+    y: window.screenTop,
     blockType: "DESTINATION",
     values: [1],
     hasInternal: false,
@@ -84,28 +26,12 @@ const initialState = {
     {
       ...blockOptions[0],
       internal: buildInternal(blockOptions[0], audioCtx)
-    },
-    {
-      ...blockOptions[1],
-      internal: buildInternal(blockOptions[1], audioCtx)
-    },
-    {
-      ...blockOptions[2],
-      internal: buildInternal(blockOptions[2], audioCtx)
-    },
-    {
-      ...blockOptions[3],
-      internal: buildInternal(blockOptions[3], audioCtx)
-    },
-    {
-      ...blockOptions[4],
-      internal: buildInternal(blockOptions[4], audioCtx)
     }
   ],
   audioCtx,
   error: "",
   success: "",
-  lastId: 4
+  lastId: 0
 };
 
 export default (state: StoreState = initialState, action: any): StoreState => {

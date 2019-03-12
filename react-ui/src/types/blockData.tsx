@@ -17,6 +17,7 @@ export interface BlockDataOptions {
   outputs: Array<OutputData>;
   gainInputDOMRect: DOMRect; // the DOM element we're connecing to (x2, y2 of line)
   freqInputDOMRect?: DOMRect; // the DOM element we're connecing to (x2, y2 of line)
+  triggerInputDOMRect?: DOMRect; // the DOM element we're connecing to (x2, y2 of line)
   outputDOMRect?: DOMRect; // the DOM element we're connecint FROM (x1, y1 of line)
 }
 export interface BlockData extends BlockDataOptions {
@@ -26,5 +27,4 @@ export interface BlockData extends BlockDataOptions {
 export interface OutputData {
   id: number;
   isConnectedTo: number; // the id of the block we're connecting to
-  connectedToType: "GAIN" | "GAIN_MOD" | "FREQ" | "DESTINATION"; // which parameter of the block we're connecting to
-}
+  connectedToType: "GAIN" | "GAIN_MOD" | "FREQ" | "DESTINATION" | "TRIGGER";

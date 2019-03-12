@@ -125,4 +125,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Topbar);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Topbar);

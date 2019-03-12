@@ -68,6 +68,10 @@ export const composedBlock = (
                 this.props.audioCtx.destination
               );
               break;
+            case "TRIGGER":
+              // connecting to analyser allows us to read stream
+              destination = blockToConnectTo.internal.analyser;
+              break;
             default:
               destination = blockToConnectTo.internal.gain;
               break;
@@ -80,7 +84,8 @@ export const composedBlock = (
       data: DraggableData,
       gainInputElement: DOMRect,
       outputElement: DOMRect,
-      freqInputElement?: DOMRect
+      freqInputElement?: DOMRect,
+      triggerInputElement?: DOMRect
     ) => {
       if (freqInputElement) {
         const updatedBlock: BlockData = {
@@ -89,6 +94,17 @@ export const composedBlock = (
           y: data.y,
           gainInputDOMRect: gainInputElement,
           freqInputDOMRect: freqInputElement as DOMRect,
+          outputDOMRect: outputElement
+        };
+        this.props.updateBlock(updatedBlock);
+      }
+      if (triggerInputElement) {
+        const updatedBlock: BlockData = {
+          ...this.props.block,
+          x: data.x,
+          y: data.y,
+          gainInputDOMRect: gainInputElement,
+          triggerInputDOMRect: triggerInputElement as DOMRect,
           outputDOMRect: outputElement
         };
         this.props.updateBlock(updatedBlock);
@@ -112,7 +128,7 @@ export const composedBlock = (
     };
     checkInputs = (outputType: string) => {
       let allInputTypes: Array<string> = [];
-      this.props.block.hasInputFrom.map(input => {
+      this.props.block.hasInputFrom.forEach(input => {
         const inputFromBlock = this.props.allBlocks.find(
           b => b.id === input
         ) as BlockData;

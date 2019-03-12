@@ -63,7 +63,7 @@ export const drawConnectionLines = (blocks: Array<BlockData>) => {
   let allNewLines: Array<Line> = [];
   blocks.map(block => {
     if (block.connected) {
-      block.outputs.map(output => {
+      block.outputs.forEach(output => {
         let inputDOMRect;
         // get block it's connected to
         const blockConnectedTo = blocks.find(
@@ -76,6 +76,9 @@ export const drawConnectionLines = (blocks: Array<BlockData>) => {
               break;
             case "FREQ":
               inputDOMRect = blockConnectedTo.freqInputDOMRect as DOMRect;
+              break;
+            case "TRIGGER":
+              inputDOMRect = blockConnectedTo.triggerInputDOMRect as DOMRect;
               break;
             default:
               inputDOMRect = blockConnectedTo.gainInputDOMRect;

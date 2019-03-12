@@ -123,16 +123,26 @@ export class Editor extends React.Component<EditorProps, EditorState> {
 
     const internal = blockWithOutput.internal;
 
+    let outputIndex: number = blockWithOutput.outputs.findIndex(
+      output => output.id === outputId
+    );
     const updatedBlockWithOutput: BlockData = {
       ...blockWithOutput,
       connected: blockWithOutput.outputs.length > 1 ? true : false,
-      outputs: blockWithOutput.outputs.filter(output => output.id !== outputId)
+      outputs: blockWithOutput.outputs.filter(
+        (output, index) => index !== outputIndex
+      )
     };
     this.props.updateBlock(updatedBlockWithOutput);
 
+    let inputIndex: number = blockWithInput.hasInputFrom.findIndex(
+      input => input === fromBlock
+    );
     const updatedBlockWithInput: BlockData = {
       ...blockWithInput,
-      hasInputFrom: blockWithInput.hasInputFrom.filter(id => id !== fromBlock)
+      hasInputFrom: blockWithInput.hasInputFrom.filter(
+        (input, index) => index !== inputIndex
+      )
     };
     this.props.updateBlock(updatedBlockWithInput);
 
