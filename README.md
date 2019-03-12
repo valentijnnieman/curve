@@ -6,7 +6,7 @@ A visual synth-design tool for Web Audio
 
 [Play around with it here!](https://curve-visual.herokuapp.com/)
 
-<img src="https://github.com/valentijnnieman/curve/blob/master/react-ui/public/osc_screen.png?raw=true" />
+<img src="https://github.com/valentijnnieman/curve/blob/master/react-ui/public/all_screen.png?raw=true" />
 
 # What is this?
 
