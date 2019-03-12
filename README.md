@@ -12,7 +12,7 @@ This is a visual synth-design tool for Web Audio! You can use it to design synth
 
 ## How should I use this?
 
-You can create oscillator or gain blocks by clicking the '+' button in the bottom right corner of the screen. Connect them to the speakers and turn it on to hear the oscillator oscillating wildly! Try connecting oscillators and gain blocks together! You can connect to an oscillator's internal gain, or frequency.
+You can create audio blocks such as oscillators, gain, filters, or envelopes, by clicking the '+' button in the bottom right corner of the screen. Connect them to the speakers and turn it on to hear the oscillator oscillating wildly! Try connecting different blocks together.
 
 ## Generate code
 
@@ -22,24 +22,24 @@ You can click the "Generate code" button to see the Web Audio code output. You c
 
 Install the server:
 
-* Run `npm install` in the root folder
+- Run `npm install` in the root folder
 
 Setting up the database:
 
-* Create a development database using `createdb curve-dev`. The `createdb` command comes from the `pg` package installed by npm.
-* Enter your development database credentials in `server/config/config.json`, under `development`
-* Run migrations using `sequelize db:migrate`
+- Create a development database using `createdb curve-dev`. The `createdb` command comes from the `pg` package installed by npm.
+- Enter your development database credentials in `server/config/config.json`, under `development`
+- Run migrations using `sequelize db:migrate`
 
 Run the server:
 
-* Run `npm start` in the root folder
+- Run `npm start` in the root folder
   The server is an express app that handles saving and sharing synths! It hosts the main React app in `react-ui` on the '/' route.
 
 Run the app:
 
-* `cd react-ui`
-* `npm install`
-* `npm start`
+- `cd react-ui`
+- `npm install`
+- `npm start`
 
 The `react-ui` app is the frontend. On the server, `npm run build` is run, and the express app (server) handles everything. On local however, it's nice to make use of the webpack dev tools, so we run it independently!
 
@@ -47,9 +47,9 @@ The `react-ui` app is the frontend. On the server, `npm run build` is run, and t
 
 Here is some stuff I would love to implement next:
 
-* [x] A tutorial/walkthrough explaining what does what
-* [x] Better performance! The drawing of the connection lines is quite slow.
-* [x] Filter blocks
-* [x] Envelope blocks
-* [x] Saving a 'project'
-* [ ] Cookbook recipes showing off cool synth ideas
+- [x] Better performance! The drawing of the connection lines is quite slow.
+- [x] Filter blocks
+- [x] Envelope blocks
+- [x] Saving a 'project'
+- [ ] Documentation
+- [ ] Cookbook recipes showing off cool synth ideas
