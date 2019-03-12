@@ -168,6 +168,7 @@ export class EnvelopeBlock extends React.Component<
             data,
             this.gainInputElement.getBoundingClientRect() as DOMRect,
             this.outputElement.getBoundingClientRect() as DOMRect,
+            undefined,
             this.triggerInputElement.getBoundingClientRect() as DOMRect
           )
         }

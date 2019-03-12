@@ -185,11 +185,11 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
             <MenuItem value="lowpass" primaryText="Lowpass" />
             <MenuItem value="highpass" primaryText="Highpass" />
             <MenuItem value="bandpass" primaryText="Bandpass" />
-            <MenuItem value="lowshelf" primaryText="Lowshelf" />
-            <MenuItem value="highshelf" primaryText="Highshelf" />
-            <MenuItem value="peaking" primaryText="Peaking" />
+            {/* <MenuItem value="lowshelf" primaryText="Lowshelf" />
+            <MenuItem value="highshelf" primaryText="Highshelf" /> */}
+            {/* <MenuItem value="peaking" primaryText="Peaking" />
             <MenuItem value="notch" primaryText="Notch" />
-            <MenuItem value="allpass" primaryText="Allpass" />
+            <MenuItem value="allpass" primaryText="Allpass" /> */}
           </DropDownMenu>
           <Analyser
             analyser={this.props.block.internal.analyser as AnalyserNode}
