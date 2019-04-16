@@ -1,0 +1,11 @@
+.sidebar-button {
+  z-index: 999;
+  position: fixed;
+  bottom: 106px;
+  right: 30px;
+}
+.sidebar-header {
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+}

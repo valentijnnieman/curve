@@ -12,10 +12,9 @@ import { createBlock } from "../../actions/block";
 // import FlatButton from "material-ui/FlatButton";
 import { StoreState } from "../../types/storeState";
 import { CreateBlock } from "./CreateBlock";
-import { Code } from "./Code";
-import { genWACode } from "../../lib/helpers/Editor";
-import { ShareMenu } from "./ShareMenu";
+// import { ShareMenu } from "./ShareMenu";
 import { saveState } from "../../actions/state";
+import Sidebar from "./Sidebar";
 
 const CurveSVG = require("../../curve.svg");
 
@@ -37,17 +36,11 @@ interface TopbarProps {
 
 class Topbar extends React.Component<TopbarProps, TopbarState> {
   // joyride: Joyride;
-  code: string;
   constructor(props: TopbarProps) {
     super(props);
     this.state = {
       joyrideIsRunning: false
     };
-    // Build internal objects from blocks used with web audio
-    this.code = genWACode(this.props.blocks);
-  }
-  componentWillReceiveProps(nextProps: TopbarProps) {
-    this.code = genWACode(nextProps.blocks);
   }
   render() {
     return (
@@ -72,7 +65,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           type="continuous"
           autoStart={true}
         /> */}
-        <ShareMenu
+        {/* <ShareMenu
           blocksToSave={this.props.blocksWithoutInternals}
           saveState={this.props.saveState}
           error={this.props.error}
@@ -80,7 +73,8 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
           name={this.props.name}
           slug={this.props.slug}
         />
-        <Code code={this.code} />
+        <Code code={this.code} /> */}
+        <Sidebar {...this.props} />
         <CreateBlock
           audioCtx={this.props.audioCtx}
           createBlock={this.props.createBlock}

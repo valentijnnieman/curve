@@ -1,12 +1,6 @@
 import * as React from "react";
-import {
-  Dialog,
-  FloatingActionButton,
-  TextField,
-  RaisedButton
-} from "material-ui";
+import { Dialog, TextField, RaisedButton } from "material-ui";
 import "./Dropdown.css";
-import ContentAdd from "material-ui/svg-icons/social/share";
 import { BlockDataOptions } from "../../types/blockData";
 import { Link } from "react-router-dom";
 
@@ -64,14 +58,8 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
       );
     }
     return (
-      <div>
-        <FloatingActionButton
-          mini={true}
-          className="share-menu-button"
-          onClick={this.handleOpen}
-        >
-          <ContentAdd />
-        </FloatingActionButton>
+      <div onClick={this.handleOpen}>
+        Share synth
         <Dialog
           title="Share synth"
           modal={false}
