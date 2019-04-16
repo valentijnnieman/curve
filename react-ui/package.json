@@ -40,7 +40,7 @@
     "standard": "^8.4.0",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.10.0",
-    "typescript": "^2.7.2",
+    "typescript": "^3.2.2",
     "web-audio-test-api": "^0.5.2"
   },
   "scripts": {
