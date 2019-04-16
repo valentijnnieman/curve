@@ -45,6 +45,19 @@ Run the app:
 
 The `react-ui` app is the frontend. On the server, `npm run build` is run, and the express app (server) handles everything. On local however, it's nice to make use of the webpack dev tools, so we run it independently!
 
+## Running the tests locally with Docker and Travis
+
+You can run the tests in Travis locally using Docker by first pulling the latest Travis Node image, using 
+
+```docker pull travisci/ci-nodejs:packer-1494866191```
+
+and fire up the image with:
+
+```docker run -it travisci/ci-nodejs:packer-1494866191 /bin/bash```
+
+then you can run `su - travis` to switch to the `travis` user, clone the repo in the `/` folder, run `npm install`, and finally manually run the Travis CI build command.
+
+
 ## Roadmap
 
 Here is some stuff I would love to implement next:

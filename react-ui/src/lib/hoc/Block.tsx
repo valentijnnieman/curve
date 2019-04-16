@@ -148,10 +148,7 @@ export const composedBlock = (
     };
     componentWillReceiveProps(nextProps: ComposedBlockProps) {
       if (this.props.block.outputs !== nextProps.block.outputs) {
-        this.props = nextProps;
         this.connectInternal();
-      } else {
-        this.props = nextProps;
       }
     }
     render() {

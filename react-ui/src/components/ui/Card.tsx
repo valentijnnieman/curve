@@ -1,5 +1,5 @@
 import * as React from "react";
-import Draggable, { DraggableData } from "react-draggable";
+import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import ClearIcon from "material-ui/svg-icons/content/clear";
 import "../ui/Card.css";
 import { IconButton } from "material-ui";
@@ -19,7 +19,7 @@ export class Card extends React.Component<CardProps> {
   render() {
     return (
       <Draggable
-        onDrag={(e: Event, data: DraggableData) => {
+        onDrag={(e: DraggableEvent, data: DraggableData) => {
           this.props.onDrag(data);
         }}
         cancel="input"

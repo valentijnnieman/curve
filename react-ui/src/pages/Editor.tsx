@@ -187,8 +187,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     }
   };
   componentWillReceiveProps(nextProps: EditorProps) {
-    this.props = nextProps;
-    this.lines = drawConnectionLines(this.props.blocks);
+    this.lines = drawConnectionLines(nextProps.blocks);
   }
   onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (this.state.wantsToConnect) {

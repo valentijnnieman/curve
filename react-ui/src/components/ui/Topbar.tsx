@@ -47,8 +47,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
     this.code = genWACode(this.props.blocks);
   }
   componentWillReceiveProps(nextProps: TopbarProps) {
-    this.props = nextProps;
-    this.code = genWACode(this.props.blocks);
+    this.code = genWACode(nextProps.blocks);
   }
   render() {
     return (

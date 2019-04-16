@@ -1,7 +1,8 @@
 import { BlockData, BlockDataOptions } from "../../types/blockData";
 import { buildInternal } from "./Editor";
 
-const configureMockStore = require("redux-mock-store"); // Prevent Ts warning.
+// const { configureMockStore } = require("redux-mock-store"); // Prevent Ts warning.
+import createMockStore from 'redux-mock-store';
 
 export const audioCtx = new AudioContext();
 
@@ -144,4 +145,4 @@ export const mockblocks: Array<BlockData> = [
   }
 ];
 
-export const mockStore = configureMockStore();
+export const mockStore = createMockStore();

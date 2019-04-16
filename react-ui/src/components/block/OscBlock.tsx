@@ -78,9 +78,9 @@ export class OscBlock extends React.Component<OscBlockProps> {
     if (newFreq >= 0 && typeof newFreq === "number") {
       (this.props.block
         .internal as InternalOscData).oscillator.frequency.setValueAtTime(
-        newFreq,
-        0
-      );
+          newFreq,
+          0
+        );
 
       // update block info in store
       const updatedBlock: BlockData = {
@@ -116,8 +116,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
     this.props.updateBlock(updatedBlock);
   }
   componentWillReceiveProps(nextProps: OscBlockProps) {
-    this.props = nextProps;
-    (this.props.block.internal as InternalOscData).oscillator.connect(this.props
+    (nextProps.block.internal as InternalOscData).oscillator.connect(nextProps
       .block.internal.gain as GainNode);
   }
 

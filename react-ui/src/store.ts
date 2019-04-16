@@ -11,7 +11,7 @@ import { StoreState } from "./types/storeState";
 //   }
 // }
 
-const store = createStore<StoreState>(
+const store = createStore<StoreState, any, any, any>(
   rootReducer,
   applyMiddleware(thunkMiddleware)
 );
