@@ -26,7 +26,7 @@ import { drawConnectionLines } from "../lib/helpers/Editor";
 import { RouteComponentProps } from "react-router";
 import { fetchState } from "../actions/state";
 import { LineGrid } from "../components/LineGrid";
-import { fetchUser } from "src/actions/user";
+import { fetchUser } from "../actions/user";
 
 interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
