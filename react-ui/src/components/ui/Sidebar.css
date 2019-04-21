@@ -9,3 +9,13 @@
   justify-content: center;
   padding: 32px;
 }
+.sidebar-bottom {
+  border-top: 1px solid black;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-bottom__lower {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}

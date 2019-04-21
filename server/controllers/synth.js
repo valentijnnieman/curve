@@ -20,7 +20,6 @@ const kebabCase = str => {
 
 module.exports = {
   create(req, res) {
-    console.log(req.body);
     return Synth.create({
       name: req.body.name,
       slug: kebabCase(req.body.name),

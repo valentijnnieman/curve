@@ -70,7 +70,7 @@ export function saveState(blocks: Array<BlockDataOptions>, name: string) {
       name,
       data: blocks
     };
-    return fetch("/synth/create", {
+    return fetch("/api/synth/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -98,7 +98,7 @@ export function saveState(blocks: Array<BlockDataOptions>, name: string) {
 
 export function fetchState(name: string) {
   return function(dispatch: any) {
-    return fetch("/synth/" + name)
+    return fetch("/api/synth/" + name)
       .then(
         response => response.json(),
         error => window.console.log("Error: ", error)

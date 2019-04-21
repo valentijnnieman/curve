@@ -26,6 +26,7 @@ import { drawConnectionLines } from "../lib/helpers/Editor";
 import { RouteComponentProps } from "react-router";
 import { fetchState } from "../actions/state";
 import { LineGrid } from "../components/LineGrid";
+import { fetchUser } from "src/actions/user";
 
 interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
@@ -33,6 +34,7 @@ interface EditorProps extends RouteComponentProps<any> {
   updateBlock: (block: BlockData) => void;
   deleteBlock: (id: number) => void;
   fetchState: (name: string) => void;
+  fetchUser: () => void;
 }
 
 interface EditorState {
@@ -54,6 +56,8 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   speakersDOMRect: HTMLDivElement;
   constructor(props: EditorProps) {
     super(props);
+
+    props.fetchUser();
 
     if (this.props.match.params) {
       const { name } = this.props.match.params;
@@ -369,6 +373,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     fetchState: (name: string) => {
       dispatch(fetchState(name));
+    },
+    fetchUser: () => {
+      dispatch(fetchUser());
     }
   };
 };

@@ -67,10 +67,11 @@ form {
 }
 .input label,
 .input input,
-.input div {
+.input--dropdown div {
   color: white !important;
 }
-.input--black input {
+.input--black input,
+.input--black label {
   color: black !important;
 }
 

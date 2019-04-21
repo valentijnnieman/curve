@@ -9,12 +9,17 @@ import { connect } from "react-redux";
 import { BlockData, BlockDataOptions } from "../../types/blockData";
 import { createBlock } from "../../actions/block";
 
-// import FlatButton from "material-ui/FlatButton";
 import { StoreState } from "../../types/storeState";
 import { CreateBlock } from "./CreateBlock";
+// import { Code } from "./Code";
 // import { ShareMenu } from "./ShareMenu";
 import { saveState } from "../../actions/state";
 import Sidebar from "./Sidebar";
+// import { Link } from "react-router-dom";
+// import { RaisedButton } from "material-ui";
+import { login, register } from "src/actions/user";
+import { logout } from "src/actions/user";
+import { Login } from "./Login";
 
 const CurveSVG = require("../../curve.svg");
 
@@ -32,6 +37,10 @@ interface TopbarProps {
   saveState: (blocks: Array<BlockDataOptions>, name: string) => void;
   error: string;
   success: string;
+  user: any;
+  login: (name: string, password: string) => void;
+  register: (name: string, email: string, password: string) => void;
+  logout: () => void;
 }
 
 class Topbar extends React.Component<TopbarProps, TopbarState> {
@@ -43,6 +52,20 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
     };
   }
   render() {
+    const { user } = this.props;
+    let userButton;
+    if (user && user.name) {
+      userButton = <h3 className="topbar-title thin">Welcome, {user.name}!</h3>;
+    } else {
+      userButton = (
+        <Login
+          login={this.props.login}
+          register={this.props.register}
+          error={this.props.error}
+          user={this.props.user}
+        />
+      );
+    }
     return (
       <div className="topbar-container">
         <div className="topbar">
@@ -52,6 +75,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
               <i>{this.props.name}</i>
             </h2>
           </div>
+          {userButton}
           {/* <FlatButton
             label="Tour"
             onClick={() => this.setState({ joyrideIsRunning: true })}
@@ -84,6 +108,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
   }
 }
 const mapStateToProps = ({
+  user,
   name,
   slug,
   blocks,
@@ -107,14 +132,22 @@ const mapStateToProps = ({
     blocks,
     audioCtx,
     error,
-    success
+    success,
+    user
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {
     createBlock: (block: BlockData) => dispatch(createBlock(block)),
     saveState: (blocks: Array<BlockDataOptions>, name: string) =>
-      dispatch(saveState(blocks, name))
+      dispatch(saveState(blocks, name)),
+    logout: () => dispatch(logout()),
+    login: (name: string, password: string) => {
+      dispatch(login(name, password));
+    },
+    register: (name: string, email: string, password: string) => {
+      dispatch(register(name, email, password));
+    }
   };
 };
 

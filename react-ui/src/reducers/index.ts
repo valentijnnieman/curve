@@ -20,6 +20,7 @@ const blockOptions: Array<BlockDataOptions> = [
 ];
 
 const initialState = {
+  user: {},
   name: "Unnamed synth",
   slug: "",
   blocks: [
@@ -59,6 +60,7 @@ export default (state: StoreState = initialState, action: any): StoreState => {
       };
     case "LOAD_STATE":
       const loadedState = {
+        user: {}, // TO-DO -> pass user along with fetched state
         name: action.name,
         slug: action.slug,
         blocks: [
@@ -87,6 +89,18 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         name: action.name,
         slug: action.slug,
         error: ""
+      };
+    case "USER_LOGIN":
+      return {
+        ...state,
+        error: "",
+        user: { name: action.name }
+      };
+    case "USER_LOGOUT":
+      return {
+        ...state,
+        error: "",
+        user: {}
       };
     default:
       return state;

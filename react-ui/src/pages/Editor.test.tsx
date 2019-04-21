@@ -34,6 +34,7 @@ describe("Editor", () => {
         updateBlock={mockUpdate}
         deleteBlock={mockDelete}
         fetchState={jest.fn()}
+        fetchUser={jest.fn()}
         audioCtx={audioCtx}
         match={{} as match<any>}
         location={{} as Location}

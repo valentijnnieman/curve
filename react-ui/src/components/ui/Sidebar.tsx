@@ -19,6 +19,8 @@ interface SidebarProps {
   saveState: (blocks: Array<BlockDataOptions>, name: string) => void;
   error: string;
   success: string;
+  user: any;
+  logout: () => void;
 }
 interface SidebarState {
   open: boolean;
@@ -42,6 +44,29 @@ export default class Sidebar extends React.Component<
   handleToggle = () => this.setState({ open: !this.state.open });
 
   render() {
+    const { name } = this.props.user;
+    let userMenu;
+    if (name) {
+      userMenu = (
+        <div className="sidebar-bottom">
+          <p style={{ textAlign: "center" }}>
+            <b>{name}</b>
+          </p>
+          <MenuItem style={{ textAlign: "center" }}>My Synths</MenuItem>
+          <div className="sidebar-bottom__lower">
+            <MenuItem
+              style={{ textAlign: "center" }}
+              onClick={() => {
+                window.console.log("clock out");
+                this.props.logout();
+              }}
+            >
+              Log Out
+            </MenuItem>
+          </div>
+        </div>
+      );
+    }
     return (
       <div>
         <FloatingActionButton
@@ -73,6 +98,7 @@ export default class Sidebar extends React.Component<
           <MenuItem style={{ textAlign: "center" }}>
             <Code code={this.code} />
           </MenuItem>
+          {userMenu}
         </Drawer>
       </div>
     );

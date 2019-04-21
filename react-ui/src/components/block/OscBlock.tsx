@@ -78,9 +78,9 @@ export class OscBlock extends React.Component<OscBlockProps> {
     if (newFreq >= 0 && typeof newFreq === "number") {
       (this.props.block
         .internal as InternalOscData).oscillator.frequency.setValueAtTime(
-          newFreq,
-          0
-        );
+        newFreq,
+        0
+      );
 
       // update block info in store
       const updatedBlock: BlockData = {
@@ -182,7 +182,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
             />
           </form>
           <DropDownMenu
-            className="input"
+            className="input input--dropdown"
             value={this.props.block.type}
             onChange={this.handleTypeChange}
           >
