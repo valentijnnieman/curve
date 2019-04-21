@@ -32,7 +32,7 @@ var migrationCommands = [
         name: {
           type: Sequelize.STRING,
           field: "name",
-          unique: false,
+          unique: true,
           allowNull: false
         },
         email: {
