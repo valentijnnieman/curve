@@ -13,7 +13,7 @@ var Sequelize = require("sequelize");
 var info = {
   revision: 1,
   name: "create-user",
-  created: "2019-04-18T22:08:31.763Z",
+  created: "2019-04-21T18:23:28.961Z",
   comment: ""
 };
 
@@ -86,7 +86,7 @@ var migrationCommands = [
           allowNull: false
         },
         data: {
-          type: Sequelize.JSONTYPE,
+          type: Sequelize.JSON,
           field: "data",
           allowNull: false
         },
@@ -108,8 +108,7 @@ var migrationCommands = [
           references: {
             model: "Users",
             key: "id"
-          },
-          allowNull: true
+          }
         }
       },
       {}
