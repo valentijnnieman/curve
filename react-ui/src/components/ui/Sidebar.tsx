@@ -1,6 +1,6 @@
 import * as React from "react";
 import Drawer from "material-ui/Drawer";
-import { FloatingActionButton } from "material-ui";
+import { FloatingActionButton, FlatButton } from "material-ui";
 import MenuItem from "material-ui/MenuItem";
 import ContentAdd from "material-ui/svg-icons/navigation/apps";
 import { ShareMenu } from "./ShareMenu";
@@ -46,12 +46,12 @@ export default class Sidebar extends React.Component<
   render() {
     const { name } = this.props.user;
     let userMenu;
+    let shareMenu = (
+      <FlatButton disabled={true}>Login to save synth</FlatButton>
+    );
     if (name) {
       userMenu = (
         <div className="sidebar-bottom">
-          <p style={{ textAlign: "center" }}>
-            <b>{name}</b>
-          </p>
           <MenuItem style={{ textAlign: "center" }}>My Synths</MenuItem>
           <div className="sidebar-bottom__lower">
             <MenuItem
@@ -65,6 +65,16 @@ export default class Sidebar extends React.Component<
             </MenuItem>
           </div>
         </div>
+      );
+      shareMenu = (
+        <ShareMenu
+          blocksToSave={this.props.blocksWithoutInternals}
+          saveState={this.props.saveState}
+          error={this.props.error}
+          success={this.props.success}
+          name={this.props.name}
+          slug={this.props.slug}
+        />
       );
     }
     return (
@@ -85,16 +95,10 @@ export default class Sidebar extends React.Component<
             <img src={CurveSVG} width={48} />
             <h1 style={{ textAlign: "center" }}>Curve</h1>
           </div>
-          <MenuItem style={{ textAlign: "center" }}>
-            <ShareMenu
-              blocksToSave={this.props.blocksWithoutInternals}
-              saveState={this.props.saveState}
-              error={this.props.error}
-              success={this.props.success}
-              name={this.props.name}
-              slug={this.props.slug}
-            />
-          </MenuItem>
+          <p style={{ textAlign: "center" }}>
+            <b>{name}</b>
+          </p>
+          <MenuItem style={{ textAlign: "center" }}>{shareMenu}</MenuItem>
           <MenuItem style={{ textAlign: "center" }}>
             <Code code={this.code} />
           </MenuItem>

@@ -25,7 +25,7 @@ export class Register extends React.Component<RegisterProps, any> {
 
   handleClose = () => {
     // close parent login modal too
-    this.props.closeLogin();
+    // this.props.closeLogin();
     this.setState({ open: false });
   };
   handleNameChange = (e: any) => {
@@ -72,7 +72,21 @@ export class Register extends React.Component<RegisterProps, any> {
   };
   handleFormSubmit = (e: any) => {
     e.preventDefault();
-    this.props.register(this.state.name, this.state.email, this.state.password);
+    if (this.state.password.length < 8) {
+      this.setState({
+        passwordError: "Password is too short."
+      });
+    } else if (this.state.password !== this.state.passwordAgain) {
+      this.setState({
+        passwordError: "Passwords do not match."
+      });
+    } else {
+      this.props.register(
+        this.state.name,
+        this.state.email,
+        this.state.password
+      );
+    }
   };
   render() {
     return (
@@ -91,7 +105,7 @@ export class Register extends React.Component<RegisterProps, any> {
               id="name"
               value={this.state.name}
               onChange={this.handleNameChange}
-              floatingLabelText="Name"
+              floatingLabelText="Username"
               className="input input--black"
               errorText={this.props.error}
               errorStyle={{ color: "red" }}

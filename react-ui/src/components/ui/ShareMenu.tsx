@@ -59,9 +59,9 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
     }
     return (
       <div onClick={this.handleOpen}>
-        Share synth
+        Save synth
         <Dialog
-          title="Share synth"
+          title="Save & share synth"
           modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}

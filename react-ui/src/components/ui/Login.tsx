@@ -62,7 +62,7 @@ export class Login extends React.Component<LoginProps, any> {
               id="name"
               value={this.state.name}
               onChange={this.handleNameChange}
-              floatingLabelText="Name"
+              floatingLabelText="Username"
               className="input input--black"
               errorText={this.props.error}
               errorStyle={{ color: "red" }}
