@@ -48,7 +48,15 @@ export function login(name: string, password: string) {
       body: JSON.stringify(data)
     })
       .then(response => {
-        return response.json();
+        if (
+          response.status === 200 ||
+          response.status === 201 ||
+          response.status === 304
+        ) {
+          return response.json();
+        } else {
+          throw Error("Could not log in with those credentials.");
+        }
       })
       .then(json => {
         if (json.errors) {
@@ -77,7 +85,11 @@ export function register(name: string, email: string, password: string) {
       body: JSON.stringify(data)
     })
       .then(response => {
-        if (response.status === 200 || response.status === 201) {
+        if (
+          response.status === 200 ||
+          response.status === 201 ||
+          response.status === 304
+        ) {
           return response.json();
         } else {
           throw Error("A user with those credentials already exists.");
@@ -87,7 +99,6 @@ export function register(name: string, email: string, password: string) {
         if (json.errors) {
           throw Error("Unable to log in!");
         } else {
-          window.console.log("json", json);
           dispatch(userLogin(json.name, json.id));
         }
       })

@@ -33,5 +33,15 @@ module.exports = {
         res.status(200).send(user);
       })
       .catch(error => res.status(400).send(error));
+  },
+  authenticate(name, password, done) {
+    User.findOne({ where: { name: name } }).then(user => {
+      if (!user) {
+        return done(null, false, { message: "Incorrect username." });
+      }
+      if (bcrypt.compareSync(password, user.password)) {
+        return done(null, user);
+      } else return done(null, false, { message: "Incorrect password." });
+    });
   }
 };

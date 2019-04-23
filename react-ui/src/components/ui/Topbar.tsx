@@ -57,7 +57,6 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
     };
   }
   render() {
-    window.console.log("props", this.props.user);
     const { user } = this.props;
     let userButton;
     if (user && user.name) {

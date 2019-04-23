@@ -25,7 +25,8 @@ export class SynthMenu extends React.Component<SynthMenuProps, SynthMenuState> {
     this.setState({ open: false });
   };
   render() {
-    const synthList = this.props.synths.map((synth, index) => {
+    const synths = this.props.synths.length > 0 ? this.props.synths : [];
+    const synthList = synths.map((synth, index) => {
       return (
         <Link
           key={index}

@@ -56,8 +56,9 @@ module.exports = {
           res.status(404).send({
             message: "No synths found for this user."
           });
+        } else {
+          res.status(200).send(synths);
         }
-        res.status(200).send(synths);
       })
       .catch(error => res.status(400).send(error));
   }

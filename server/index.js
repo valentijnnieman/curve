@@ -53,20 +53,10 @@ if (cluster.isMaster) {
   app.use(passport.session());
 
   passport.use(
-    new Strategy({ usernameField: "name", passwordField: "password" }, function(
-      name,
-      password,
-      done
-    ) {
-      User.findOne({ where: { name: name } }).then(user => {
-        if (!user) {
-          return done(null, false, { message: "Incorrect username." });
-        }
-        if (bcrypt.compareSync(password, user.password)) {
-          return done(null, user);
-        } else return done(null, false, { message: "Incorrect password." });
-      });
-    })
+    new Strategy(
+      { usernameField: "name", passwordField: "password" },
+      require("./controllers/user").authenticate
+    )
   );
 
   passport.serializeUser(function(user, done) {
@@ -96,7 +86,7 @@ if (cluster.isMaster) {
     "/api/register",
     [
       check("name")
-        .isLength({ min: 5 })
+        .isLength({ min: 3 })
         .trim()
         .escape(),
       check("password")
@@ -122,6 +112,11 @@ if (cluster.isMaster) {
   app.post(
     "/api/synth/create",
     ensureAuthenticated,
+    [
+      check("name")
+        .trim()
+        .escape()
+    ],
     require("./controllers/synth").create
   );
 
