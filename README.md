@@ -30,11 +30,12 @@ Setting up the database:
 
 - Create a development database using `createdb curve-dev`. The `createdb` command comes from the `pg` package installed by npm.
 - Enter your development database credentials in `server/config/config.json`, under `development`
+- Create a `.env.local` file that'll hold some ENV keys we'll need. In the file, set `curve_session_key=my_custom_key`.
 - Run migrations using `sequelize db:migrate`
 
 Run the server:
 
-- Run `npm start` in the root folder
+- Run `npm run dev` in the root folder
   The server is an express app that handles saving and sharing synths! It hosts the main React app in `react-ui` on the '/' route.
 
 Run the app:
@@ -47,16 +48,15 @@ The `react-ui` app is the frontend. On the server, `npm run build` is run, and t
 
 ## Running the tests locally with Docker and Travis
 
-You can run the tests in Travis locally using Docker by first pulling the latest Travis Node image, using 
+You can run the tests in Travis locally using Docker by first pulling the latest Travis Node image, using
 
-```docker pull travisci/ci-nodejs:packer-1494866191```
+`docker pull travisci/ci-nodejs:packer-1494866191`
 
 and fire up the image with:
 
-```docker run -it travisci/ci-nodejs:packer-1494866191 /bin/bash```
+`docker run -it travisci/ci-nodejs:packer-1494866191 /bin/bash`
 
 then you can run `su - travis` to switch to the `travis` user, clone the repo in the `/` folder, run `npm install`, and finally manually run the Travis CI build command.
-
 
 ## Roadmap
 

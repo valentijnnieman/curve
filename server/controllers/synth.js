@@ -20,11 +20,11 @@ const kebabCase = str => {
 
 module.exports = {
   create(req, res) {
-    console.log(req.body);
     return Synth.create({
       name: req.body.name,
       slug: kebabCase(req.body.name),
-      data: req.body.data
+      data: req.body.data,
+      userId: req.body.userId
     })
       .then(synth => res.status(201).send(synth))
       .catch(error => res.status(400).send(error));
@@ -42,6 +42,23 @@ module.exports = {
           });
         }
         res.status(200).send(synth);
+      })
+      .catch(error => res.status(400).send(error));
+  },
+  queryAll(req, res) {
+    return Synth.findAll({
+      where: {
+        userId: req.params.id
+      }
+    })
+      .then(synths => {
+        if (!synths || synths.length < 1) {
+          res.status(404).send({
+            message: "No synths found for this user."
+          });
+        } else {
+          res.status(200).send(synths);
+        }
       })
       .catch(error => res.status(400).send(error));
   }

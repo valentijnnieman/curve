@@ -5,12 +5,17 @@ import { BlockDataOptions } from "../../types/blockData";
 import { Link } from "react-router-dom";
 
 interface ShareMenuProps {
-  saveState: (blocksToSave: Array<BlockDataOptions>, name: string) => void;
+  saveState: (
+    blocksToSave: Array<BlockDataOptions>,
+    name: string,
+    id: number
+  ) => void;
   name: string;
   slug: string;
   blocksToSave: Array<BlockDataOptions>;
   error: string;
   success: string;
+  user: any;
 }
 interface ShareMenuState {
   open: boolean;
@@ -40,7 +45,11 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
   };
   handleFormSubmit = (e: any) => {
     e.preventDefault();
-    this.props.saveState(this.props.blocksToSave, this.state.name);
+    this.props.saveState(
+      this.props.blocksToSave,
+      this.state.name,
+      this.props.user.id
+    );
   };
   render() {
     let successElement;
@@ -50,7 +59,7 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
           <p className="success-text">{this.props.success}</p>
           <p>
             You can share your synth using this link:{" "}
-            <Link to={"/" + this.props.slug} onClick={this.handleClose}>
+            <Link to={"/synth/" + this.props.slug} onClick={this.handleClose}>
               {this.props.slug}
             </Link>
           </p>
@@ -59,9 +68,9 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
     }
     return (
       <div onClick={this.handleOpen}>
-        Share synth
+        Save synth
         <Dialog
-          title="Share synth"
+          title="Save & share synth"
           modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}

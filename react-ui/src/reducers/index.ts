@@ -20,7 +20,9 @@ const blockOptions: Array<BlockDataOptions> = [
 ];
 
 const initialState = {
+  user: {},
   name: "Unnamed synth",
+  synths: [],
   slug: "",
   blocks: [
     {
@@ -59,8 +61,10 @@ export default (state: StoreState = initialState, action: any): StoreState => {
       };
     case "LOAD_STATE":
       const loadedState = {
+        user: state.user,
         name: action.name,
         slug: action.slug,
+        synths: [], // TO-DO -> pass synths allong
         blocks: [
           ...action.blockOptions.map((option: BlockDataOptions) => {
             return {
@@ -75,6 +79,12 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         lastId: initialState.lastId
       };
       return loadedState;
+
+    case "LOAD_SYNTHS":
+      return {
+        ...state,
+        synths: action.synths
+      };
     case "FETCH_ERRORS":
       return {
         ...state,
@@ -87,6 +97,19 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         name: action.name,
         slug: action.slug,
         error: ""
+      };
+    case "USER_LOGIN":
+      return {
+        ...state,
+        error: "",
+        user: { name: action.name, id: action.id }
+      };
+    case "USER_LOGOUT":
+      return {
+        ...state,
+        error: "",
+        user: {},
+        synths: []
       };
     default:
       return state;

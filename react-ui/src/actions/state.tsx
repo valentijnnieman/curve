@@ -9,6 +9,11 @@ export interface LoadStateAction {
   slug: string;
 }
 
+export interface LoadSynthsAction {
+  type: "LOAD_SYNTHS";
+  synths: Array<any>;
+}
+
 export interface RetrieveBlocksAction {
   type: "RETRIEVE_BLOCKS";
 }
@@ -38,6 +43,13 @@ export function loadState(
   };
 }
 
+export function loadSynths(synths: Array<string>): LoadSynthsAction {
+  return {
+    type: "LOAD_SYNTHS",
+    synths
+  };
+}
+
 export function retrieveBlocks(): RetrieveBlocksAction {
   return {
     type: "RETRIEVE_BLOCKS"
@@ -64,13 +76,19 @@ function fetchSuccess(
   };
 }
 
-export function saveState(blocks: Array<BlockDataOptions>, name: string) {
+export function saveState(
+  blocks: Array<BlockDataOptions>,
+  name: string,
+  id: number
+) {
   return function(dispatch: any) {
+    window.console.log("User id: ", id);
     const data = {
       name,
-      data: blocks
+      data: blocks,
+      userId: id
     };
-    return fetch("/synth/create", {
+    return fetch("/api/synth/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -98,13 +116,31 @@ export function saveState(blocks: Array<BlockDataOptions>, name: string) {
 
 export function fetchState(name: string) {
   return function(dispatch: any) {
-    return fetch("/synth/" + name)
+    return fetch("/api/synth/" + name)
       .then(
         response => response.json(),
         error => window.console.log("Error: ", error)
       )
       .then(json => {
         dispatch(loadState(json[0].data, json[0].name, json[0].slug));
+      })
+      .catch(e => {
+        window.console.log(e);
+      });
+  };
+}
+
+export function fetchSynths(id: number) {
+  return function(dispatch: any) {
+    return fetch("/api/synths/" + id)
+      .then(
+        response => {
+          return response.json();
+        },
+        error => window.console.log("Error: ", error)
+      )
+      .then(json => {
+        dispatch(loadSynths(json));
       })
       .catch(e => {
         window.console.log(e);

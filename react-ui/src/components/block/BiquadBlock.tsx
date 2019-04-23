@@ -178,7 +178,7 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
             />
           </form>
           <DropDownMenu
-            className="input"
+            className="input input--dropdown"
             value={this.props.block.type}
             onChange={this.handleTypeChange}
           >

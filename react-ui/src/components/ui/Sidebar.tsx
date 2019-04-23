@@ -1,6 +1,6 @@
 import * as React from "react";
 import Drawer from "material-ui/Drawer";
-import { FloatingActionButton } from "material-ui";
+import { FloatingActionButton, FlatButton } from "material-ui";
 import MenuItem from "material-ui/MenuItem";
 import ContentAdd from "material-ui/svg-icons/navigation/apps";
 import { ShareMenu } from "./ShareMenu";
@@ -8,6 +8,7 @@ import "./Sidebar.css";
 import { BlockDataOptions, BlockData } from "src/types/blockData";
 import { genWACode } from "../../lib/helpers/Editor";
 import { Code } from "./Code";
+import { SynthMenu } from "./SynthMenu";
 const CurveSVG = require("../../curve.svg");
 
 interface SidebarProps {
@@ -16,9 +17,16 @@ interface SidebarProps {
   blocks: Array<BlockData>;
   blocksWithoutInternals: Array<BlockData>;
   createBlock: (block: BlockData) => void;
-  saveState: (blocks: Array<BlockDataOptions>, name: string) => void;
+  saveState: (
+    blocks: Array<BlockDataOptions>,
+    name: string,
+    id: number
+  ) => void;
   error: string;
   success: string;
+  user: any;
+  synths: Array<any>;
+  logout: () => void;
 }
 interface SidebarState {
   open: boolean;
@@ -42,6 +50,43 @@ export default class Sidebar extends React.Component<
   handleToggle = () => this.setState({ open: !this.state.open });
 
   render() {
+    const { name } = this.props.user;
+    let userMenu;
+    let shareMenu = (
+      <FlatButton disabled={true}>Login to save synth</FlatButton>
+    );
+    if (name) {
+      userMenu = (
+        <div className="sidebar-bottom">
+          {/* <MenuItem style={{ textAlign: "center" }}>My Synths</MenuItem> */}
+          <MenuItem style={{ textAlign: "center" }}>
+            <SynthMenu synths={this.props.synths} />
+          </MenuItem>
+          <div className="sidebar-bottom__lower">
+            <MenuItem
+              style={{ textAlign: "center" }}
+              onClick={() => {
+                window.console.log("clock out");
+                this.props.logout();
+              }}
+            >
+              Log Out
+            </MenuItem>
+          </div>
+        </div>
+      );
+      shareMenu = (
+        <ShareMenu
+          blocksToSave={this.props.blocksWithoutInternals}
+          saveState={this.props.saveState}
+          error={this.props.error}
+          success={this.props.success}
+          name={this.props.name}
+          slug={this.props.slug}
+          user={this.props.user}
+        />
+      );
+    }
     return (
       <div>
         <FloatingActionButton
@@ -60,19 +105,14 @@ export default class Sidebar extends React.Component<
             <img src={CurveSVG} width={48} />
             <h1 style={{ textAlign: "center" }}>Curve</h1>
           </div>
-          <MenuItem style={{ textAlign: "center" }}>
-            <ShareMenu
-              blocksToSave={this.props.blocksWithoutInternals}
-              saveState={this.props.saveState}
-              error={this.props.error}
-              success={this.props.success}
-              name={this.props.name}
-              slug={this.props.slug}
-            />
-          </MenuItem>
+          <p style={{ textAlign: "center" }}>
+            <b>{name}</b>
+          </p>
+          <MenuItem style={{ textAlign: "center" }}>{shareMenu}</MenuItem>
           <MenuItem style={{ textAlign: "center" }}>
             <Code code={this.code} />
           </MenuItem>
+          {userMenu}
         </Drawer>
       </div>
     );

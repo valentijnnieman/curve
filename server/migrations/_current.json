@@ -1,0 +1,96 @@
+{
+    "tables": {
+        "Synths": {
+            "tableName": "Synths",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "name": {
+                    "allowNull": false,
+                    "unique": true,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "slug": {
+                    "allowNull": false,
+                    "unique": true,
+                    "field": "slug",
+                    "seqType": "Sequelize.STRING"
+                },
+                "data": {
+                    "allowNull": false,
+                    "field": "data",
+                    "seqType": "Sequelize.JSONTYPE"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "userId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "userId",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "Users": {
+            "tableName": "Users",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "name": {
+                    "allowNull": false,
+                    "unique": false,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "email": {
+                    "allowNull": false,
+                    "unique": true,
+                    "validate": {
+                        "isEmail": true
+                    },
+                    "field": "email",
+                    "seqType": "Sequelize.STRING"
+                },
+                "password": {
+                    "allowNull": false,
+                    "field": "password",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "revision": 1
+}
