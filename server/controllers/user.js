@@ -1,11 +1,19 @@
 const User = require("../models").User;
+const bcrypt = require("bcrypt");
+const { validationResult } = require("express-validator/check");
 
 module.exports = {
   create(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(422).send(errors.array()[0].message);
+    }
+    const hashedPassword = bcrypt.hashSync(req.body.password, 8);
+
     return User.create({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: hashedPassword
     })
       .then(user => res.status(201).send(user))
       .catch(error => res.status(400).send(error));

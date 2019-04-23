@@ -8,6 +8,7 @@ import "./Sidebar.css";
 import { BlockDataOptions, BlockData } from "src/types/blockData";
 import { genWACode } from "../../lib/helpers/Editor";
 import { Code } from "./Code";
+import { SynthMenu } from "./SynthMenu";
 const CurveSVG = require("../../curve.svg");
 
 interface SidebarProps {
@@ -16,10 +17,15 @@ interface SidebarProps {
   blocks: Array<BlockData>;
   blocksWithoutInternals: Array<BlockData>;
   createBlock: (block: BlockData) => void;
-  saveState: (blocks: Array<BlockDataOptions>, name: string) => void;
+  saveState: (
+    blocks: Array<BlockDataOptions>,
+    name: string,
+    id: number
+  ) => void;
   error: string;
   success: string;
   user: any;
+  synths: Array<any>;
   logout: () => void;
 }
 interface SidebarState {
@@ -52,7 +58,10 @@ export default class Sidebar extends React.Component<
     if (name) {
       userMenu = (
         <div className="sidebar-bottom">
-          <MenuItem style={{ textAlign: "center" }}>My Synths</MenuItem>
+          {/* <MenuItem style={{ textAlign: "center" }}>My Synths</MenuItem> */}
+          <MenuItem style={{ textAlign: "center" }}>
+            <SynthMenu synths={this.props.synths} />
+          </MenuItem>
           <div className="sidebar-bottom__lower">
             <MenuItem
               style={{ textAlign: "center" }}
@@ -74,6 +83,7 @@ export default class Sidebar extends React.Component<
           success={this.props.success}
           name={this.props.name}
           slug={this.props.slug}
+          user={this.props.user}
         />
       );
     }

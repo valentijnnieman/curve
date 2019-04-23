@@ -34,13 +34,18 @@ interface TopbarProps {
   blocks: Array<BlockData>;
   blocksWithoutInternals: Array<BlockData>;
   createBlock: (block: BlockData) => void;
-  saveState: (blocks: Array<BlockDataOptions>, name: string) => void;
+  saveState: (
+    blocks: Array<BlockDataOptions>,
+    name: string,
+    id: number
+  ) => void;
   error: string;
   success: string;
   user: any;
   login: (name: string, password: string) => void;
   register: (name: string, email: string, password: string) => void;
   logout: () => void;
+  synths: Array<any>;
 }
 
 class Topbar extends React.Component<TopbarProps, TopbarState> {
@@ -52,6 +57,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
     };
   }
   render() {
+    window.console.log("props", this.props.user);
     const { user } = this.props;
     let userButton;
     if (user && user.name) {
@@ -114,7 +120,8 @@ const mapStateToProps = ({
   blocks,
   audioCtx,
   error,
-  success
+  success,
+  synths
 }: StoreState) => {
   const copiedBlocks = blocks.map(block => {
     return { ...block };
@@ -133,14 +140,15 @@ const mapStateToProps = ({
     audioCtx,
     error,
     success,
-    user
+    user,
+    synths
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {
     createBlock: (block: BlockData) => dispatch(createBlock(block)),
-    saveState: (blocks: Array<BlockDataOptions>, name: string) =>
-      dispatch(saveState(blocks, name)),
+    saveState: (blocks: Array<BlockDataOptions>, name: string, id: number) =>
+      dispatch(saveState(blocks, name, id)),
     logout: () => dispatch(logout()),
     login: (name: string, password: string) => {
       dispatch(login(name, password));

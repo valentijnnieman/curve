@@ -5,6 +5,7 @@ export interface StoreState {
   name: string;
   slug: string;
   blocks: Array<BlockData>;
+  synths: Array<string>;
   audioCtx: AudioContext;
   error: string;
   success: string;

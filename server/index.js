@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 // const session = require("express-session");
 const cookieSession = require("cookie-session");
+const { check } = require("express-validator/check");
 
 const User = require("./models").User;
 
@@ -33,32 +34,24 @@ if (cluster.isMaster) {
 } else {
   const app = express();
 
-  // app.use(require("morgan")("combined"));
-  // app.use(require("cookie-parser")("curve-dev-secret"));
+  app.use(require("morgan")("combined"));
   app.use(bodyParser.json());
-  // app.use(
-  //   session({
-  //     secret: "curve-dev-secret",
-  //     resave: false,
-  //     saveUninitialized: true
-  //   })
-  // );
+  const session_key =
+    process.env.NODE_ENV === "production"
+      ? process.env.curve_session_key
+      : "curve-local-key";
+  console.log(session_key);
+  console.log(process.env.NODE_ENV);
   app.use(
     cookieSession({
       name: "session",
-      keys: ["curve-dev-secret"],
+      keys: [session_key],
       maxAge: 24 * 60 * 60 * 1000 // 24hours
     })
   );
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // Configure the local strategy for use by Passport.
-  //
-  // The local strategy require a `verify` function which receives the credentials
-  // (`username` and `password`) submitted by the user.  The function must verify
-  // that the password is correct and then invoke `cb` with a user object, which
-  // will be set at `req.user` in route handlers after authentication.
   passport.use(
     new Strategy({ usernameField: "name", passwordField: "password" }, function(
       name,
@@ -67,30 +60,20 @@ if (cluster.isMaster) {
     ) {
       User.findOne({ where: { name: name } }).then(user => {
         if (!user) {
-          console.log("No user found!");
           return done(null, false, { message: "Incorrect username." });
         }
-        if (password == user.password) {
-          console.log("Found user, returning.");
+        if (bcrypt.compareSync(password, user.password)) {
           return done(null, user);
         } else return done(null, false, { message: "Incorrect password." });
       });
     })
   );
-  // Configure Passport authenticated session persistence.
-  //
-  // In order to restore authentication state across HTTP requests, Passport needs
-  // to serialize users into and deserialize users out of the session.  The
-  // typical implementation of this is as simple as supplying the user ID when
-  // serializing, and querying the user record by ID from the database when
-  // deserializing.
+
   passport.serializeUser(function(user, done) {
-    console.log("[[[ SERIALIZING USER ]]]]: ", user.id);
     done(null, user.id);
   });
 
   passport.deserializeUser(function(id, done) {
-    console.log("[[[ DE-SERIALIZING USER ]]]]: ", id);
     User.findByPk(id)
       .then(function(user) {
         done(null, user);
@@ -109,7 +92,20 @@ if (cluster.isMaster) {
     res.status(201).send({ name: req.user.name });
   });
 
-  app.post("/api/register", require("./controllers/user").create);
+  app.post(
+    "/api/register",
+    [
+      check("name")
+        .isLength({ min: 5 })
+        .trim()
+        .escape(),
+      check("password")
+        .isLength({ min: 8 })
+        .trim()
+        .escape()
+    ],
+    require("./controllers/user").create
+  );
 
   app.get("/api/logout", function(req, res) {
     req.logout();
@@ -117,9 +113,8 @@ if (cluster.isMaster) {
   });
 
   app.get("/api/user", ensureAuthenticated, function(req, res) {
-    console.log("req.user.id: ", req.user.id);
     User.findByPk(req.user.id)
-      .then(user => res.status(201).send({ name: user.name }))
+      .then(user => res.status(201).send({ name: user.name, id: user.id }))
       .catch(error => res.status(400).send(error));
   });
 
@@ -132,6 +127,9 @@ if (cluster.isMaster) {
 
   // Get synth route
   app.get("/api/synth/:name", require("./controllers/synth").query);
+
+  // Get all synths for users route
+  app.get("/api/synths/:id", require("./controllers/synth").queryAll);
 
   // All remaining requests return the React app, so it can handle routing.
   app.get("*", function(request, response) {
@@ -148,7 +146,6 @@ if (cluster.isMaster) {
 
   // Authentication middleware
   function ensureAuthenticated(req, res, next) {
-    console.log(req.user);
     if (req.isAuthenticated()) {
       return next();
     }

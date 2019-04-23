@@ -1,11 +1,15 @@
+import { fetchSynths } from "./state";
+
 export interface UserLoginAction {
   type: "USER_LOGIN";
   name: string;
+  id: number;
 }
-export function userLogin(name: string): UserLoginAction {
+export function userLogin(name: string, id: number): UserLoginAction {
   return {
     type: "USER_LOGIN",
-    name
+    name,
+    id
   };
 }
 export interface UserLogoutAction {
@@ -44,18 +48,13 @@ export function login(name: string, password: string) {
       body: JSON.stringify(data)
     })
       .then(response => {
-        if (response.status === 200 || response.status === 201) {
-          return response.json();
-        } else {
-          throw Error("Unrecognized name and password combination");
-        }
+        return response.json();
       })
       .then(json => {
         if (json.errors) {
           throw Error("Unable to log in!");
         } else {
-          window.console.log("json", json);
-          dispatch(userLogin(json.name));
+          dispatch(userLogin(json.name, json.id));
         }
       })
       .catch((error: Error) => dispatch(fetchErrors(error.message)));
@@ -89,7 +88,7 @@ export function register(name: string, email: string, password: string) {
           throw Error("Unable to log in!");
         } else {
           window.console.log("json", json);
-          dispatch(userLogin(json.name));
+          dispatch(userLogin(json.name, json.id));
         }
       })
       .catch((error: Error) => dispatch(fetchErrors(error.message)));
@@ -126,14 +125,12 @@ export function fetchUser() {
       credentials: "same-origin"
     })
       .then(response => {
-        if (response.status === 200 || response.status === 201) {
-          return response.json();
-        } else {
-          throw Error("No session data found.");
-        }
+        return response.json();
       })
+      .catch(error => window.console.error(error))
       .then(json => {
-        dispatch(userLogin(json.name));
+        dispatch(userLogin(json.name, json.id));
+        dispatch(fetchSynths(json.id));
       });
   };
 }
