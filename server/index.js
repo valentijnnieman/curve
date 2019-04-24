@@ -5,7 +5,6 @@ const path = require("path");
 const cluster = require("cluster");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
-// const session = require("express-session");
 const cookieSession = require("cookie-session");
 const { check } = require("express-validator/check");
 
@@ -40,8 +39,7 @@ if (cluster.isMaster) {
     process.env.NODE_ENV === "production"
       ? process.env.curve_session_key
       : "curve-local-key";
-  console.log(session_key);
-  console.log(process.env.NODE_ENV);
+
   app.use(
     cookieSession({
       name: "session",
@@ -145,6 +143,5 @@ if (cluster.isMaster) {
       return next();
     }
     res.status(401).send("Unauthorized session!");
-    // res.redirect("/login");
   }
 }
