@@ -27,7 +27,10 @@ module.exports = {
       userId: req.body.userId
     })
       .then(synth => res.status(201).send(synth))
-      .catch(error => res.status(400).send(error));
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
   },
   query(req, res) {
     return Synth.findAll({
@@ -61,5 +64,10 @@ module.exports = {
         }
       })
       .catch(error => res.status(400).send(error));
+  },
+  destroy(req, res) {
+    return Synth.destroy({ where: { id: req.body.id } })
+      .then(response => response.status(200))
+      .catch(error => res.status(500).send(error));
   }
 };

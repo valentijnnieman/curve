@@ -4,7 +4,6 @@ const Strategy = require("passport-local").Strategy;
 const path = require("path");
 const cluster = require("cluster");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");
 const cookieSession = require("cookie-session");
 const { check } = require("express-validator/check");
 

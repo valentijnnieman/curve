@@ -82,7 +82,6 @@ export function saveState(
   id: number
 ) {
   return function(dispatch: any) {
-    window.console.log("User id: ", id);
     const data = {
       name,
       data: blocks,
