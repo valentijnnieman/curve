@@ -1,37 +1,42 @@
 const assert = require("assert");
-const mocks = require("node-mocks-http");
+const httpMocks = require("node-mocks-http");
+const proxyquire = require("proxyquire");
+const SequelizeMock = require("sequelize-mock");
 
-const User = require("../server/controllers/user");
+const dbMock = new SequelizeMock();
+
+const mockUser = dbMock.define("User", {
+  id: 1,
+  name: "Test user",
+  email: "test@test.com",
+  password: "test-pwd"
+});
+const mockSynth = dbMock.define("User", {
+  id: 1,
+  name: "Test synth",
+  data: [],
+  userId: 1
+});
+
+const synthController = proxyquire("../server/controllers/synth", {
+  "../models/synth": mockSynth,
+  "../models/user": mockUser
+});
 
 describe("Synth controller", () => {
   describe(".create()", () => {
     it("should return status 201", async () => {
-      const Synth = require("../server/controllers/synth");
-      const request = {
-        body: {
-          name: "Test-synth",
-          data: [],
-          userId: 1
-        }
+      const data = {
+        name: "Test-synth",
+        data: [],
+        userId: 1
       };
-      const response = mocks.createResponse();
-      await Synth.create(request, response);
+
+      const response = httpMocks.createResponse();
+
+      await synthController.create({ body: data }, response);
       assert.equal(response.statusCode, 201);
-      await Synth.destroy({ body: { id: 0 } }, response);
     });
-    it("should return valid JSON", () => {
-      const Synth = require("../server/controllers/synth");
-      const request = {
-        body: {
-          name: "Test",
-          slug: "test",
-          data: [],
-          userId: 0
-        }
-      };
-      const response = mocks.createResponse();
-      Synth.create(request, response);
-      // assert.equal(response.status(), {});
-    });
+    it("should return valid JSON", () => {});
   });
 });
