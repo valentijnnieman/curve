@@ -18,8 +18,8 @@ const kebabCase = str => {
   return str;
 };
 
-module.exports = {
-  create(req, res) {
+class SynthController {
+  static create(req, res) {
     return Synth.create({
       name: req.body.name,
       slug: kebabCase(req.body.name),
@@ -27,12 +27,9 @@ module.exports = {
       userId: req.body.userId
     })
       .then(synth => res.status(201).send(synth))
-      .catch(error => {
-        console.log(error);
-        res.status(400).send(error);
-      });
-  },
-  query(req, res) {
+      .catch(error => res.status(400).send(error));
+  }
+  static query(req, res) {
     return Synth.findAll({
       where: {
         slug: req.params.name
@@ -47,8 +44,8 @@ module.exports = {
         res.status(200).send(synth);
       })
       .catch(error => res.status(400).send(error));
-  },
-  queryAll(req, res) {
+  }
+  static queryAll(req, res) {
     return Synth.findAll({
       where: {
         userId: req.params.id
@@ -64,10 +61,17 @@ module.exports = {
         }
       })
       .catch(error => res.status(400).send(error));
-  },
-  destroy(req, res) {
-    return Synth.destroy({ where: { id: req.body.id } })
-      .then(response => response.status(200))
-      .catch(error => res.status(500).send(error));
   }
-};
+  static update(req, res) {
+    return Synth.update({ ...req.body }, { where: { id: req.body.id } })
+      .then(synth => res.status(200).send(synth))
+      .catch(error => res.status(400).send(error));
+  }
+  static delete(req, res) {
+    return Synth.destroy({ where: { id: req.body.id } })
+      .then(response => res.status(200).send(response))
+      .catch(error => res.status(400).send(error));
+  }
+}
+
+module.exports = SynthController;

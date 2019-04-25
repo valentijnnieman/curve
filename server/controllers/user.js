@@ -2,8 +2,8 @@ const User = require("../models").User;
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator/check");
 
-module.exports = {
-  create(req, res) {
+class UserController {
+  static create(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(422).send(errors.array()[0].message);
@@ -17,24 +17,13 @@ module.exports = {
     })
       .then(user => res.status(201).send(user))
       .catch(error => res.status(400).send(error));
-  },
-  query(req, res) {
-    return User.findAll({
-      where: {
-        email: req.params.email
-      }
-    })
-      .then(user => {
-        if (!user) {
-          res.status(404).send({
-            message: "No user found with this email."
-          });
-        }
-        res.status(200).send(user);
-      })
+  }
+  static query(req, res) {
+    return User.findByPk(req.user.id)
+      .then(user => res.status(201).send({ name: user.name, id: user.id }))
       .catch(error => res.status(400).send(error));
-  },
-  authenticate(name, password, done) {
+  }
+  static authenticate(name, password, done) {
     User.findOne({ where: { name: name } }).then(user => {
       if (!user) {
         return done(null, false, { message: "Incorrect username." });
@@ -44,4 +33,16 @@ module.exports = {
       } else return done(null, false, { message: "Incorrect password." });
     });
   }
-};
+  static update(req, res) {
+    return User.update({ ...req.body }, { where: { id: req.body.id } })
+      .then(user => res.status(200).send(user))
+      .catch(error => res.status(400).send(error));
+  }
+  static delete(req, res) {
+    return User.destroy({ where: { id: req.body.id } })
+      .then(response => res.status(200).send(response))
+      .catch(error => res.status(400).send(error));
+  }
+}
+
+module.exports = UserController;

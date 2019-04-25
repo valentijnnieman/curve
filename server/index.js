@@ -9,6 +9,9 @@ const { check } = require("express-validator/check");
 
 const User = require("./models").User;
 
+const UserController = require("./controllers/user");
+const SynthController = require("./controllers/synth");
+
 const numCPUs = require("os").cpus().length;
 
 const PORT = process.env.PORT || 5000;
@@ -52,15 +55,23 @@ if (cluster.isMaster) {
   passport.use(
     new Strategy(
       { usernameField: "name", passwordField: "password" },
-      require("./controllers/user").authenticate
+      UserController.authenticate
     )
   );
 
-  passport.serializeUser(function(user, done) {
+  // Authentication middleware
+  const ensureAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.status(401).send("Unauthorized session!");
+  };
+
+  passport.serializeUser((user, done) => {
     done(null, user.id);
   });
 
-  passport.deserializeUser(function(id, done) {
+  passport.deserializeUser((id, done) => {
     User.findByPk(id)
       .then(function(user) {
         done(null, user);
@@ -91,7 +102,7 @@ if (cluster.isMaster) {
         .trim()
         .escape()
     ],
-    require("./controllers/user").create
+    UserController.create
   );
 
   app.get("/api/logout", function(req, res) {
@@ -99,11 +110,7 @@ if (cluster.isMaster) {
     res.redirect("/");
   });
 
-  app.get("/api/user", ensureAuthenticated, function(req, res) {
-    User.findByPk(req.user.id)
-      .then(user => res.status(201).send({ name: user.name, id: user.id }))
-      .catch(error => res.status(400).send(error));
-  });
+  app.get("/api/user", ensureAuthenticated, UserController.query);
 
   // Create synth route
   app.post(
@@ -114,17 +121,17 @@ if (cluster.isMaster) {
         .trim()
         .escape()
     ],
-    require("./controllers/synth").create
+    SynthController.create
   );
 
   // Get synth route
-  app.get("/api/synth/:name", require("./controllers/synth").query);
+  app.get("/api/synth/:name", SynthController.query);
 
   // Get all synths for users route
-  app.get("/api/synths/:id", require("./controllers/synth").queryAll);
+  app.get("/api/synths/:id", SynthController.queryAll);
 
   // All remaining requests return the React app, so it can handle routing.
-  app.get("*", function(request, response) {
+  app.get("*", (request, response) => {
     response.sendFile(
       path.resolve(__dirname, "../react-ui/build", "index.html")
     );
@@ -135,12 +142,4 @@ if (cluster.isMaster) {
       `Node cluster worker ${process.pid}: listening on port ${PORT}`
     );
   });
-
-  // Authentication middleware
-  function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.status(401).send("Unauthorized session!");
-  }
 }

@@ -1,6 +1,5 @@
-"use strict";
 module.exports = (sequelize, DataTypes) => {
-  var Synth = sequelize.define(
+  const Synth = sequelize.define(
     "Synth",
     {
       name: {
