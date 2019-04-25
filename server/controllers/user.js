@@ -33,6 +33,16 @@ class UserController {
       } else return done(null, false, { message: "Incorrect password." });
     });
   }
+  static update(req, res) {
+    return User.update({ ...req.body }, { where: { id: req.body.id } })
+      .then(user => res.status(200).send(user))
+      .catch(error => res.status(400).send(error));
+  }
+  static delete(req, res) {
+    return User.destroy({ where: { id: req.body.id } })
+      .then(response => res.status(200).send(response))
+      .catch(error => res.status(400).send(error));
+  }
 }
 
 module.exports = UserController;

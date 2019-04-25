@@ -62,7 +62,16 @@ class SynthController {
       })
       .catch(error => res.status(400).send(error));
   }
-  // TODO: update, delete
+  static update(req, res) {
+    return Synth.update({ ...req.body }, { where: { id: req.body.id } })
+      .then(synth => res.status(200).send(synth))
+      .catch(error => res.status(400).send(error));
+  }
+  static delete(req, res) {
+    return Synth.destroy({ where: { id: req.body.id } })
+      .then(response => res.status(200).send(response))
+      .catch(error => res.status(400).send(error));
+  }
 }
 
 module.exports = SynthController;
