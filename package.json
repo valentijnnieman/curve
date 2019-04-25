@@ -4,7 +4,10 @@
   "scripts": {
     "start": "NODE_ENV=production nodemon server",
     "dev": "NODE_ENV=development nodemon server",
-    "test": "cd react-ui/ && npm run test",
+    "test": "npm run test.backend",
+    "test.backend": "NODE_ENV=test mocha --exit",
+    "test.backend.watch": "NODE_ENV=test mocha --watch",
+    "test.frontend": "cd react-ui/ && npm run test",
     "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "cacheDirectories": [
@@ -38,5 +41,13 @@
     "visual",
     "curve"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "node-mocks-http": "^1.7.3",
+    "proxyquire": "^2.1.0",
+    "sequelize-mock": "^0.10.2",
+    "sinon": "^7.3.2"
+  }
 }
