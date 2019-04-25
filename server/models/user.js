@@ -1,6 +1,5 @@
-"use strict";
 module.exports = (sequelize, DataTypes) => {
-  var User = sequelize.define(
+  const User = sequelize.define(
     "User",
     {
       id: {
