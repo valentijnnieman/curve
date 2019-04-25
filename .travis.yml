@@ -1,13 +1,16 @@
 sudo: false
 language: node_js
 node_js:
-- '10'
+  - "10"
 script:
-- cd react-ui
-- npm i
-- npm test
-- rm -rf ./node_modules
-- cd ../
+  - cd react-ui
+  - npm i
+  - npm test
+  - rm -rf ./node_modules
+  - cd ../
+  - npm i
+  - npm test
+  - rm -rf ./node_modules
 deploy:
   provider: heroku
   app: curve-visual
