@@ -27,10 +27,7 @@ class SynthController {
       userId: req.body.userId
     })
       .then(synth => res.status(201).send(synth))
-      .catch(error => {
-        console.log(error);
-        res.status(400).send(error);
-      });
+      .catch(error => res.status(400).send(error));
   }
   static query(req, res) {
     return Synth.findAll({
