@@ -8,15 +8,15 @@ class UserController {
     if (!errors.isEmpty()) {
       res.status(422).send(errors.array()[0].message);
     }
-    const hashedPassword = bcrypt.hashSync(req.body.password, 8);
-
-    return User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword
-    })
-      .then(user => res.status(201).send(user))
-      .catch(error => res.status(400).send(error));
+    bcrypt.hash(req.body.password, 8).then(hashedPassword => {
+      return User.create({
+        name: req.body.name,
+        email: req.body.email,
+        password: hashedPassword
+      })
+        .then(user => res.status(201).send(user))
+        .catch(error => res.status(400).send(error));
+    });
   }
   static query(req, res) {
     return User.findByPk(req.user.id)
@@ -28,9 +28,14 @@ class UserController {
       if (!user) {
         return done(null, false, { message: "Incorrect username." });
       }
-      if (bcrypt.compareSync(password, user.password)) {
-        return done(null, user);
-      } else return done(null, false, { message: "Incorrect password." });
+      bcrypt
+        .compare(password, user.password)
+        .then(res => {
+          if (res) {
+            return done(null, user);
+          } else return done(null, false, { message: "Incorrect password." });
+        })
+        .catch(e => done(null, false, { message: "Something went wrong!" }));
     });
   }
   static update(req, res) {
