@@ -46,6 +46,20 @@ Run the app:
 
 The `react-ui` app is the frontend. On the server, `npm run build` is run, and the express app (server) handles everything. On local however, it's nice to make use of the webpack dev tools, so we run it independently!
 
+## Running Curve with Docker
+
+- create an `.env.production` file that holds the following keys:
+
+```
+curve_session_key=?
+POSTGRES_DB=curve
+POSTGRES_USER=username
+POSTGRES_PASSWORD=password
+DATABASE_URL=postgres://username:password@db/curve
+```
+
+- run the containers useing the `docker-compose.yml` file by running `docker-compose up`. Now, you can run the database migrations by logging in to the container as follows: `docker exec -t -i <CONTAINER_ID> bash` where CONTAINER_ID is the id of the container running `curve_web` (run `docker ps` to see all the containers running). Then, run `node_modules/.bin/sequelize db:migrate --env production` to run the latest db migration.
+
 ## Running the tests locally with Docker and Travis
 
 You can run the tests in Travis locally using Docker by first pulling the latest Travis Node image, using
