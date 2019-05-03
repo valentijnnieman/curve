@@ -81,7 +81,7 @@ describe("Editor", () => {
         {
           connectedToType: "gain",
           id: 0,
-          isConnectedTo: 1
+          isConnectedTo: "1"
         }
       ]
     };
@@ -90,7 +90,7 @@ describe("Editor", () => {
     );
     const expectedBlockToConnectTo = {
       ...blockToConnectTo,
-      hasInputFrom: [0]
+      hasInputFrom: ["0"]
     };
     expect(mockUpdate.mock.calls[mockUpdate.mock.calls.length - 1][0]).toEqual(
       expectedBlockToConnectTo
@@ -106,7 +106,7 @@ describe("Editor", () => {
         {
           connectedToType: "gain",
           id: 0,
-          isConnectedTo: 1
+          isConnectedTo: "1"
         }
       ]
     };
@@ -117,10 +117,10 @@ describe("Editor", () => {
     expect(mockUpdate.mock.calls.length).toEqual(2);
     expect(mockUpdate.mock.calls[1][0]).toEqual({
       ...expectedBlockWithInput,
-      hasInputFrom: [0]
+      hasInputFrom: ["0"]
     });
 
-    instance.disconnect(0, 1, 0);
+    instance.disconnect("0", "1", 0);
 
     // the update for the block that wants to disconnect it's output is run first
     // then the update for the block that receives input
@@ -141,7 +141,7 @@ describe("Editor", () => {
         {
           connectedToType: "gain",
           id: 0,
-          isConnectedTo: 5
+          isConnectedTo: "5"
         }
       ]
     };
@@ -149,11 +149,11 @@ describe("Editor", () => {
 
     const expectedBlockWithInput = {
       ...props.blocks[5],
-      hasInputFrom: [0]
+      hasInputFrom: ["0"]
     };
     expect(mockUpdate.mock.calls[1][0]).toEqual(expectedBlockWithInput);
 
-    instance.disconnect(0, 5, 0);
+    instance.disconnect("0", "5", 0);
 
     // the update for the block that wants to disconnect it's output is run first
     // then the update for the block that receives input
@@ -176,17 +176,17 @@ describe("Editor", () => {
         connectedToType: "gain",
         destination: props.blocks[1].internal.gain.gain,
         id: 0,
-        isConnectedTo: 1
+        isConnectedTo: "1"
       },
       {
         connectedToType: "gain",
         destination: props.blocks[2].internal.gain.gain,
         id: 1,
-        isConnectedTo: 2
+        isConnectedTo: "2"
       }
     ];
 
-    instance.disconnect(0, 1, 0);
+    instance.disconnect("0", "1", 0);
 
     const expectedBlock = {
       ...testBlock,
@@ -196,7 +196,7 @@ describe("Editor", () => {
           connectedToType: "gain",
           destination: props.blocks[2].internal.gain.gain,
           id: 1,
-          isConnectedTo: 2
+          isConnectedTo: "2"
         }
       ]
     };
