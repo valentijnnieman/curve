@@ -6,7 +6,7 @@ const audioCtx = new AudioContext();
 
 const blockOptions: Array<BlockDataOptions> = [
   {
-    id: 0,
+    id: "curve-output",
     x: 0,
     y: 0,
     blockType: "DESTINATION",
@@ -51,8 +51,7 @@ export default (state: StoreState = initialState, action: any): StoreState => {
     case "CREATE_BLOCK":
       return {
         ...state,
-        blocks: [...state.blocks, { ...action.block, id: state.lastId + 1 }],
-        lastId: state.lastId + 1
+        blocks: [...state.blocks, { ...action.block }]
       };
     case "DELETE_BLOCK":
       return {
@@ -75,8 +74,7 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         ],
         audioCtx,
         error: initialState.error,
-        success: initialState.success,
-        lastId: initialState.lastId
+        success: initialState.success
       };
       return loadedState;
 

@@ -13,7 +13,7 @@ import { StoreState } from "../../types/storeState";
 import { CreateBlock } from "./CreateBlock";
 // import { Code } from "./Code";
 // import { ShareMenu } from "./ShareMenu";
-import { saveState } from "../../actions/state";
+import { saveState, fetchSynths } from "../../actions/state";
 import Sidebar from "./Sidebar";
 // import { Link } from "react-router-dom";
 // import { RaisedButton } from "material-ui";
@@ -45,6 +45,7 @@ interface TopbarProps {
   login: (name: string, password: string) => void;
   register: (name: string, email: string, password: string) => void;
   logout: () => void;
+  fetchSynths: (id: number) => void;
   synths: Array<any>;
 }
 
@@ -154,6 +155,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     register: (name: string, email: string, password: string) => {
       dispatch(register(name, email, password));
+    },
+    fetchSynths: (id: number) => {
+      dispatch(fetchSynths(id));
     }
   };
 };

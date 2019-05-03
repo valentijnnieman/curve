@@ -3,7 +3,7 @@ import { Line } from "../types/lineData";
 
 interface LineGridProps {
   stopMouseLine: (e: React.MouseEvent<SVGElement>) => void;
-  disconnect: (fromBlock: number, toBlock: number, outputId: number) => void;
+  disconnect: (fromBlock: string, toBlock: string, outputId: number) => void;
   lines: Array<Line>;
   wantsToConnect: boolean;
   lineFrom?: DOMRect;

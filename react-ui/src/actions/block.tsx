@@ -12,7 +12,7 @@ export interface CreateBlockAction {
 
 export interface DeleteBlockAction {
   type: "DELETE_BLOCK";
-  id: number;
+  id: string;
 }
 
 export function updateBlock(block: BlockData): UpdateBlockAction {
@@ -29,7 +29,7 @@ export function createBlock(block: BlockData): CreateBlockAction {
   };
 }
 
-export function deleteBlock(id: number): DeleteBlockAction {
+export function deleteBlock(id: string): DeleteBlockAction {
   return {
     type: "DELETE_BLOCK",
     id

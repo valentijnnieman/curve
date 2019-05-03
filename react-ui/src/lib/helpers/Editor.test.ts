@@ -34,7 +34,7 @@ describe("drawConnectionLines()", () => {
     mockblocks[0].outputs = [
       {
         id: 0,
-        isConnectedTo: 1,
+        isConnectedTo: "1",
         connectedToType: "GAIN"
       }
     ];
@@ -46,9 +46,9 @@ describe("drawConnectionLines()", () => {
       y1: fromRect.y + fromRect.height / 2,
       x2: toRect.x,
       y2: toRect.y + toRect.height / 2,
-      fromBlock: 0,
+      fromBlock: "0",
       outputId: 0,
-      toBlock: 1
+      toBlock: "1"
     } as Line;
 
     expect(lines.length).toEqual(1);

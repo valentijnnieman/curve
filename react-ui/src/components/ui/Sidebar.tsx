@@ -27,6 +27,7 @@ interface SidebarProps {
   user: any;
   synths: Array<any>;
   logout: () => void;
+  fetchSynths: (id: number) => void;
 }
 interface SidebarState {
   open: boolean;
@@ -47,7 +48,10 @@ export default class Sidebar extends React.Component<
     this.code = genWACode(nextProps.blocks);
   }
 
-  handleToggle = () => this.setState({ open: !this.state.open });
+  handleToggle = () =>
+    this.setState({ open: !this.state.open }, () => {
+      this.props.fetchSynths(this.props.user.id);
+    });
 
   render() {
     const { name } = this.props.user;

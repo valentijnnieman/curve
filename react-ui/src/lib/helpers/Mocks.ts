@@ -27,7 +27,7 @@ export const speakersDOMRect = {
 } as DOMRect;
 const mockblockOptions: Array<BlockDataOptions> = [
   {
-    id: 0,
+    id: "0",
     x: 0,
     y: 0,
     blockType: "OSC",
@@ -43,7 +43,7 @@ const mockblockOptions: Array<BlockDataOptions> = [
     outputDOMRect: outputDOMRect
   },
   {
-    id: 1,
+    id: "1",
     x: 0,
     y: 0,
     blockType: "GAIN",
@@ -56,7 +56,7 @@ const mockblockOptions: Array<BlockDataOptions> = [
     outputDOMRect: outputDOMRect
   },
   {
-    id: 2,
+    id: "2",
     x: 0,
     y: 0,
     blockType: "GAIN",
@@ -69,7 +69,7 @@ const mockblockOptions: Array<BlockDataOptions> = [
     outputDOMRect: outputDOMRect
   },
   {
-    id: 3,
+    id: "3",
     x: 0,
     y: 0,
     blockType: "BIQUAD",
@@ -84,7 +84,7 @@ const mockblockOptions: Array<BlockDataOptions> = [
     outputDOMRect: outputDOMRect
   },
   {
-    id: 4,
+    id: "4",
     x: 0,
     y: 0,
     blockType: "ENVELOPE",
@@ -98,7 +98,7 @@ const mockblockOptions: Array<BlockDataOptions> = [
     outputDOMRect: outputDOMRect
   },
   {
-    id: 5,
+    id: "5",
     x: 0,
     y: 0,
     blockType: "OSC",

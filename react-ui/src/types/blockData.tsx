@@ -4,7 +4,7 @@ import {
   InternalOscData
 } from "./internalData";
 export interface BlockDataOptions {
-  id: number;
+  id: string;
   x: number;
   y: number;
   blockType: "OSC" | "GAIN" | "BIQUAD" | "ENVELOPE" | "DESTINATION";
@@ -12,7 +12,7 @@ export interface BlockDataOptions {
   values: Array<number>;
   hasInternal: boolean;
   running?: boolean;
-  hasInputFrom: Array<number>;
+  hasInputFrom: Array<string>;
   connected: boolean;
   outputs: Array<OutputData>;
   gainInputDOMRect: DOMRect; // the DOM element we're connecing to (x2, y2 of line)
@@ -26,5 +26,6 @@ export interface BlockData extends BlockDataOptions {
 
 export interface OutputData {
   id: number;
-  isConnectedTo: number; // the id of the block we're connecting to
+  isConnectedTo: string; // the id of the block we're connecting to
   connectedToType: "GAIN" | "GAIN_MOD" | "FREQ" | "DESTINATION" | "TRIGGER";
+}

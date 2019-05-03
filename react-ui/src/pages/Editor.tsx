@@ -32,7 +32,7 @@ interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
   audioCtx: AudioContext;
   updateBlock: (block: BlockData) => void;
-  deleteBlock: (id: number) => void;
+  deleteBlock: (id: string) => void;
   fetchState: (name: string) => void;
   fetchUser: () => void;
 }
@@ -116,7 +116,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       lineTo: undefined
     });
   };
-  disconnect = (fromBlock: number, toBlock: number, outputId: number) => {
+  disconnect = (fromBlock: string, toBlock: string, outputId: number) => {
     // update block info in store
     const blockWithOutput: BlockData = this.props.blocks.find(
       b => b.id === fromBlock
@@ -214,7 +214,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   handleAccessModalClose = () => {
     this.setState({ accessModalOpen: false });
   };
-  deleteAndDisconnect = (id: number) => {
+  deleteAndDisconnect = (id: string) => {
     // stop internal WA objects from making sound
     const blockToDelete = this.props.blocks.find(b => b.id === id) as BlockData;
     if ("oscillator" in blockToDelete.internal) {
@@ -367,7 +367,7 @@ const mapStateToProps = ({ blocks, audioCtx }: StoreState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     updateBlock: (block: BlockData) => dispatch(updateBlock(block)),
-    deleteBlock: (id: number) => {
+    deleteBlock: (id: string) => {
       // we need to handle internals here as well as updating the redux store.
       dispatch(deleteBlock(id));
     },

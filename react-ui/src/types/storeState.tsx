@@ -9,5 +9,4 @@ export interface StoreState {
   audioCtx: AudioContext;
   error: string;
   success: string;
-  lastId: number;
 }

@@ -7,6 +7,8 @@ import { BlockData, BlockDataOptions } from "../../types/blockData";
 import "./Dropdown.css";
 import ContentAdd from "material-ui/svg-icons/content/add";
 
+import { v4 as uuid } from "uuid";
+
 import { buildInternal } from "../../lib/helpers/Editor";
 
 interface CreateBlockProps {
@@ -61,7 +63,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
               primaryText="Oscillator"
               onClick={() => {
                 const options = {
-                  id: 999,
+                  id: uuid(),
                   x: 0,
                   y: 0,
                   blockType: "OSC",
@@ -87,7 +89,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
               primaryText="Filter"
               onClick={() => {
                 const options = {
-                  id: 999,
+                  id: uuid(),
                   x: 0,
                   y: 0,
                   blockType: "BIQUAD",
@@ -112,7 +114,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
               primaryText="Envelope"
               onClick={() => {
                 const options = {
-                  id: 999,
+                  id: uuid(),
                   x: 0,
                   y: 0,
                   blockType: "ENVELOPE",
@@ -135,7 +137,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
               primaryText="Gain"
               onClick={() => {
                 const options = {
-                  id: 999,
+                  id: uuid(),
                   x: 0,
                   y: 0,
                   blockType: "GAIN",
