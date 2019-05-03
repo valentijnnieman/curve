@@ -1,18 +1,18 @@
 sudo: false
 language: node_js
 node_js:
-  - "10"
+- '10'
 script:
-  - cd react-ui
-  - npm i
-  - npm test
-  - rm -rf ./node_modules
-  - cd ../
-  - npm i
-  - npm test
-  - rm -rf ./node_modules
+- cd react-ui
+- npm i
+- npm test
+- rm -rf ./node_modules
+- cd ../
+- npm i
+- npm test
+- rm -rf ./node_modules
 deploy:
   provider: heroku
   app: curve-visual
   api_key:
-    secure: jSZFACU0YRM/dfUiLLDgC04K+Z06IxSm/+1chKIyC24C2lckinvX7WhWxPJmR364w1kP3Dr4jroqx0SFUs0bYaFILC5Uq5tziGzOWWjDjg3zyQQD54E1TkjFC2zPa6evW/WZyrr2NgQIuZJN8h8OO9NISf5lhTtw4UGGyNRiFsCrXpxBrceCOLPVY7ID9NmMzSmya2aIKD6RNMU8LXyXcgZRshbXUehPh3yi/cmVjyZ71sfNR1+n34TIDIFStjoMIhUliRrDBn0n0dURbJicbPYaGEpmEGVb+RaJQw6Tmg1E5OyLXZLH5xUQ9fEEyu1HmQv+jYeKbnmZBBWHG6y4GWdyM7iAW1IFTW6OQtHR4wNQF6Vm/p9Th/EGyeCsop4ylABOZlpPX1ojtIgF3JRngniN7/FbagCZtCOqMYApn4Z707l1stkbUv9Dyn7MyWQ/ZagYZa5FJaCKz6/E09cKX9s9KJV86shYdGZKBlchAfhliwcBhSk/JK4vFat7Cn0PMGPbT6eI6vEilbPWUXT9/6yxH2sADDIFIMN5UOZR0+ZWhGRDkMwEb8rKQMrdRJ9VWPL/BlZLUOKRazzqmPqryhvklRX5w6BXoNX63gDGd0O0cSNxX97TJooeFOMXejFhZnmewZ/SjvcPYxF0fWlxnj2eAnmv9icGPsgm7vQmcWQ=
+    secure: smDSiEQ3DUQnXTuYLMcc8XDnWY9Y/iMlWD/W13vnxc0RPV2DBzSAejjIc1Z55eN2x/q3+Nm1YiSZrTk+DZ5i38l+k5S0ZzuMLrGc3zj8talb0JRwFJV4PF6pr4DuzL+N4xQ5d/kJKfgqILKw+vbr1sDvU8RKsXDzzkaXOPrVcvJIdOhk5+x7TCXrteTVXKiVEVuijRYn57YVlUGbvgeja7dD3DOVjwsNnlNtQaaLErNZsCh15MltMWMc8v91whn7/boz2hX8gfSvSSeOpTfTNuWafxt6Z696Kt+/16Rm+yD7/KmBbSQavo4B48Od0+ZNU2meUBkJWACfG7BcOhB9LLX02regrV59HlNQQdN+5OJuqdtSJkahg04HQbXsXB61lDXQ316FLX9/255T9x0ZgdEFxlZ1vqCvwsy6oVjdr99njfO7tQNTU6UrSEVPjTsYPHyh5YNjAYaXoFcFC4B3Op2wxvmUpa/co39d2V8EXQ2vap7otQB0n+rF/20mnDBbistOOpTh2VOXStOb2rTsFuCoUrT5pqH8Dqg2kazGrSE+cADtqAiJ8D19gy9t7p+f7NBVlEzwN3LlYbCSXb2KOl6DaQFtliZ/IBsgYkmuVIk+IdAVElcaiV5DS1KsQVifOZ0MebEyFsqKVAYedRMm8tSKyLn4CzwaiV21xbiMp+I=
