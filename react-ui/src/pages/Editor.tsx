@@ -153,6 +153,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
 
     if (internal) {
       internal.gain.disconnect();
+      internal.gain.connect(internal.analyser);
     }
   };
   tryToConnect = (block: BlockData, internal: InternalData, el: DOMRect) => {

@@ -170,6 +170,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
             className="toggle"
             thumbSwitchedStyle={{ backgroundColor: "#f50057" }}
             trackSwitchedStyle={{ backgroundColor: "#ff9d9d" }}
+            toggled={this.props.block.running}
           />
           <form onSubmit={e => e.preventDefault()} className="block-controls">
             <TextField
