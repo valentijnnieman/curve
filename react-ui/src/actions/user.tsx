@@ -62,6 +62,7 @@ export function login(name: string, password: string) {
         if (json.errors) {
           throw Error("Unable to log in!");
         } else {
+          dispatch(fetchSynths(json.id));
           dispatch(userLogin(json.name, json.id));
         }
       })
@@ -140,8 +141,8 @@ export function fetchUser() {
       })
       .catch(error => window.console.error(error))
       .then(json => {
-        dispatch(userLogin(json.name, json.id));
         dispatch(fetchSynths(json.id));
+        dispatch(userLogin(json.name, json.id));
       });
   };
 }

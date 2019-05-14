@@ -86,9 +86,7 @@ if (cluster.isMaster) {
     res.status(200).send("All systems operational!");
   });
 
-  app.post("/api/login", passport.authenticate("local"), function(req, res) {
-    res.status(201).send({ name: req.user.name });
-  });
+  app.post("/api/login", passport.authenticate("local"), UserController.query);
 
   app.post(
     "/api/register",
