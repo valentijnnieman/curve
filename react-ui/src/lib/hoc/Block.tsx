@@ -62,10 +62,14 @@ export const composedBlock = (
               }
               break;
             case "DESTINATION":
-              destination = this.props.audioCtx.destination;
+              destination = blockToConnectTo.internal.gain;
               // connect internal gain to destination (speakers)
               blockToConnectTo.internal.gain.connect(
                 this.props.audioCtx.destination
+              );
+              // connect internal gain to analyser
+              blockToConnectTo.internal.gain.connect(
+                blockToConnectTo.internal.analyser
               );
               break;
             case "TRIGGER":
@@ -147,9 +151,7 @@ export const composedBlock = (
       }
     };
     componentWillReceiveProps(nextProps: ComposedBlockProps) {
-      if (this.props.block.outputs !== nextProps.block.outputs) {
-        this.connectInternal();
-      }
+      this.connectInternal();
     }
     render() {
       return (

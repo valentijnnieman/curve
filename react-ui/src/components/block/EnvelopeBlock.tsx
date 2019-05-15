@@ -137,7 +137,6 @@ export class EnvelopeBlock extends React.Component<
     this.props.updateBlock(updatedBlock);
   }
   componentWillReceiveProps(newProps: EnvelopeBlockProps) {
-    window.console.log(newProps);
     if (newProps.block.hasInputFrom.length > 0) {
       for (var i = 0; i < this.props.block.hasInputFrom.length; i++) {
         const blockConnectedToThis = this.props.allBlocks.find(
