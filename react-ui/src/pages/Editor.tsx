@@ -22,7 +22,7 @@ import { RouteComponentProps } from "react-router";
 import { fetchState } from "../actions/state";
 import { LineGrid } from "../components/LineGrid";
 import { fetchUser } from "../actions/user";
-import { BlockGrid } from "src/components/BlockGrid";
+import { BlockGrid } from "../components/BlockGrid";
 
 interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;

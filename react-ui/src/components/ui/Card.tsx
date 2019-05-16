@@ -5,7 +5,7 @@ import "../ui/Card.css";
 import { IconButton } from "material-ui";
 import { BlockData } from "../../types/blockData";
 import { connect } from "react-redux";
-import { startDragging, stopDragging } from "src/actions/block";
+import { startDragging, stopDragging } from "../../actions/block";
 
 interface CardProps {
   block: BlockData;
