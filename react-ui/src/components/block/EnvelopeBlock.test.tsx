@@ -10,6 +10,9 @@ import { EnvelopeBlock } from "./EnvelopeBlock";
 import { mount } from "enzyme";
 import { MuiThemeProvider } from "material-ui/styles";
 
+import { Provider } from "react-redux";
+import store from "../../store";
+
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("<EnvelopeBlock />", () => {
@@ -22,22 +25,24 @@ describe("<EnvelopeBlock />", () => {
     mockDelete = jest.fn();
     blockInstance = mockblocks[4] as BlockData;
     wrapper = mount(
-      <MuiThemeProvider>
-        <EnvelopeBlock
-          block={blockInstance}
-          allBlocks={mockblocks}
-          tryToConnectTo={jest.fn()}
-          canConnect={false}
-          updateBlock={mockUpdate}
-          deleteBlock={mockDelete}
-          audioCtx={audioCtx}
-          connectToAnalyser={jest.fn()}
-          connectInternal={jest.fn()}
-          onDragHandler={jest.fn()}
-          tryToConnect={jest.fn()}
-          checkInputs={jest.fn()}
-        />
-      </MuiThemeProvider>
+      <Provider store={store}>
+        <MuiThemeProvider>
+          <EnvelopeBlock
+            block={blockInstance}
+            allBlocks={mockblocks}
+            tryToConnectTo={jest.fn()}
+            canConnect={false}
+            updateBlock={mockUpdate}
+            deleteBlock={mockDelete}
+            audioCtx={audioCtx}
+            connectToAnalyser={jest.fn()}
+            connectInternal={jest.fn()}
+            onDragHandler={jest.fn()}
+            tryToConnect={jest.fn()}
+            checkInputs={jest.fn()}
+          />
+        </MuiThemeProvider>
+      </Provider>
     );
     instance = wrapper.children().instance() as EnvelopeBlock;
   });

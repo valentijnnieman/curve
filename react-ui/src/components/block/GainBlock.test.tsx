@@ -12,6 +12,9 @@ import { GainBlock } from "./GainBlock";
 import { mount } from "enzyme";
 import { MuiThemeProvider } from "material-ui/styles";
 
+import { Provider } from "react-redux";
+import store from "../../store";
+
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("<GainBlock />", () => {
@@ -20,22 +23,24 @@ describe("<GainBlock />", () => {
 
   const blockInstance = mockblocks[0] as BlockData;
   const wrapper = mount(
-    <MuiThemeProvider>
-      <GainBlock
-        block={blockInstance}
-        allBlocks={mockblocks}
-        tryToConnectTo={jest.fn()}
-        canConnect={false}
-        updateBlock={mockUpdate}
-        deleteBlock={mockDelete}
-        audioCtx={audioCtx}
-        connectToAnalyser={jest.fn()}
-        connectInternal={jest.fn()}
-        onDragHandler={jest.fn()}
-        tryToConnect={jest.fn()}
-        checkInputs={jest.fn()}
-      />
-    </MuiThemeProvider>
+    <Provider store={store}>
+      <MuiThemeProvider>
+        <GainBlock
+          block={blockInstance}
+          allBlocks={mockblocks}
+          tryToConnectTo={jest.fn()}
+          canConnect={false}
+          updateBlock={mockUpdate}
+          deleteBlock={mockDelete}
+          audioCtx={audioCtx}
+          connectToAnalyser={jest.fn()}
+          connectInternal={jest.fn()}
+          onDragHandler={jest.fn()}
+          tryToConnect={jest.fn()}
+          checkInputs={jest.fn()}
+        />
+      </MuiThemeProvider>
+    </Provider>
   );
 
   const instance = wrapper.children().instance() as GainBlock;
