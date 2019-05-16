@@ -12,7 +12,7 @@ import { GainBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton } from "material-ui";
 
-import { Card } from "../ui/Card";
+import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";
 
 export class GainBlock extends React.Component<GainBlockProps> {

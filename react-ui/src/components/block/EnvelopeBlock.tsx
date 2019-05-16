@@ -11,7 +11,7 @@ import { BlockData } from "../../types/blockData";
 import { EnvelopeBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton, FlatButton } from "material-ui";
-import { Card } from "../ui/Card";
+import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";
 
 interface EnvelopeState {

@@ -4,21 +4,30 @@ import ClearIcon from "material-ui/svg-icons/content/clear";
 import "../ui/Card.css";
 import { IconButton } from "material-ui";
 import { BlockData } from "../../types/blockData";
+import { connect } from "react-redux";
+import { startDragging, stopDragging } from "src/actions/block";
 
 interface CardProps {
   block: BlockData;
   children: any;
   removeBlock: any;
   onDrag: (data: DraggableData) => void;
+  startDragging: () => void;
+  stopDragging: () => void;
 }
 
-export class Card extends React.Component<CardProps> {
+class Card extends React.Component<CardProps> {
   constructor(props: CardProps) {
     super(props);
   }
   render() {
     return (
       <Draggable
+        onStart={this.props.startDragging}
+        onStop={(e: DraggableEvent, data: DraggableData) => {
+          this.props.stopDragging();
+          this.props.onDrag(data);
+        }}
         onDrag={(e: DraggableEvent, data: DraggableData) => {
           this.props.onDrag(data);
         }}
@@ -38,3 +47,19 @@ export class Card extends React.Component<CardProps> {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    startDragging: () => {
+      dispatch(startDragging());
+    },
+    stopDragging: () => {
+      dispatch(stopDragging());
+    }
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Card);

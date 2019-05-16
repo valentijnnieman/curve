@@ -14,6 +14,12 @@ export interface DeleteBlockAction {
   type: "DELETE_BLOCK";
   id: string;
 }
+export interface StartDraggingAction {
+  type: "START_DRAGGING";
+}
+export interface StopDraggingAction {
+  type: "STOP_DRAGGING";
+}
 
 export function updateBlock(block: BlockData): UpdateBlockAction {
   return {
@@ -33,5 +39,17 @@ export function deleteBlock(id: string): DeleteBlockAction {
   return {
     type: "DELETE_BLOCK",
     id
+  };
+}
+
+export function startDragging(): StartDraggingAction {
+  return {
+    type: "START_DRAGGING"
+  };
+}
+
+export function stopDragging(): StopDraggingAction {
+  return {
+    type: "STOP_DRAGGING"
   };
 }

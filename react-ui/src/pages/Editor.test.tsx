@@ -39,6 +39,7 @@ describe("Editor", () => {
         match={{} as match<any>}
         location={{} as Location}
         history={{} as History}
+        dragging={false}
       />
     );
 

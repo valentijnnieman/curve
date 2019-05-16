@@ -1,11 +1,6 @@
 import * as React from "react";
 
 import "./Editor.css";
-import OscBlock from "../components/block/OscBlock";
-import GainBlock from "../components/block/GainBlock";
-import BiquadBlock from "../components/block/BiquadBlock";
-import EnvelopeBlock from "../components/block/EnvelopeBlock";
-import DestinationBlock from "../components/block/DestinationBlock";
 // import OutputNode from "../components/block/OutputNode";
 import {
   InternalOscData,
@@ -27,6 +22,7 @@ import { RouteComponentProps } from "react-router";
 import { fetchState } from "../actions/state";
 import { LineGrid } from "../components/LineGrid";
 import { fetchUser } from "../actions/user";
+import { BlockGrid } from "src/components/BlockGrid";
 
 interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
@@ -35,6 +31,7 @@ interface EditorProps extends RouteComponentProps<any> {
   deleteBlock: (id: string) => void;
   fetchState: (name: string) => void;
   fetchUser: () => void;
+  dragging: boolean;
 }
 
 interface EditorState {
@@ -240,95 +237,9 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     // update redux store -> delete blockData object
     this.props.deleteBlock(id);
   };
-
   render() {
-    const synthElements = this.props.blocks.map(
-      (block: BlockData, index: number) => {
-        if (block.internal) {
-          if (block.blockType === "OSC") {
-            return (
-              <OscBlock
-                key={index}
-                block={block}
-                allBlocks={this.props.blocks}
-                tryToConnect={this.tryToConnect}
-                tryToConnectTo={this.tryToConnectTo}
-                canConnect={this.state.wantsToConnect}
-                updateBlock={this.props.updateBlock}
-                deleteBlock={this.deleteAndDisconnect}
-                audioCtx={this.props.audioCtx}
-              />
-            );
-          } else if (block.blockType === "GAIN") {
-            return (
-              <GainBlock
-                key={index}
-                block={block}
-                allBlocks={this.props.blocks}
-                tryToConnect={this.tryToConnect}
-                tryToConnectTo={this.tryToConnectTo}
-                canConnect={this.state.wantsToConnect}
-                updateBlock={this.props.updateBlock}
-                deleteBlock={this.deleteAndDisconnect}
-                audioCtx={this.props.audioCtx}
-              />
-            );
-          } else if (block.blockType === "BIQUAD") {
-            return (
-              <BiquadBlock
-                key={index}
-                block={block}
-                allBlocks={this.props.blocks}
-                tryToConnect={this.tryToConnect}
-                tryToConnectTo={this.tryToConnectTo}
-                canConnect={this.state.wantsToConnect}
-                updateBlock={this.props.updateBlock}
-                deleteBlock={this.deleteAndDisconnect}
-                audioCtx={this.props.audioCtx}
-              />
-            );
-          } else if (block.blockType === "ENVELOPE") {
-            return (
-              <EnvelopeBlock
-                key={index}
-                block={block}
-                allBlocks={this.props.blocks}
-                tryToConnect={this.tryToConnect}
-                tryToConnectTo={this.tryToConnectTo}
-                canConnect={this.state.wantsToConnect}
-                updateBlock={this.props.updateBlock}
-                deleteBlock={this.deleteAndDisconnect}
-                audioCtx={this.props.audioCtx}
-              />
-            );
-          } else if (block.blockType === "DESTINATION") {
-            return (
-              <DestinationBlock
-                key={index}
-                block={block}
-                allBlocks={this.props.blocks}
-                tryToConnect={this.tryToConnect}
-                tryToConnectTo={this.tryToConnectTo}
-                canConnect={this.state.wantsToConnect}
-                updateBlock={this.props.updateBlock}
-                deleteBlock={this.deleteAndDisconnect}
-                audioCtx={this.props.audioCtx}
-              />
-            );
-          } else {
-            return null;
-          }
-        } else {
-          return null;
-        }
-      }
-    );
     return (
       <div onMouseMove={e => this.onMouseMove(e)}>
-        {/* <svg className="grid-svg" onClick={e => this.stopMouseLine(e)}>
-          {lineElements}
-          {lineToMouse}
-        </svg> */}
         <LineGrid
           stopMouseLine={this.stopMouseLine}
           disconnect={this.disconnect}
@@ -338,7 +249,16 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           mouseX={this.state.mouseX}
           mouseY={this.state.mouseY}
         />
-        {synthElements}
+        <BlockGrid
+          blocks={this.props.blocks}
+          tryToConnect={this.tryToConnect}
+          tryToConnectTo={this.tryToConnectTo}
+          wantsToConnect={this.state.wantsToConnect}
+          updateBlock={this.props.updateBlock}
+          deleteAndDisconnect={this.deleteAndDisconnect}
+          audioCtx={this.props.audioCtx}
+          dragging={this.props.dragging}
+        />
         <Dialog
           title="Allow Web Audio access"
           modal={true}
@@ -358,10 +278,11 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   }
 }
 
-const mapStateToProps = ({ blocks, audioCtx }: StoreState) => {
+const mapStateToProps = ({ blocks, audioCtx, dragging }: StoreState) => {
   return {
     blocks,
-    audioCtx
+    audioCtx,
+    dragging
   };
 };
 

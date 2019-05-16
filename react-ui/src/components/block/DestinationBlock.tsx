@@ -12,7 +12,7 @@ import { DestinationBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { IconButton } from "material-ui";
 
-import { Card } from "../ui/Card";
+import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";
 
 export class DestinationBlock extends React.Component<DestinationBlockProps> {

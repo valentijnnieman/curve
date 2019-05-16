@@ -16,7 +16,7 @@ import { BiquadBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { InternalBiquadData } from "../../types/internalData";
 import { IconButton } from "material-ui";
-import { Card } from "../ui/Card";
+import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";
 
 export class BiquadBlock extends React.Component<BiquadBlockProps> {

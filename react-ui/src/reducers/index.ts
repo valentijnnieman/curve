@@ -33,11 +33,22 @@ const initialState = {
   audioCtx,
   error: "",
   success: "",
-  lastId: 0
+  lastId: 0,
+  dragging: false
 };
 
 export default (state: StoreState = initialState, action: any): StoreState => {
   switch (action.type) {
+    case "START_DRAGGING":
+      return {
+        ...state,
+        dragging: true
+      };
+    case "STOP_DRAGGING":
+      return {
+        ...state,
+        dragging: false
+      };
     case "UPDATE_BLOCK":
       return {
         ...state,
@@ -74,7 +85,8 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         ],
         audioCtx,
         error: initialState.error,
-        success: initialState.success
+        success: initialState.success,
+        dragging: false
       };
       return loadedState;
 

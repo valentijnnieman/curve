@@ -52,6 +52,7 @@
   "proxy": "http://localhost:5000",
   "devDependencies": {
     "jest-canvas-mock": "^1.1.0",
+    "redux-devtools-extension": "^2.13.8",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^4.0.0",
