@@ -72,6 +72,8 @@ export class DestinationBlock extends React.Component<DestinationBlockProps> {
             this.gainInputElement.getBoundingClientRect() as DOMRect
           )
         }
+        startDragging={this.props.startDragging}
+        stopDragging={this.props.stopDragging}
         block={this.props.block}
       >
         <IconButton

@@ -15,6 +15,7 @@ import { Dialog, RaisedButton } from "material-ui";
 import { connect } from "react-redux";
 
 import { updateBlock, deleteBlock } from "../actions/block";
+import { startDragging, stopDragging } from "../actions/block";
 
 // helpers
 import { drawConnectionLines } from "../lib/helpers/Editor";
@@ -32,6 +33,8 @@ interface EditorProps extends RouteComponentProps<any> {
   fetchState: (name: string) => void;
   fetchUser: () => void;
   dragging: boolean;
+  startDragging: () => void;
+  stopDragging: () => void;
 }
 
 interface EditorState {
@@ -258,6 +261,8 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           deleteAndDisconnect={this.deleteAndDisconnect}
           audioCtx={this.props.audioCtx}
           dragging={this.props.dragging}
+          startDragging={this.props.startDragging}
+          stopDragging={this.props.stopDragging}
         />
         <Dialog
           title="Allow Web Audio access"
@@ -298,6 +303,12 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     fetchUser: () => {
       dispatch(fetchUser());
+    },
+    startDragging: () => {
+      dispatch(startDragging());
+    },
+    stopDragging: () => {
+      dispatch(stopDragging());
     }
   };
 };

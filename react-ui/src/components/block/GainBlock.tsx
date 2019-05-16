@@ -75,6 +75,8 @@ export class GainBlock extends React.Component<GainBlockProps> {
             this.outputElement.getBoundingClientRect() as DOMRect
           )
         }
+        startDragging={this.props.startDragging}
+        stopDragging={this.props.stopDragging}
         block={this.props.block}
       >
         <IconButton

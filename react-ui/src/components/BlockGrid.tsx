@@ -16,6 +16,8 @@ interface BlockGridProps {
   deleteAndDisconnect: (id: string) => void;
   audioCtx: AudioContext;
   dragging: boolean;
+  startDragging: () => void;
+  stopDragging: () => void;
 }
 
 export class BlockGrid extends React.Component<BlockGridProps> {
@@ -73,6 +75,8 @@ export class BlockGrid extends React.Component<BlockGridProps> {
               updateBlock={this.props.updateBlock}
               deleteBlock={this.props.deleteAndDisconnect}
               audioCtx={this.props.audioCtx}
+              startDragging={this.props.startDragging}
+              stopDragging={this.props.stopDragging}
             />
           );
         } else if (block.blockType === "GAIN") {
@@ -87,6 +91,8 @@ export class BlockGrid extends React.Component<BlockGridProps> {
               updateBlock={this.props.updateBlock}
               deleteBlock={this.props.deleteAndDisconnect}
               audioCtx={this.props.audioCtx}
+              startDragging={this.props.startDragging}
+              stopDragging={this.props.stopDragging}
             />
           );
         } else if (block.blockType === "BIQUAD") {
@@ -101,6 +107,8 @@ export class BlockGrid extends React.Component<BlockGridProps> {
               updateBlock={this.props.updateBlock}
               deleteBlock={this.props.deleteAndDisconnect}
               audioCtx={this.props.audioCtx}
+              startDragging={this.props.startDragging}
+              stopDragging={this.props.stopDragging}
             />
           );
         } else if (block.blockType === "ENVELOPE") {
@@ -115,6 +123,8 @@ export class BlockGrid extends React.Component<BlockGridProps> {
               updateBlock={this.props.updateBlock}
               deleteBlock={this.props.deleteAndDisconnect}
               audioCtx={this.props.audioCtx}
+              startDragging={this.props.startDragging}
+              stopDragging={this.props.stopDragging}
             />
           );
         } else if (block.blockType === "DESTINATION") {
@@ -129,6 +139,8 @@ export class BlockGrid extends React.Component<BlockGridProps> {
               updateBlock={this.props.updateBlock}
               deleteBlock={this.props.deleteAndDisconnect}
               audioCtx={this.props.audioCtx}
+              startDragging={this.props.startDragging}
+              stopDragging={this.props.stopDragging}
             />
           );
         } else {

@@ -81,6 +81,8 @@ describe("OscNode", () => {
       }}
       deleteBlock={jest.fn()}
       audioCtx={audioCtx}
+      startDragging={jest.fn()}
+      stopDragging={jest.fn()}
     />
   );
 

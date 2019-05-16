@@ -128,6 +128,8 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
             this.freqInputElement.getBoundingClientRect() as DOMRect
           );
         }}
+        startDragging={this.props.startDragging}
+        stopDragging={this.props.stopDragging}
         block={this.props.block}
       >
         <IconButton

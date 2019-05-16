@@ -172,6 +172,8 @@ export class EnvelopeBlock extends React.Component<
             this.triggerInputElement.getBoundingClientRect() as DOMRect
           )
         }
+        startDragging={this.props.startDragging}
+        stopDragging={this.props.stopDragging}
         block={this.props.block}
       >
         <IconButton

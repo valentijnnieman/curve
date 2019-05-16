@@ -134,6 +134,8 @@ export class OscBlock extends React.Component<OscBlockProps> {
             this.freqInputElement.getBoundingClientRect() as DOMRect
           );
         }}
+        startDragging={this.props.startDragging}
+        stopDragging={this.props.stopDragging}
         block={this.props.block}
       >
         <IconButton

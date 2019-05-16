@@ -11,6 +11,8 @@ export interface ComposedBlockProps {
   updateBlock: (node: BlockData) => void;
   deleteBlock: (id: string) => void;
   audioCtx: AudioContext;
+  startDragging: () => void;
+  stopDragging: () => void;
 }
 
 // common props between blocks - extends the composed block's props

@@ -12,9 +12,6 @@ import { OscBlock } from "./OscBlock";
 import { mount } from "enzyme";
 import { MuiThemeProvider } from "material-ui/styles";
 
-import { Provider } from "react-redux";
-import store from "../../store";
-
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("<OscBlock />", () => {
@@ -25,24 +22,24 @@ describe("<OscBlock />", () => {
 
   const blockInstance = mockblocks[0] as BlockData;
   const wrapper = mount(
-    <Provider store={store}>
-      <MuiThemeProvider>
-        <OscBlock
-          block={blockInstance}
-          allBlocks={mockblocks}
-          tryToConnectTo={mockTryToConnectTo}
-          canConnect={false}
-          updateBlock={mockUpdate}
-          deleteBlock={mockDelete}
-          audioCtx={audioCtx}
-          connectToAnalyser={jest.fn()}
-          connectInternal={jest.fn()}
-          onDragHandler={jest.fn()}
-          tryToConnect={jest.fn()}
-          checkInputs={jest.fn()}
-        />
-      </MuiThemeProvider>
-    </Provider>
+    <MuiThemeProvider>
+      <OscBlock
+        block={blockInstance}
+        allBlocks={mockblocks}
+        tryToConnectTo={mockTryToConnectTo}
+        canConnect={false}
+        updateBlock={mockUpdate}
+        deleteBlock={mockDelete}
+        audioCtx={audioCtx}
+        connectToAnalyser={jest.fn()}
+        connectInternal={jest.fn()}
+        onDragHandler={jest.fn()}
+        tryToConnect={jest.fn()}
+        checkInputs={jest.fn()}
+        startDragging={jest.fn()}
+        stopDragging={jest.fn()}
+      />
+    </MuiThemeProvider>
   );
 
   const instance = wrapper.children().instance() as OscBlock;

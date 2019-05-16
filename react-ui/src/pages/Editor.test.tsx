@@ -40,6 +40,8 @@ describe("Editor", () => {
         location={{} as Location}
         history={{} as History}
         dragging={false}
+        startDragging={jest.fn()}
+        stopDragging={jest.fn()}
       />
     );
 
