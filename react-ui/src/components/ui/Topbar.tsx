@@ -13,7 +13,7 @@ import { StoreState } from "../../types/storeState";
 import { CreateBlock } from "./CreateBlock";
 // import { Code } from "./Code";
 // import { ShareMenu } from "./ShareMenu";
-import { saveState, fetchSynths } from "../../actions/state";
+import { saveState, fetchSynths, updateState } from "../../actions/state";
 import Sidebar from "./Sidebar";
 // import { Link } from "react-router-dom";
 // import { RaisedButton } from "material-ui";
@@ -39,6 +39,13 @@ interface TopbarProps {
     name: string,
     id: number
   ) => void;
+  updateState: (
+    blocksToSave: Array<BlockDataOptions>,
+    name: string,
+    synthId: number,
+    userId: number
+  ) => void;
+  synthId: number;
   error: string;
   success: string;
   user: any;
@@ -116,6 +123,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
 const mapStateToProps = ({
   user,
   name,
+  synthId,
   slug,
   blocks,
   audioCtx,
@@ -135,6 +143,7 @@ const mapStateToProps = ({
   return {
     blocksWithoutInternals,
     name,
+    synthId,
     slug,
     blocks,
     audioCtx,
@@ -149,6 +158,12 @@ const mapDispatchToProps = (dispatch: any) => {
     createBlock: (block: BlockData) => dispatch(createBlock(block)),
     saveState: (blocks: Array<BlockDataOptions>, name: string, id: number) =>
       dispatch(saveState(blocks, name, id)),
+    updateState: (
+      blocks: Array<BlockDataOptions>,
+      name: string,
+      synthId: number,
+      userId: number
+    ) => dispatch(updateState(blocks, name, synthId, userId)),
     logout: () => dispatch(logout()),
     login: (name: string, password: string) => {
       dispatch(login(name, password));

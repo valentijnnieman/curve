@@ -34,6 +34,7 @@ const initialState = {
   error: "",
   success: "",
   lastId: 0,
+  synthId: -1,
   dragging: false
 };
 
@@ -74,6 +75,7 @@ export default (state: StoreState = initialState, action: any): StoreState => {
         user: state.user,
         name: action.name,
         slug: action.slug,
+        synthId: action.id,
         synths: [], // TO-DO -> pass synths allong
         blocks: [
           ...action.blockOptions.map((option: BlockDataOptions) => {

@@ -122,6 +122,9 @@ if (cluster.isMaster) {
     SynthController.create
   );
 
+  // Update synth route
+  app.post("/api/synth/update", ensureAuthenticated, SynthController.update);
+
   // Get synth route
   app.get("/api/synth/:name", SynthController.query);
 
