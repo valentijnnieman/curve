@@ -4,6 +4,7 @@ import { BlockDataOptions } from "../types/blockData";
 
 export interface LoadStateAction {
   type: "LOAD_STATE";
+  id: number;
   blockOptions: Array<Object>;
   name: string;
   slug: string;
@@ -31,12 +32,14 @@ interface FetchSuccessAction {
 }
 
 export function loadState(
+  id: number,
   blockOptions: Array<Object>,
   name: string,
   slug: string
 ): LoadStateAction {
   return {
     type: "LOAD_STATE",
+    id,
     blockOptions,
     name,
     slug
@@ -113,6 +116,43 @@ export function saveState(
   };
 }
 
+export function updateState(
+  blocks: Array<BlockDataOptions>,
+  name: string,
+  synthId: number,
+  userId: number
+) {
+  return function(dispatch: any) {
+    const data = {
+      name,
+      data: blocks,
+      id: synthId,
+      userId: userId
+    };
+    return fetch("/api/synth/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(
+        response => response.json(),
+        error => window.console.log("error: ", error)
+      )
+      .then(json => {
+        // we got it
+        if (json.errors) {
+          dispatch(
+            fetchErrors("Couldn't update this synth - something went wrong!")
+          );
+        } else {
+          dispatch(fetchSuccess("Synth saved!", json.name, json.slug));
+        }
+      });
+  };
+}
+
 export function fetchState(name: string) {
   return function(dispatch: any) {
     return fetch("/api/synth/" + name)
@@ -121,7 +161,9 @@ export function fetchState(name: string) {
         error => window.console.log("Error: ", error)
       )
       .then(json => {
-        dispatch(loadState(json[0].data, json[0].name, json[0].slug));
+        dispatch(
+          loadState(json[0].id, json[0].data, json[0].name, json[0].slug)
+        );
       })
       .catch(e => {
         window.console.log(e);

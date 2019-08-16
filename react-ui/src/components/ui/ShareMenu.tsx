@@ -10,12 +10,19 @@ interface ShareMenuProps {
     name: string,
     id: number
   ) => void;
+  updateState: (
+    blocksToSave: Array<BlockDataOptions>,
+    name: string,
+    id: number,
+    userId: number
+  ) => void;
   name: string;
   slug: string;
   blocksToSave: Array<BlockDataOptions>;
   error: string;
   success: string;
   user: any;
+  synthId: number;
 }
 interface ShareMenuState {
   open: boolean;
@@ -45,11 +52,20 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
   };
   handleFormSubmit = (e: any) => {
     e.preventDefault();
-    this.props.saveState(
-      this.props.blocksToSave,
-      this.state.name,
-      this.props.user.id
-    );
+    if (this.state.name === this.props.name) {
+      this.props.updateState(
+        this.props.blocksToSave,
+        this.state.name,
+        this.props.synthId,
+        this.props.user.id
+      );
+    } else {
+      this.props.saveState(
+        this.props.blocksToSave,
+        this.state.name,
+        this.props.user.id
+      );
+    }
   };
   render() {
     let successElement;

@@ -63,12 +63,14 @@ class SynthController {
       .catch(error => res.status(400).send(error));
   }
   static update(req, res) {
-    return Synth.update({ ...req.body }, { where: { id: req.body.id } })
+    const { id, userId } = req.body;
+    return Synth.update({ ...req.body }, { where: { id: id, userId: userId } })
       .then(synth => res.status(200).send(synth))
       .catch(error => res.status(400).send(error));
   }
   static delete(req, res) {
-    return Synth.destroy({ where: { id: req.body.id } })
+    const { id, userId } = req.body;
+    return Synth.destroy({ where: { id: id, userId: userId } })
       .then(response => res.status(200).send(response))
       .catch(error => res.status(400).send(error));
   }

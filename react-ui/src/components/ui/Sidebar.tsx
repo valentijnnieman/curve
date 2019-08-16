@@ -22,10 +22,17 @@ interface SidebarProps {
     name: string,
     id: number
   ) => void;
+  updateState: (
+    blocksToSave: Array<BlockDataOptions>,
+    name: string,
+    synthId: number,
+    userId: number
+  ) => void;
   error: string;
   success: string;
   user: any;
   synths: Array<any>;
+  synthId: number;
   logout: () => void;
   fetchSynths: (id: number) => void;
 }
@@ -83,11 +90,13 @@ export default class Sidebar extends React.Component<
         <ShareMenu
           blocksToSave={this.props.blocksWithoutInternals}
           saveState={this.props.saveState}
+          updateState={this.props.updateState}
           error={this.props.error}
           success={this.props.success}
           name={this.props.name}
           slug={this.props.slug}
           user={this.props.user}
+          synthId={this.props.synthId}
         />
       );
     }
