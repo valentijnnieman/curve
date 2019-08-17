@@ -24,14 +24,9 @@
   align-items: center;
 }
 .topbar-title {
-  font-weight: 100 !important;
-  font-size: 32 !important;
-  color: white !important;
+  font-weight: 100;
+  font-size: 32;
   margin-left: 8px;
-}
-
-.topbar button {
-  color: white !important;
 }
 
 .logo {
@@ -40,7 +35,7 @@
 }
 
 .thin {
-  font-weight: 100;
+  font-weight: normal;
 }
 
 .success-text {

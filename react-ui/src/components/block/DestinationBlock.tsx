@@ -10,7 +10,7 @@ import { BlockData } from "../../types/blockData";
 
 import { DestinationBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
-import { IconButton } from "material-ui";
+import IconButton from "../ui/Buttons/IconButton";
 
 import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";

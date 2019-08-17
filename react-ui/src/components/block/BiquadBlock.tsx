@@ -1,13 +1,10 @@
 import * as React from "react";
-// import { Button, ButtonToolbar } from "react-bootstrap";
 
-import TextField from "material-ui/TextField";
+import TextField from "../ui/TextField";
 
 import { BlockData } from "../../types/blockData";
 
-import DropDownMenu from "material-ui/DropDownMenu";
-import MenuItem from "material-ui/MenuItem";
-
+import DropDownMenu from "../ui/Dropdown";
 import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
@@ -15,9 +12,10 @@ import { Analyser } from "../Analyser";
 import { BiquadBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
 import { InternalBiquadData } from "../../types/internalData";
-import { IconButton } from "material-ui";
+import IconButton from "../ui/Buttons/IconButton";
 import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";
+import DropdownItem from "../ui/DropdownItem";
 
 export class BiquadBlock extends React.Component<BiquadBlockProps> {
   freqInput: HTMLInputElement;
@@ -184,14 +182,9 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
             value={this.props.block.type}
             onChange={this.handleTypeChange}
           >
-            <MenuItem value="lowpass" primaryText="Lowpass" />
-            <MenuItem value="highpass" primaryText="Highpass" />
-            <MenuItem value="bandpass" primaryText="Bandpass" />
-            {/* <MenuItem value="lowshelf" primaryText="Lowshelf" />
-            <MenuItem value="highshelf" primaryText="Highshelf" /> */}
-            {/* <MenuItem value="peaking" primaryText="Peaking" />
-            <MenuItem value="notch" primaryText="Notch" />
-            <MenuItem value="allpass" primaryText="Allpass" /> */}
+            <DropdownItem value="lowpass" primaryText="Lowpass" />
+            <DropdownItem value="highpass" primaryText="Highpass" />
+            <DropdownItem value="bandpass" primaryText="Bandpass" />
           </DropDownMenu>
           <Analyser
             analyser={this.props.block.internal.analyser as AnalyserNode}

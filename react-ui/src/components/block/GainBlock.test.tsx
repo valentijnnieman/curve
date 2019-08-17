@@ -10,7 +10,6 @@ import { BlockData } from "../../types/blockData";
 import { GainBlock } from "./GainBlock";
 // import { BlockProps } from "../types/blockProps";
 import { mount } from "enzyme";
-import { MuiThemeProvider } from "material-ui/styles";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -20,24 +19,22 @@ describe("<GainBlock />", () => {
 
   const blockInstance = mockblocks[0] as BlockData;
   const wrapper = mount(
-    <MuiThemeProvider>
-      <GainBlock
-        block={blockInstance}
-        allBlocks={mockblocks}
-        tryToConnectTo={jest.fn()}
-        canConnect={false}
-        updateBlock={mockUpdate}
-        deleteBlock={mockDelete}
-        audioCtx={audioCtx}
-        connectToAnalyser={jest.fn()}
-        connectInternal={jest.fn()}
-        onDragHandler={jest.fn()}
-        tryToConnect={jest.fn()}
-        checkInputs={jest.fn()}
-        startDragging={jest.fn()}
-        stopDragging={jest.fn()}
-      />
-    </MuiThemeProvider>
+    <GainBlock
+      block={blockInstance}
+      allBlocks={mockblocks}
+      tryToConnectTo={jest.fn()}
+      canConnect={false}
+      updateBlock={mockUpdate}
+      deleteBlock={mockDelete}
+      audioCtx={audioCtx}
+      connectToAnalyser={jest.fn()}
+      connectInternal={jest.fn()}
+      onDragHandler={jest.fn()}
+      tryToConnect={jest.fn()}
+      checkInputs={jest.fn()}
+      startDragging={jest.fn()}
+      stopDragging={jest.fn()}
+    />
   );
 
   const instance = wrapper.children().instance() as GainBlock;

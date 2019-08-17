@@ -1,0 +1,18 @@
+.textfield-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.textfield {
+  border: none;
+  background-image: none;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  z-index: 90;
+  width: 100%;
+  color: #4b4b4b;
+}

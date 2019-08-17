@@ -1,5 +1,7 @@
 import * as React from "react";
-import { TextField, RaisedButton, Dialog, FlatButton } from "material-ui";
+import RaisedButton from "../ui/Buttons/RaisedButton";
+import Dialog from "../ui/Dialog";
+import TextField from "../ui/TextField";
 
 interface RegisterProps {
   register: (name: string, email: string, password: string) => void;
@@ -90,11 +92,12 @@ export class Register extends React.Component<RegisterProps, any> {
   };
   render() {
     return (
-      <FlatButton onClick={this.handleOpen}>
-        SIGN UP
+      <RaisedButton onClick={this.handleOpen}>
+        REGISTER
         <Dialog
-          title="Sign up"
+          title="Register"
           modal={false}
+          closable={true}
           open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
@@ -143,13 +146,13 @@ export class Register extends React.Component<RegisterProps, any> {
             />
             <RaisedButton
               primary={true}
-              label="Sign up"
+              label="Register"
               style={{ marginTop: "32px", marginBottom: "32px" }}
               type="submit"
             />
           </form>
         </Dialog>
-      </FlatButton>
+      </RaisedButton>
     );
   }
 }

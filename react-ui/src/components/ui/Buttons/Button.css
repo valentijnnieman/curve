@@ -1,0 +1,10 @@
+.button {
+  border: 2px solid #4b4b4b;
+  border-radius: 4px;
+  padding: 16px;
+  display: inline-block;
+}
+
+.button:hover {
+  cursor: pointer;
+}

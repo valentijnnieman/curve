@@ -1,15 +1,15 @@
 import * as React from "react";
-import FloatingActionButton from "material-ui/FloatingActionButton";
-import Popover from "material-ui/Popover";
-import Menu from "material-ui/Menu";
-import MenuItem from "material-ui/MenuItem";
+import Menu from "../ui/Menu";
+import MenuItem from "../ui/MenuItem";
 import { BlockData, BlockDataOptions } from "../../types/blockData";
 import "./Dropdown.css";
-import ContentAdd from "material-ui/svg-icons/content/add";
+// import ContentAdd from "../ui/Icons/add.svg";
 
 import { v4 as uuid } from "uuid";
 
 import { buildInternal } from "../../lib/helpers/Editor";
+import Drawer from "./Drawer";
+import SidebarButton from "./Buttons/SidebarButton";
 
 interface CreateBlockProps {
   audioCtx: AudioContext;
@@ -44,23 +44,21 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
   render() {
     return (
       <div>
-        <FloatingActionButton
+        <SidebarButton
           secondary={true}
           onClick={this.handleClick}
           className="createblock-button"
         >
-          <ContentAdd />
-        </FloatingActionButton>
-        <Popover
+          {/* <ContentAdd /> */}
+        </SidebarButton>
+        <Drawer
           open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-          targetOrigin={{ horizontal: "left", vertical: "top" }}
-          onRequestClose={this.handleRequestClose}
+          onRequestChange={open => this.setState({ open })}
+          right={true}
         >
+          <h2>Add block:</h2>
           <Menu>
             <MenuItem
-              primaryText="Oscillator"
               onClick={() => {
                 const options = {
                   id: uuid(),
@@ -84,9 +82,10 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
                 } as BlockData;
                 this.props.createBlock(newOscBlock);
               }}
-            />
+            >
+              Oscillator
+            </MenuItem>
             <MenuItem
-              primaryText="Filter"
               onClick={() => {
                 const options = {
                   id: uuid(),
@@ -109,9 +108,10 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
                 } as BlockData;
                 this.props.createBlock(newOscBlock);
               }}
-            />
+            >
+              Filter
+            </MenuItem>
             <MenuItem
-              primaryText="Envelope"
               onClick={() => {
                 const options = {
                   id: uuid(),
@@ -132,9 +132,10 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
                 } as BlockData;
                 this.props.createBlock(newOscBlock);
               }}
-            />
+            >
+              Envelope
+            </MenuItem>
             <MenuItem
-              primaryText="Gain"
               onClick={() => {
                 const options = {
                   id: uuid(),
@@ -155,9 +156,11 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
                 } as BlockData;
                 this.props.createBlock(newOscBlock);
               }}
-            />
+            >
+              Gain
+            </MenuItem>
           </Menu>
-        </Popover>
+        </Drawer>
       </div>
     );
   }

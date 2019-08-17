@@ -1,20 +1,27 @@
 .createblock-button {
   z-index: 999;
   position: fixed;
-  bottom: 32px;
-  right: 22px;
+  top: 50%;
+  right: 0;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-right: none !important;
 }
 
-.code-dialog-button {
-  z-index: 999;
-  position: fixed;
-  bottom: 118px;
-  right: 30px;
+.dropdown {
+  list-style-type: none;
+  padding: 0.5rem 1rem;
+  border: 2px solid #4b4b4b;
+}
+.dropdown:hover {
+  cursor: pointer;
 }
 
-.share-menu-button {
-  z-index: 999;
-  position: fixed;
-  bottom: 186px;
-  right: 30px;
+.dropdown-item {
+  color: #4b4b4b;
+  padding: 0.5rem 0 0;
+}
+.dropdown-item:hover {
+  background-color: #4b4b4b;
+  color: white;
 }

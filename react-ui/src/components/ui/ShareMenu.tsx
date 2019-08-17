@@ -1,8 +1,11 @@
 import * as React from "react";
-import { Dialog, TextField, RaisedButton } from "material-ui";
+import RaisedButton from "../ui/Buttons/RaisedButton";
+import Dialog from "../ui/Dialog";
+import TextField from "../ui/TextField";
 import "./Dropdown.css";
 import { BlockDataOptions } from "../../types/blockData";
 import { Link } from "react-router-dom";
+import MenuItem from "./MenuItem";
 
 interface ShareMenuProps {
   saveState: (
@@ -83,11 +86,11 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
       );
     }
     return (
-      <div onClick={this.handleOpen}>
+      <MenuItem onClick={this.handleOpen}>
         Save synth
         <Dialog
           title="Save & share synth"
-          modal={false}
+          closable={true}
           open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
@@ -113,7 +116,7 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
           </form>
           {successElement}
         </Dialog>
-      </div>
+      </MenuItem>
     );
   }
 }

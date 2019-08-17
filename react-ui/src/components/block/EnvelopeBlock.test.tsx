@@ -8,7 +8,6 @@ import { audioCtx, mockblocks } from "../../lib/helpers/Mocks";
 import { BlockData } from "../../types/blockData";
 import { EnvelopeBlock } from "./EnvelopeBlock";
 import { mount } from "enzyme";
-import { MuiThemeProvider } from "material-ui/styles";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -22,24 +21,22 @@ describe("<EnvelopeBlock />", () => {
     mockDelete = jest.fn();
     blockInstance = mockblocks[4] as BlockData;
     wrapper = mount(
-      <MuiThemeProvider>
-        <EnvelopeBlock
-          block={blockInstance}
-          allBlocks={mockblocks}
-          tryToConnectTo={jest.fn()}
-          canConnect={false}
-          updateBlock={mockUpdate}
-          deleteBlock={mockDelete}
-          audioCtx={audioCtx}
-          connectToAnalyser={jest.fn()}
-          connectInternal={jest.fn()}
-          onDragHandler={jest.fn()}
-          tryToConnect={jest.fn()}
-          checkInputs={jest.fn()}
-          startDragging={jest.fn()}
-          stopDragging={jest.fn()}
-        />
-      </MuiThemeProvider>
+      <EnvelopeBlock
+        block={blockInstance}
+        allBlocks={mockblocks}
+        tryToConnectTo={jest.fn()}
+        canConnect={false}
+        updateBlock={mockUpdate}
+        deleteBlock={mockDelete}
+        audioCtx={audioCtx}
+        connectToAnalyser={jest.fn()}
+        connectInternal={jest.fn()}
+        onDragHandler={jest.fn()}
+        tryToConnect={jest.fn()}
+        checkInputs={jest.fn()}
+        startDragging={jest.fn()}
+        stopDragging={jest.fn()}
+      />
     );
     instance = wrapper.children().instance() as EnvelopeBlock;
   });

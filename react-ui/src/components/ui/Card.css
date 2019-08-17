@@ -1,8 +1,4 @@
 .card {
-  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12),
-    0 3px 1px -2px rgba(0, 0, 0, 0.2);
   position: absolute;
   width: 144px;
   display: inline-flex;
@@ -17,6 +13,8 @@
   position: absolute !important;
   top: -40px !important;
   left: 115px !important;
+  border: none;
+  transition: all 0.2s;
 }
 .card:hover .card-close {
   visibility: visible;
@@ -28,8 +26,10 @@
 }
 .card-content {
   padding-top: 16px;
-  background-color: #272727cf;
-  border-radius: 0 0 2px 2px;
+  background-color: white;
+  color: #4b4b4b;
+  border: 3px solid #4b4b4b;
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -38,4 +38,5 @@
 }
 canvas {
   margin-top: 16px;
+  margin-bottom: 6px;
 }

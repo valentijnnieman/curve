@@ -1,8 +1,11 @@
-.sidebar-button {
+.main-menu-button {
   z-index: 999;
   position: fixed;
-  bottom: 106px;
-  right: 30px;
+  top: 50%;
+  left: 0;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-left: none !important;
 }
 .sidebar-header {
   display: flex;

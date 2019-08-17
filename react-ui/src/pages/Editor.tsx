@@ -10,7 +10,8 @@ import {
 import { BlockData, OutputData } from "../types/blockData";
 import { Line } from "../types/lineData";
 import { StoreState } from "../types/storeState";
-import { Dialog, RaisedButton } from "material-ui";
+import Dialog from "../components/ui/Dialog";
+import RaisedButton from "../components/ui/Buttons/RaisedButton";
 
 import { connect } from "react-redux";
 

@@ -1,5 +1,7 @@
 import * as React from "react";
-import { Dialog, List, ListItem } from "material-ui";
+import List from "../ui/List";
+import ListItem from "../ui/ListItem";
+import Dialog from "../ui/Dialog";
 import "./Dropdown.css";
 import { Link } from "react-router-dom";
 
@@ -43,6 +45,7 @@ export class SynthMenu extends React.Component<SynthMenuProps, SynthMenuState> {
         <Dialog
           title="My Synths"
           modal={false}
+          closable={true}
           open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}

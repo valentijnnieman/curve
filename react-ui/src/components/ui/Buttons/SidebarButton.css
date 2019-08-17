@@ -1,0 +1,8 @@
+.sidebar-button {
+  padding: 0px;
+  width: 0.5rem;
+  height: 2rem;
+  border: 2px solid black;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  background-color: #e6e6e6;
+}

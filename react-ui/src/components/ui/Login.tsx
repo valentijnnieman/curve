@@ -1,7 +1,10 @@
 import * as React from "react";
-import { TextField, RaisedButton, Dialog } from "material-ui";
+import RaisedButton from "../ui/Buttons/RaisedButton";
+import Dialog from "../ui/Dialog";
+import TextField from "../ui/TextField";
 import { Redirect } from "react-router";
 import Register from "./Register";
+import SubmitButton from "./Buttons/SubmitButton";
 
 interface LoginProps {
   login: (name: string, password: string) => void;
@@ -39,6 +42,7 @@ export class Login extends React.Component<LoginProps, any> {
     });
   };
   handleFormSubmit = (e: any) => {
+    window.console.log("SUBMITTING");
     e.preventDefault();
     this.props.login(this.state.name, this.state.password);
   };
@@ -48,11 +52,12 @@ export class Login extends React.Component<LoginProps, any> {
     }
     return (
       <RaisedButton primary={true} onClick={this.handleOpen}>
-        Login
+        Log in / Register
         <Dialog
           title="Login"
           modal={false}
           open={this.state.open}
+          closable={true}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
           className="code-dialog"
@@ -78,18 +83,18 @@ export class Login extends React.Component<LoginProps, any> {
               errorStyle={{ color: "red" }}
               type="password"
             />
-            <RaisedButton
+            <SubmitButton
               primary={true}
               label="Log in"
               style={{ marginTop: "32px", marginBottom: "32px" }}
               type="submit"
             />
-            <Register
-              register={this.props.register}
-              error={this.props.error}
-              closeLogin={this.handleClose}
-            />
           </form>
+          <Register
+            register={this.props.register}
+            error={this.props.error}
+            closeLogin={this.handleClose}
+          />
         </Dialog>
       </RaisedButton>
     );
