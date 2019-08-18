@@ -1,14 +1,14 @@
 import * as React from "react";
-import Menu from "../ui/Menu";
-import MenuItem from "../ui/MenuItem";
+import Menu from "./Menu/Menu";
+import MenuItem from "./Menu/MenuItem";
 import { BlockData, BlockDataOptions } from "../../types/blockData";
-import "./Dropdown.css";
+import "./Menu/Dropdown.css";
 // import ContentAdd from "../ui/Icons/add.svg";
 
 import { v4 as uuid } from "uuid";
 
 import { buildInternal } from "../../lib/helpers/Editor";
-import Drawer from "./Drawer";
+import Drawer from "./Menu/Drawer";
 import SidebarButton from "./Buttons/SidebarButton";
 
 interface CreateBlockProps {

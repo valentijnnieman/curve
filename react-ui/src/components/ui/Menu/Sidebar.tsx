@@ -1,16 +1,16 @@
 import * as React from "react";
-import Drawer from "../ui/Drawer";
-import MenuItem from "../ui/MenuItem";
+import Drawer from "./Drawer";
+import MenuItem from "./MenuItem";
 // import ContentAdd from "../ui/Icons/add.svg";
-import { ShareMenu } from "./ShareMenu";
+import { ShareMenu } from "../ShareMenu";
 import "./Sidebar.css";
 import { BlockDataOptions, BlockData } from "src/types/blockData";
-import { genWACode } from "../../lib/helpers/Editor";
-import { Code } from "./Code";
-import { SynthMenu } from "./SynthMenu";
-import SidebarButton from "./Buttons/SidebarButton";
+import { genWACode } from "../../../lib/helpers/Editor";
+import { Code } from "../Code";
+import { SynthMenu } from "../SynthMenu";
+import SidebarButton from "../Buttons/SidebarButton";
 import Menu from "./Menu";
-const CurveSVG = require("../../curve.svg");
+const CurveSVG = require("../../../curve.svg");
 
 interface SidebarProps {
   name: string;

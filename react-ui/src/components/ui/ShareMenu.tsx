@@ -1,10 +1,9 @@
 import * as React from "react";
-import Dialog from "../ui/Dialog";
-import TextField from "../ui/TextField";
-import "./Dropdown.css";
+import Dialog from "./Menu/Dialog";
+import TextField from "./Forms/TextField";
 import { BlockDataOptions } from "../../types/blockData";
 import { Link } from "react-router-dom";
-import MenuItem from "./MenuItem";
+import MenuItem from "./Menu/MenuItem";
 import SubmitButton from "./Buttons/SubmitButton";
 
 interface ShareMenuProps {

@@ -3,3 +3,9 @@
   background-color: cyan;
   padding: 16px;
 }
+.flat-button:hover {
+  cursor: pointer;
+}
+.flat-button:active {
+  background-color: #f50057;
+}

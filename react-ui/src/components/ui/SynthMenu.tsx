@@ -1,8 +1,7 @@
 import * as React from "react";
-import List from "../ui/List";
-import ListItem from "../ui/ListItem";
-import Dialog from "../ui/Dialog";
-import "./Dropdown.css";
+import List from "./Menu/List";
+import ListItem from "./Menu/ListItem";
+import Dialog from "./Menu/Dialog";
 import { Link } from "react-router-dom";
 
 interface SynthMenuProps {

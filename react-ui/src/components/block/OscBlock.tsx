@@ -1,13 +1,13 @@
 import * as React from "react";
 import Toggle from "../ui/Buttons/Toggle";
 
-import TextField from "../ui/TextField";
+import TextField from "../ui/Forms/TextField";
 
 import { BlockData } from "../../types/blockData";
 
 import { InternalOscData } from "../../types/internalData";
 
-import DropDownMenu from "../ui/Dropdown";
+import DropDownMenu from "../ui/Menu/Dropdown";
 
 import "./Block.css";
 import { Analyser } from "../Analyser";
@@ -17,7 +17,7 @@ import { composedBlock } from "../../lib/hoc/Block";
 import IconButton from "../ui/Buttons/IconButton";
 import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";
-import DropdownItem from "../ui/DropdownItem";
+import DropdownItem from "../ui/Menu/DropdownItem";
 
 export class OscBlock extends React.Component<OscBlockProps> {
   freqInput: HTMLInputElement;

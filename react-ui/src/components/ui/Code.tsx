@@ -1,10 +1,9 @@
 import * as React from "react";
 import RaisedButton from "../ui/Buttons/RaisedButton";
-import Dialog from "../ui/Dialog";
+import Dialog from "./Menu/Dialog";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/styles/hljs";
-import "./Dropdown.css";
-import MenuItem from "./MenuItem";
+import MenuItem from "./Menu/MenuItem";
 
 interface CodeProps {
   code: string;

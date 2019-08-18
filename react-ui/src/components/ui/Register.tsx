@@ -1,7 +1,7 @@
 import * as React from "react";
 import RaisedButton from "../ui/Buttons/RaisedButton";
-import Dialog from "../ui/Dialog";
-import TextField from "../ui/TextField";
+import Dialog from "./Menu/Dialog";
+import TextField from "./Forms/TextField";
 import SubmitButton from "./Buttons/SubmitButton";
 
 interface RegisterProps {

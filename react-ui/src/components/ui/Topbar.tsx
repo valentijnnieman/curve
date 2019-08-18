@@ -11,12 +11,8 @@ import { createBlock } from "../../actions/block";
 
 import { StoreState } from "../../types/storeState";
 import { CreateBlock } from "./CreateBlock";
-// import { Code } from "./Code";
-// import { ShareMenu } from "./ShareMenu";
 import { saveState, fetchSynths, updateState } from "../../actions/state";
-import Sidebar from "./Sidebar";
-// import { Link } from "react-router-dom";
-// import { RaisedButton } from "material-ui";
+import Sidebar from "./Menu/Sidebar";
 import { login, register } from "src/actions/user";
 import { logout } from "src/actions/user";
 import { Login } from "./Login";

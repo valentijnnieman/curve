@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import TextField from "../ui/TextField";
+import TextField from "../ui/Forms/TextField";
 
 import { BlockData } from "../../types/blockData";
 
-import DropDownMenu from "../ui/Dropdown";
+import DropDownMenu from "../ui/Menu/Dropdown";
 import "../ui/Card.css";
 import "./Block.css";
 import { Analyser } from "../Analyser";
@@ -15,7 +15,7 @@ import { InternalBiquadData } from "../../types/internalData";
 import IconButton from "../ui/Buttons/IconButton";
 import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";
-import DropdownItem from "../ui/DropdownItem";
+import DropdownItem from "../ui/Menu/DropdownItem";
 
 export class BiquadBlock extends React.Component<BiquadBlockProps> {
   freqInput: HTMLInputElement;
