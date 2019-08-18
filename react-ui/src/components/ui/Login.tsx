@@ -3,7 +3,6 @@ import RaisedButton from "../ui/Buttons/RaisedButton";
 import Dialog from "../ui/Dialog";
 import TextField from "../ui/TextField";
 import { Redirect } from "react-router";
-import Register from "./Register";
 import SubmitButton from "./Buttons/SubmitButton";
 
 interface LoginProps {
@@ -51,10 +50,10 @@ export class Login extends React.Component<LoginProps, any> {
       return <Redirect to="/" />;
     }
     return (
-      <RaisedButton primary={true} onClick={this.handleOpen}>
-        Log in / Register
+      <RaisedButton onClick={this.handleOpen}>
+        Log in
         <Dialog
-          title="Login"
+          title="Log in"
           modal={false}
           open={this.state.open}
           closable={true}
@@ -71,6 +70,7 @@ export class Login extends React.Component<LoginProps, any> {
               className="input input--black"
               errorText={this.props.error}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="text"
             />
             <TextField
@@ -82,19 +82,10 @@ export class Login extends React.Component<LoginProps, any> {
               errorText={this.props.error}
               errorStyle={{ color: "red" }}
               type="password"
+              underlined={true}
             />
-            <SubmitButton
-              primary={true}
-              label="Log in"
-              style={{ marginTop: "32px", marginBottom: "32px" }}
-              type="submit"
-            />
+            <SubmitButton primary={true} label="Log in" type="submit" />
           </form>
-          <Register
-            register={this.props.register}
-            error={this.props.error}
-            closeLogin={this.handleClose}
-          />
         </Dialog>
       </RaisedButton>
     );

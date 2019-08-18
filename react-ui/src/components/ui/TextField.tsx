@@ -13,10 +13,13 @@ interface TextFieldProps {
   className?: string;
   errorText?: string;
   errorStyle?: object;
+  underlined?: boolean;
 }
 
 export default (props: TextFieldProps) => {
-  const textClass = `textfield ${props.className}`;
+  const textClass = `textfield ${props.className} ${
+    props.underlined ? "textfield-underlined" : ""
+  }`;
   return (
     <div className="textfield-container">
       <label>{props.floatingLabelText}</label>
@@ -28,7 +31,7 @@ export default (props: TextFieldProps) => {
         step={props.step}
         className={textClass}
       />
-      <span>{props.errorText}</span>
+      <span className="textfield-error">{props.errorText}</span>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import * as React from "react";
 import RaisedButton from "../ui/Buttons/RaisedButton";
 import Dialog from "../ui/Dialog";
 import TextField from "../ui/TextField";
+import SubmitButton from "./Buttons/SubmitButton";
 
 interface RegisterProps {
   register: (name: string, email: string, password: string) => void;
@@ -92,8 +93,8 @@ export class Register extends React.Component<RegisterProps, any> {
   };
   render() {
     return (
-      <RaisedButton onClick={this.handleOpen}>
-        REGISTER
+      <RaisedButton className="register-button" onClick={this.handleOpen}>
+        Register
         <Dialog
           title="Register"
           modal={false}
@@ -112,6 +113,7 @@ export class Register extends React.Component<RegisterProps, any> {
               className="input input--black"
               errorText={this.props.error}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="text"
             />
             <TextField
@@ -122,6 +124,7 @@ export class Register extends React.Component<RegisterProps, any> {
               className="input input--black"
               errorText={this.props.error}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="email"
             />
             <TextField
@@ -132,6 +135,7 @@ export class Register extends React.Component<RegisterProps, any> {
               className="input input--black"
               errorText={this.props.error || this.state.passwordError}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="password"
             />
             <TextField
@@ -142,14 +146,10 @@ export class Register extends React.Component<RegisterProps, any> {
               className="input input--black"
               errorText={this.props.error || this.state.passwordError}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="password"
             />
-            <RaisedButton
-              primary={true}
-              label="Register"
-              style={{ marginTop: "32px", marginBottom: "32px" }}
-              type="submit"
-            />
+            <SubmitButton label="Register" />
           </form>
         </Dialog>
       </RaisedButton>

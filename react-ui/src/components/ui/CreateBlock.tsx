@@ -56,7 +56,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
           onRequestChange={open => this.setState({ open })}
           right={true}
         >
-          <h2>Add block:</h2>
+          <h2>Add:</h2>
           <Menu>
             <MenuItem
               onClick={() => {

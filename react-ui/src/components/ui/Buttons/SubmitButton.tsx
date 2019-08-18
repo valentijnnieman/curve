@@ -14,12 +14,13 @@ interface SubmitButtonProps {
 }
 
 export default (props: SubmitButtonProps) => {
-  const buttonClass = `button raised-button ${props.className}`;
+  const buttonClass = `button raised-button submit-button ${props.className}`;
   return (
-    <div>
-      {props.label}
-      <input type="submit" className={buttonClass} onClick={props.onClick} />
-      {props.children}
-    </div>
+    <input
+      type="submit"
+      value={props.label}
+      className={buttonClass}
+      onClick={props.onClick}
+    />
   );
 };

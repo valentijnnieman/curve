@@ -35,7 +35,7 @@ export class SynthMenu extends React.Component<SynthMenuProps, SynthMenuState> {
           to={"/synth/" + synth.slug}
           onClick={this.handleClose}
         >
-          <ListItem primaryText={synth.name} />
+          <ListItem>{synth.name}</ListItem>
         </Link>
       );
     });

@@ -1,3 +1,14 @@
 .raised-button {
   background-color: hotpink;
+  font-weight: bold;
+}
+
+.register-button {
+  margin-left: 1rem;
+  background-color: cyan;
+}
+
+.submit-button {
+  float: right;
+  margin: 2rem 0.5rem 0;
 }

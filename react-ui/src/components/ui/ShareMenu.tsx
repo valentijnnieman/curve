@@ -1,11 +1,11 @@
 import * as React from "react";
-import RaisedButton from "../ui/Buttons/RaisedButton";
 import Dialog from "../ui/Dialog";
 import TextField from "../ui/TextField";
 import "./Dropdown.css";
 import { BlockDataOptions } from "../../types/blockData";
 import { Link } from "react-router-dom";
 import MenuItem from "./MenuItem";
+import SubmitButton from "./Buttons/SubmitButton";
 
 interface ShareMenuProps {
   saveState: (
@@ -107,11 +107,9 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
               errorText={this.props.error}
               type="text"
             />
-            <RaisedButton
-              primary={true}
+            <SubmitButton
               label="Save"
               style={{ marginTop: "32px", marginBottom: "32px" }}
-              type="submit"
             />
           </form>
           {successElement}

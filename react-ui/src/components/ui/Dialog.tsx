@@ -19,8 +19,12 @@ export default (props: any) => {
   return (
     <div>
       {containerElement}
-      <div className={`dialog ${props.open ? "" : "dialog--closed"}`}>
-        <h2>
+      <div
+        className={`dialog ${
+          props.open ? "" : "dialog--closed"
+        } ${props.className || ""}`}
+      >
+        <h2 className="dialog-title">
           <i>{props.title}</i>
         </h2>
         {props.children}
