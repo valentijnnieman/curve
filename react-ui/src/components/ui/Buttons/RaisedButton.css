@@ -1,5 +1,6 @@
 .raised-button {
-  background-color: hotpink;
+  background-color: #f50057;
+  color: white;
   font-weight: bold;
   font-size: 1rem;
   font-family: "Roboto Mono", monospace;
@@ -7,7 +8,8 @@
 
 .register-button {
   margin-left: 1rem;
-  background-color: cyan;
+  background-color: white;
+  color: #4b4b4b;
 }
 
 .submit-button {

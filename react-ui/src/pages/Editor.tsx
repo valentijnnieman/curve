@@ -273,7 +273,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           autoScrollBodyContent={true}
           className="code-dialog"
         >
-          <p>
+          <p style={{ marginBottom: "2rem" }}>
             Web Audio needs to be turned on - some browsers prevent autoplaying
             audio.
           </p>
