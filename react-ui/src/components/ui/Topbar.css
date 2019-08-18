@@ -46,5 +46,7 @@
   width: 400px;
   padding: 0px;
 }
-.share-form input {
+
+.topbar-buttons {
+  margin-right: 20rem;
 }

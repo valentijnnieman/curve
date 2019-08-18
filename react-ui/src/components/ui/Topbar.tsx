@@ -95,7 +95,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
               <i>{this.props.name}</i>
             </h2>
           </div>
-          <div>
+          <div className="topbar-buttons">
             {userButton}
             {registerButton}
           </div>

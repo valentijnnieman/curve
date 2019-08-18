@@ -3,7 +3,7 @@ import "./Drawer.css";
 
 export default (props: any) => {
   let containerElement;
-  if (props.open) {
+  if (props.open && !props.static) {
     containerElement = (
       <div
         className="drawer-container"

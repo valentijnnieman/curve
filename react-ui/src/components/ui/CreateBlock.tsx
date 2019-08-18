@@ -9,7 +9,6 @@ import { v4 as uuid } from "uuid";
 
 import { buildInternal } from "../../lib/helpers/Editor";
 import Drawer from "./Menu/Drawer";
-import SidebarButton from "./Buttons/SidebarButton";
 
 interface CreateBlockProps {
   audioCtx: AudioContext;
@@ -19,43 +18,12 @@ interface CreateBlockProps {
 export class CreateBlock extends React.Component<CreateBlockProps, any> {
   constructor(props: any) {
     super(props);
-
-    this.state = {
-      open: false
-    };
   }
-
-  handleClick = (event: React.MouseEvent<any>) => {
-    // This prevents ghost click.
-    event.preventDefault();
-
-    this.setState({
-      open: true,
-      anchorEl: event.currentTarget
-    });
-  };
-
-  handleRequestClose = () => {
-    this.setState({
-      open: false
-    });
-  };
 
   render() {
     return (
       <div>
-        <SidebarButton
-          secondary={true}
-          onClick={this.handleClick}
-          className="createblock-button"
-        >
-          {/* <ContentAdd /> */}
-        </SidebarButton>
-        <Drawer
-          open={this.state.open}
-          onRequestChange={open => this.setState({ open })}
-          right={true}
-        >
+        <Drawer open={true} right={true} static={true}>
           <h2>Add:</h2>
           <Menu>
             <MenuItem
