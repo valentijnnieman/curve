@@ -149,7 +149,10 @@ export class Register extends React.Component<RegisterProps, any> {
               underlined={true}
               type="password"
             />
-            <SubmitButton label="Register" />
+            <SubmitButton
+              label="Register"
+              className="submit-button--register"
+            />
           </form>
         </Dialog>
       </RaisedButton>

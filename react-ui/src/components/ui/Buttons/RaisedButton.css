@@ -1,6 +1,8 @@
 .raised-button {
   background-color: hotpink;
   font-weight: bold;
+  font-size: 1rem;
+  font-family: "Roboto Mono", monospace;
 }
 
 .register-button {
@@ -11,4 +13,7 @@
 .submit-button {
   float: right;
   margin: 2rem 0.5rem 0;
+}
+.submit-button--register {
+  background-color: cyan;
 }

@@ -39,8 +39,8 @@ describe("<OscBlock />", () => {
     />
   );
 
-  const instance = wrapper.children().instance() as OscBlock;
-  const props = wrapper.children().instance().props;
+  const instance = wrapper.instance() as OscBlock;
+  const props = wrapper.instance().props;
   test("toggleOsc()", () => {
     expect(props.block.running).toBe(false);
     instance.toggleOsc();

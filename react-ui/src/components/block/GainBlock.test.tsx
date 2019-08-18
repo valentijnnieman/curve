@@ -37,7 +37,7 @@ describe("<GainBlock />", () => {
     />
   );
 
-  const instance = wrapper.children().instance() as GainBlock;
+  const instance = wrapper.instance() as GainBlock;
   // const props = wrapper.children().instance().props;
   // const MockBlockProps = MockBlock.props().children.props;
   test("tryToConnectTo()", () => {

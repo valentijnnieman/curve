@@ -44,7 +44,7 @@ describe("<BiquadBlock />", () => {
     />
   );
 
-  const instance = wrapper.children().instance() as BiquadBlock;
+  const instance = wrapper.instance() as BiquadBlock;
   // const props = wrapper.children().instance().props;
   test("tryToConnectTo()", () => {
     instance.tryToConnectTo("gain");

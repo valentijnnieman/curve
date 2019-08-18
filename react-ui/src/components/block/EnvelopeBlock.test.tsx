@@ -38,7 +38,7 @@ describe("<EnvelopeBlock />", () => {
         stopDragging={jest.fn()}
       />
     );
-    instance = wrapper.children().instance() as EnvelopeBlock;
+    instance = wrapper.instance() as EnvelopeBlock;
   });
 
   // const props = wrapper.children().instance().props;
