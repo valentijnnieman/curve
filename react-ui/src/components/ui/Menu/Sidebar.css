@@ -17,7 +17,7 @@
   flex-direction: column;
 }
 .sidebar-bottom__lower {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  bottom: 0;
+  position: absolute;
+  margin-bottom: 2rem;
 }
