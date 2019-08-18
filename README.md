@@ -14,7 +14,7 @@ This is a visual synth-design tool for Web Audio! You can use it to design synth
 
 ## How should I use this?
 
-You can create audio blocks such as oscillators, gain, filters, or envelopes, by clicking the '+' button in the bottom right corner of the screen. Connect them to the speakers and turn it on to hear the oscillator oscillating wildly! Try connecting different blocks together.
+You can create audio blocks such as oscillators, gain, filters, or envelopes, by clicking the menu button in the right corner of the screen. Connect them to the speakers and turn it on to hear the oscillator oscillating wildly! Try connecting different blocks together.
 
 ## Generate code
 
