@@ -10,7 +10,6 @@ import { BlockData } from "../../types/blockData";
 import { BiquadBlock } from "./BiquadBlock";
 // import { BlockProps } from "../types/blockProps";
 import { mount } from "enzyme";
-import { MuiThemeProvider } from "material-ui/styles";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -20,34 +19,32 @@ describe("<BiquadBlock />", () => {
 
   const blockInstance = mockblocks[3] as BlockData;
   const wrapper = mount(
-    <MuiThemeProvider>
-      <BiquadBlock
-        block={blockInstance}
-        allBlocks={mockblocks}
-        tryToConnectTo={(
-          block: BlockData,
-          outputToConnectTo: AudioParam,
-          outputType: string,
-          inputElement: DOMRect
-        ) => {
-          //
-        }}
-        canConnect={false}
-        updateBlock={mockUpdate}
-        deleteBlock={mockDelete}
-        audioCtx={audioCtx}
-        connectToAnalyser={jest.fn()}
-        connectInternal={jest.fn()}
-        onDragHandler={jest.fn()}
-        tryToConnect={jest.fn()}
-        checkInputs={jest.fn()}
-        startDragging={jest.fn()}
-        stopDragging={jest.fn()}
-      />
-    </MuiThemeProvider>
+    <BiquadBlock
+      block={blockInstance}
+      allBlocks={mockblocks}
+      tryToConnectTo={(
+        block: BlockData,
+        outputToConnectTo: AudioParam,
+        outputType: string,
+        inputElement: DOMRect
+      ) => {
+        //
+      }}
+      canConnect={false}
+      updateBlock={mockUpdate}
+      deleteBlock={mockDelete}
+      audioCtx={audioCtx}
+      connectToAnalyser={jest.fn()}
+      connectInternal={jest.fn()}
+      onDragHandler={jest.fn()}
+      tryToConnect={jest.fn()}
+      checkInputs={jest.fn()}
+      startDragging={jest.fn()}
+      stopDragging={jest.fn()}
+    />
   );
 
-  const instance = wrapper.children().instance() as BiquadBlock;
+  const instance = wrapper.instance() as BiquadBlock;
   // const props = wrapper.children().instance().props;
   test("tryToConnectTo()", () => {
     instance.tryToConnectTo("gain");

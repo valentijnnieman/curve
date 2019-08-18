@@ -1,7 +1,9 @@
 import * as React from "react";
-import { TextField, RaisedButton, Dialog } from "material-ui";
+import RaisedButton from "../ui/Buttons/RaisedButton";
+import Dialog from "./Menu/Dialog";
+import TextField from "./Forms/TextField";
 import { Redirect } from "react-router";
-import Register from "./Register";
+import SubmitButton from "./Buttons/SubmitButton";
 
 interface LoginProps {
   login: (name: string, password: string) => void;
@@ -39,6 +41,7 @@ export class Login extends React.Component<LoginProps, any> {
     });
   };
   handleFormSubmit = (e: any) => {
+    window.console.log("SUBMITTING");
     e.preventDefault();
     this.props.login(this.state.name, this.state.password);
   };
@@ -47,12 +50,13 @@ export class Login extends React.Component<LoginProps, any> {
       return <Redirect to="/" />;
     }
     return (
-      <RaisedButton primary={true} onClick={this.handleOpen}>
-        Login
+      <RaisedButton onClick={this.handleOpen}>
+        Log in
         <Dialog
-          title="Login"
+          title="Log in"
           modal={false}
           open={this.state.open}
+          closable={true}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
           className="code-dialog"
@@ -66,6 +70,7 @@ export class Login extends React.Component<LoginProps, any> {
               className="input input--black"
               errorText={this.props.error}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="text"
             />
             <TextField
@@ -77,18 +82,9 @@ export class Login extends React.Component<LoginProps, any> {
               errorText={this.props.error}
               errorStyle={{ color: "red" }}
               type="password"
+              underlined={true}
             />
-            <RaisedButton
-              primary={true}
-              label="Log in"
-              style={{ marginTop: "32px", marginBottom: "32px" }}
-              type="submit"
-            />
-            <Register
-              register={this.props.register}
-              error={this.props.error}
-              closeLogin={this.handleClose}
-            />
+            <SubmitButton primary={true} label="Log in" type="submit" />
           </form>
         </Dialog>
       </RaisedButton>

@@ -1,6 +1,6 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
-import TextField from "material-ui/TextField";
+import TextField from "../ui/Forms/TextField";
 
 import "../ui/Card.css";
 import "./Block.css";
@@ -10,7 +10,7 @@ import { BlockData } from "../../types/blockData";
 
 import { GainBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
-import { IconButton } from "material-ui";
+import IconButton from "../ui/Buttons/IconButton";
 
 import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";

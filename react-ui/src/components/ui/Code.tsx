@@ -1,8 +1,9 @@
 import * as React from "react";
-import { RaisedButton, Dialog } from "material-ui";
+import RaisedButton from "../ui/Buttons/RaisedButton";
+import Dialog from "./Menu/Dialog";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/styles/hljs";
-import "./Dropdown.css";
+import MenuItem from "./Menu/MenuItem";
 
 interface CodeProps {
   code: string;
@@ -37,11 +38,11 @@ export class Code extends React.Component<CodeProps, CodeState> {
   };
   render() {
     return (
-      <div onClick={this.handleOpen}>
+      <MenuItem onClick={this.handleOpen}>
         Code output
         <Dialog
           title="Generated Web Audio code (experimental)"
-          modal={false}
+          closable={true}
           open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
@@ -59,7 +60,7 @@ export class Code extends React.Component<CodeProps, CodeState> {
             {this.props.code}
           </SyntaxHighlighter>
         </Dialog>
-      </div>
+      </MenuItem>
     );
   }
 }

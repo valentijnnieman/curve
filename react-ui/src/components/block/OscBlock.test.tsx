@@ -10,7 +10,6 @@ import { BlockData } from "../../types/blockData";
 import { OscBlock } from "./OscBlock";
 // import { BlockProps } from "../types/blockProps";
 import { mount } from "enzyme";
-import { MuiThemeProvider } from "material-ui/styles";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -22,28 +21,26 @@ describe("<OscBlock />", () => {
 
   const blockInstance = mockblocks[0] as BlockData;
   const wrapper = mount(
-    <MuiThemeProvider>
-      <OscBlock
-        block={blockInstance}
-        allBlocks={mockblocks}
-        tryToConnectTo={mockTryToConnectTo}
-        canConnect={false}
-        updateBlock={mockUpdate}
-        deleteBlock={mockDelete}
-        audioCtx={audioCtx}
-        connectToAnalyser={jest.fn()}
-        connectInternal={jest.fn()}
-        onDragHandler={jest.fn()}
-        tryToConnect={jest.fn()}
-        checkInputs={jest.fn()}
-        startDragging={jest.fn()}
-        stopDragging={jest.fn()}
-      />
-    </MuiThemeProvider>
+    <OscBlock
+      block={blockInstance}
+      allBlocks={mockblocks}
+      tryToConnectTo={mockTryToConnectTo}
+      canConnect={false}
+      updateBlock={mockUpdate}
+      deleteBlock={mockDelete}
+      audioCtx={audioCtx}
+      connectToAnalyser={jest.fn()}
+      connectInternal={jest.fn()}
+      onDragHandler={jest.fn()}
+      tryToConnect={jest.fn()}
+      checkInputs={jest.fn()}
+      startDragging={jest.fn()}
+      stopDragging={jest.fn()}
+    />
   );
 
-  const instance = wrapper.children().instance() as OscBlock;
-  const props = wrapper.children().instance().props;
+  const instance = wrapper.instance() as OscBlock;
+  const props = wrapper.instance().props;
   test("toggleOsc()", () => {
     expect(props.block.running).toBe(false);
     instance.toggleOsc();
@@ -81,7 +78,7 @@ describe("<OscBlock />", () => {
     expect(mockUpdate.mock.calls[3][0].values).toEqual([999]);
   });
   test("handleTypeChange()", () => {
-    instance.handleTypeChange({}, 0, "sine");
+    instance.handleTypeChange("sine");
     expect(mockUpdate.mock.calls[3][0].type).toEqual("sine");
   });
 });

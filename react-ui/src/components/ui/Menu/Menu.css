@@ -1,0 +1,14 @@
+.menu {
+  list-style-type: none;
+  padding: 1rem 0;
+}
+.menu-item {
+  padding: 1rem;
+  border: 2px solid #4b4b4b;
+  margin-bottom: 1rem;
+}
+.menu-item:hover {
+  cursor: pointer;
+  background-color: #4b4b4b;
+  color: white;
+}

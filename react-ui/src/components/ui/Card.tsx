@@ -1,8 +1,8 @@
 import * as React from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-import ClearIcon from "material-ui/svg-icons/content/clear";
+const ClearSVG = require("../ui/Icons/clear.svg");
 import "../ui/Card.css";
-import { IconButton } from "material-ui";
+import IconButton from "../ui/Buttons/IconButton";
 import { BlockData } from "../../types/blockData";
 
 interface CardProps {
@@ -37,7 +37,8 @@ export default class Card extends React.Component<CardProps> {
       >
         <div className="card">
           <IconButton className="card-close" onClick={this.props.removeBlock}>
-            <ClearIcon />
+            <img src={ClearSVG} />
+            {/* <ClearIcon /> */}
           </IconButton>
           {this.props.children}
         </div>

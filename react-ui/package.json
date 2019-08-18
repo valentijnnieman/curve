@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@types/jest": "^22.2.0",
-    "@types/material-ui": "^0.21.1",
     "@types/node": "^9.4.7",
     "@types/react": "^16.8.0",
     "@types/react-dom": "^16.8.0",
@@ -21,7 +20,6 @@
     "concurrently": "^3.5.1",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
-    "material-ui": "^0.20.0",
     "nyc": "^13.3.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",

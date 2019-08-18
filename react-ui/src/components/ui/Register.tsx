@@ -1,5 +1,8 @@
 import * as React from "react";
-import { TextField, RaisedButton, Dialog, FlatButton } from "material-ui";
+import RaisedButton from "../ui/Buttons/RaisedButton";
+import Dialog from "./Menu/Dialog";
+import TextField from "./Forms/TextField";
+import SubmitButton from "./Buttons/SubmitButton";
 
 interface RegisterProps {
   register: (name: string, email: string, password: string) => void;
@@ -90,11 +93,12 @@ export class Register extends React.Component<RegisterProps, any> {
   };
   render() {
     return (
-      <FlatButton onClick={this.handleOpen}>
-        SIGN UP
+      <RaisedButton className="register-button" onClick={this.handleOpen}>
+        Register
         <Dialog
-          title="Sign up"
+          title="Register"
           modal={false}
+          closable={true}
           open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
@@ -109,6 +113,7 @@ export class Register extends React.Component<RegisterProps, any> {
               className="input input--black"
               errorText={this.props.error}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="text"
             />
             <TextField
@@ -119,6 +124,7 @@ export class Register extends React.Component<RegisterProps, any> {
               className="input input--black"
               errorText={this.props.error}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="email"
             />
             <TextField
@@ -129,6 +135,7 @@ export class Register extends React.Component<RegisterProps, any> {
               className="input input--black"
               errorText={this.props.error || this.state.passwordError}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="password"
             />
             <TextField
@@ -139,17 +146,16 @@ export class Register extends React.Component<RegisterProps, any> {
               className="input input--black"
               errorText={this.props.error || this.state.passwordError}
               errorStyle={{ color: "red" }}
+              underlined={true}
               type="password"
             />
-            <RaisedButton
-              primary={true}
-              label="Sign up"
-              style={{ marginTop: "32px", marginBottom: "32px" }}
-              type="submit"
+            <SubmitButton
+              label="Register"
+              className="submit-button--register"
             />
           </form>
         </Dialog>
-      </FlatButton>
+      </RaisedButton>
     );
   }
 }

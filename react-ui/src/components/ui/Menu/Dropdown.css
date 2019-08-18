@@ -1,0 +1,27 @@
+.createblock-button {
+  z-index: 999;
+  position: fixed;
+  top: 50%;
+  right: 0;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-right: none !important;
+}
+
+.dropdown {
+  list-style-type: none;
+  padding: 0.5rem 1rem;
+  border: 2px solid #4b4b4b;
+}
+.dropdown:hover {
+  cursor: pointer;
+}
+
+.dropdown-item {
+  color: #4b4b4b;
+  padding: 0.5rem 0 0;
+}
+.dropdown-item:hover {
+  background-color: #4b4b4b;
+  color: white;
+}

@@ -1,23 +1,23 @@
 import * as React from "react";
-import Toggle from "material-ui/Toggle";
+import Toggle from "../ui/Buttons/Toggle";
 
-import TextField from "material-ui/TextField";
+import TextField from "../ui/Forms/TextField";
 
 import { BlockData } from "../../types/blockData";
 
 import { InternalOscData } from "../../types/internalData";
 
-import DropDownMenu from "material-ui/DropDownMenu";
-import MenuItem from "material-ui/MenuItem";
+import DropDownMenu from "../ui/Menu/Dropdown";
 
 import "./Block.css";
 import { Analyser } from "../Analyser";
 
 import { OscBlockProps } from "../../types/blockProps";
 import { composedBlock } from "../../lib/hoc/Block";
-import { IconButton } from "material-ui";
+import IconButton from "../ui/Buttons/IconButton";
 import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";
+import DropdownItem from "../ui/Menu/DropdownItem";
 
 export class OscBlock extends React.Component<OscBlockProps> {
   freqInput: HTMLInputElement;
@@ -91,7 +91,7 @@ export class OscBlock extends React.Component<OscBlockProps> {
     }
   };
   // handleTypeChange's parameters are dictated by material-ui/DropdownMenu
-  handleTypeChange = (e: any, index: any, value: any) => {
+  handleTypeChange = (value: any) => {
     // set change here so it is instant
     (this.props.block.internal as InternalOscData).oscillator.type = value;
 
@@ -189,10 +189,10 @@ export class OscBlock extends React.Component<OscBlockProps> {
             value={this.props.block.type}
             onChange={this.handleTypeChange}
           >
-            <MenuItem value="sine" primaryText="Sine" />
-            <MenuItem value="square" primaryText="Square" />
-            <MenuItem value="triangle" primaryText="Triangle" />
-            <MenuItem value="sawtooth" primaryText="Sawtooth" />
+            <DropdownItem value="sine" primaryText="Sine" />
+            <DropdownItem value="square" primaryText="Square" />
+            <DropdownItem value="triangle" primaryText="Triangle" />
+            <DropdownItem value="sawtooth" primaryText="Sawtooth" />
           </DropDownMenu>
           <Analyser
             analyser={this.props.block.internal.analyser}
