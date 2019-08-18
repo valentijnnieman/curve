@@ -18,6 +18,8 @@
   left: 33vw;
   padding: 2rem;
   color: #4b4b4b;
+  max-height: 40rem;
+  overflow-y: scroll;
 }
 .dialog--closed {
   top: -999px;
