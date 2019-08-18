@@ -25,6 +25,7 @@ interface ShareMenuProps {
   success: string;
   user: any;
   synthId: number;
+  disabled: boolean;
 }
 interface ShareMenuState {
   open: boolean;
@@ -85,7 +86,7 @@ export class ShareMenu extends React.Component<ShareMenuProps, ShareMenuState> {
       );
     }
     return (
-      <MenuItem onClick={this.handleOpen}>
+      <MenuItem onClick={this.handleOpen} disabled={this.props.disabled}>
         Save synth
         <Dialog
           title="Save & share synth"

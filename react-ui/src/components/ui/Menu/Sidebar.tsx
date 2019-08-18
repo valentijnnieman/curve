@@ -69,40 +69,37 @@ export default class Sidebar extends React.Component<
         Log in to save synth <br /> <br />
       </>
     );
-    if (name) {
-      userMenu = (
-        <div className="sidebar-bottom">
-          {/* <MenuItem style={{ textAlign: "center" }}>My Synths</MenuItem> */}
-          <MenuItem style={{ textAlign: "center" }}>
-            <SynthMenu synths={this.props.synths} />
+    userMenu = (
+      <div className="sidebar-bottom">
+        {/* <MenuItem style={{ textAlign: "center" }}>My Synths</MenuItem> */}
+        <SynthMenu synths={this.props.synths} disabled={name ? false : true} />
+        <div className="sidebar-bottom__lower">
+          <MenuItem
+            style={{ textAlign: "center" }}
+            onClick={() => {
+              this.props.logout();
+            }}
+            disabled={name ? false : true}
+          >
+            Log Out
           </MenuItem>
-          <div className="sidebar-bottom__lower">
-            <MenuItem
-              style={{ textAlign: "center" }}
-              onClick={() => {
-                window.console.log("clock out");
-                this.props.logout();
-              }}
-            >
-              Log Out
-            </MenuItem>
-          </div>
         </div>
-      );
-      shareMenu = (
-        <ShareMenu
-          blocksToSave={this.props.blocksWithoutInternals}
-          saveState={this.props.saveState}
-          updateState={this.props.updateState}
-          error={this.props.error}
-          success={this.props.success}
-          name={this.props.name}
-          slug={this.props.slug}
-          user={this.props.user}
-          synthId={this.props.synthId}
-        />
-      );
-    }
+      </div>
+    );
+    shareMenu = (
+      <ShareMenu
+        blocksToSave={this.props.blocksWithoutInternals}
+        saveState={this.props.saveState}
+        updateState={this.props.updateState}
+        error={this.props.error}
+        success={this.props.success}
+        name={this.props.name}
+        slug={this.props.slug}
+        user={this.props.user}
+        synthId={this.props.synthId}
+        disabled={name ? false : true}
+      />
+    );
     return (
       <div>
         <SidebarButton
@@ -119,7 +116,11 @@ export default class Sidebar extends React.Component<
             <h1 style={{ textAlign: "center" }}>Curve</h1>
           </div>
           <p style={{ textAlign: "center" }}>
-            <b>{name}</b>
+            <b>
+              {name
+                ? `Welcome, ${name}!`
+                : "Please log in to have access to all features."}
+            </b>
           </p>
           <Menu>
             {shareMenu}

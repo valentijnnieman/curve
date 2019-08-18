@@ -3,9 +3,11 @@ import List from "./Menu/List";
 import ListItem from "./Menu/ListItem";
 import Dialog from "./Menu/Dialog";
 import { Link } from "react-router-dom";
+import MenuItem from "./Menu/MenuItem";
 
 interface SynthMenuProps {
   synths: Array<any>;
+  disabled: boolean;
 }
 interface SynthMenuState {
   open: boolean;
@@ -39,7 +41,7 @@ export class SynthMenu extends React.Component<SynthMenuProps, SynthMenuState> {
       );
     });
     return (
-      <div onClick={this.handleOpen}>
+      <MenuItem onClick={this.handleOpen} disabled={this.props.disabled}>
         My Synths
         <Dialog
           title="My Synths"
@@ -52,7 +54,7 @@ export class SynthMenu extends React.Component<SynthMenuProps, SynthMenuState> {
         >
           <List>{synthList}</List>
         </Dialog>
-      </div>
+      </MenuItem>
     );
   }
 }

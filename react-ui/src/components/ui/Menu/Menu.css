@@ -12,3 +12,12 @@
   background-color: #4b4b4b;
   color: white;
 }
+.menu-item--disabled {
+  color: #e6e6e6;
+  border-color: #e6e6e6;
+}
+.menu-item--disabled:hover {
+  cursor: inherit;
+  background-color: white;
+  color: #e6e6e6;
+}
