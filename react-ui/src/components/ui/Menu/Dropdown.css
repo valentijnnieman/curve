@@ -2,10 +2,14 @@
   z-index: 999;
   position: fixed;
   top: 50%;
-  right: 0;
+  right: 16rem;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
   border-right: none !important;
+  transition: all 0.2s;
+}
+.createblock-button--collapsed {
+  right: 0;
 }
 
 .dropdown {

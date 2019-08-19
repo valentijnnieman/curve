@@ -9,6 +9,7 @@ import { v4 as uuid } from "uuid";
 
 import { buildInternal } from "../../lib/helpers/Editor";
 import Drawer from "./Menu/Drawer";
+import SidebarButton from "./Buttons/SidebarButton";
 
 interface CreateBlockProps {
   audioCtx: AudioContext;
@@ -18,12 +19,25 @@ interface CreateBlockProps {
 export class CreateBlock extends React.Component<CreateBlockProps, any> {
   constructor(props: any) {
     super(props);
+    this.state = {
+      open: true
+    };
   }
+
+  handleToggle = () => {
+    this.setState({ open: !this.state.open });
+  };
 
   render() {
     return (
       <div>
-        <Drawer open={true} right={true} static={true}>
+        <SidebarButton
+          className="createblock-button"
+          closedClassName="createblock-button--collapsed"
+          open={this.state.open}
+          onClick={this.handleToggle}
+        />
+        <Drawer open={this.state.open} right={true} static={true}>
           <h2>Add:</h2>
           <Menu>
             <MenuItem

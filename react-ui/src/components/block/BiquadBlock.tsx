@@ -69,7 +69,7 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
       this.props.updateBlock(updatedBlock);
     }
   };
-  handleTypeChange = (e: any, index: any, value: any) => {
+  handleTypeChange = (value: any) => {
     // set change here so it is instant
     (this.props.block.internal as InternalBiquadData).filter.type = value;
 

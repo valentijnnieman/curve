@@ -12,10 +12,15 @@ interface SidebarButtonProps {
   type?: string;
   mini?: boolean;
   className?: string;
+  open?: boolean;
+  openClassName?: string;
+  closedClassName?: string;
 }
 
 export default (props: SidebarButtonProps) => {
-  const buttonClass = `button sidebar-button ${props.className}`;
+  const buttonClass = `button sidebar-button ${props.className} ${
+    props.open ? props.openClassName || "" : props.closedClassName || ""
+  }`;
   return (
     <div className={buttonClass} onClick={props.onClick}>
       |{props.children}

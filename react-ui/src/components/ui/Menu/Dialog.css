@@ -15,7 +15,11 @@
   border-radius: 8px;
   transition: all 0.6s;
   top: 33vh;
-  left: 33vw;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 26rem;
   padding: 2rem;
   color: #4b4b4b;
   max-height: 40rem;
