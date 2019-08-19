@@ -4,23 +4,27 @@
 }
 .menu-item {
   padding: 1rem;
-  border: 2px solid #4b4b4b;
+  border: 2px solid white;
+  color: white;
   border-radius: 8px;
   margin-bottom: 1rem;
 }
 .menu-item:hover {
   cursor: pointer;
-  background-color: #4b4b4b;
-  color: white;
+  background-color: white;
+  color: #4b4b4b;
+  border-color: white;
 }
 .menu-item--disabled {
-  color: #e6e6e6;
-  border-color: #e6e6e6;
+  background-color: #4b4b4b;
+  color: #777777;
+  border-color: #777777;
 }
 .menu-item--disabled:hover {
   cursor: inherit;
-  background-color: white;
-  color: #e6e6e6;
+  background-color: #4b4b4b;
+  color: #777777;
+  border-color: #777777;
 }
 
 .create-osc-button {
