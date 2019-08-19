@@ -41,6 +41,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
           <h2>Add:</h2>
           <Menu>
             <MenuItem
+              className="create-osc-button"
               onClick={() => {
                 const options = {
                   id: uuid(),
@@ -68,6 +69,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
               Oscillator
             </MenuItem>
             <MenuItem
+              className="create-filter-button"
               onClick={() => {
                 const options = {
                   id: uuid(),
@@ -94,6 +96,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
               Filter
             </MenuItem>
             <MenuItem
+              className="create-envelope-button"
               onClick={() => {
                 const options = {
                   id: uuid(),
@@ -118,6 +121,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
               Envelope
             </MenuItem>
             <MenuItem
+              className="create-gain-button"
               onClick={() => {
                 const options = {
                   id: uuid(),

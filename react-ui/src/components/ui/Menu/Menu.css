@@ -22,3 +22,39 @@
   background-color: white;
   color: #e6e6e6;
 }
+
+.create-osc-button {
+  color: #53a857;
+  border-color: #53a857;
+}
+.create-osc-button:hover {
+  background-color: #53a857;
+  color: white;
+}
+.create-filter-button {
+  color: #fdd835;
+  border-color: #fdd835;
+}
+.create-filter-button:hover {
+  background-color: #fdd835;
+  color: white;
+}
+.create-envelope-button {
+  color: #e53935;
+  border-color: #e53935;
+}
+.create-envelope-button:hover {
+  background-color: #e53935;
+  color: white;
+}
+.create-gain-button {
+  color: #337ab7;
+  border-color: #337ab7;
+}
+.create-gain-button:hover {
+  background-color: #337ab7;
+  color: white;
+}
+            
+            
+            
