@@ -13,7 +13,7 @@ import { StoreState } from "../../types/storeState";
 import { CreateBlock } from "./CreateBlock";
 import { saveState, fetchSynths, updateState } from "../../actions/state";
 import Sidebar from "./Menu/Sidebar";
-import { login, register } from "src/actions/user";
+import { login, register } from "../../actions/user";
 import { logout } from "../../actions/user";
 import { Login } from "./Login";
 import Register from "./Register";
