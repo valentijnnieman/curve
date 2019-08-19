@@ -1,14 +1,51 @@
 import { StoreState } from "../types/storeState";
-import { BlockDataOptions } from "../types/blockData";
+import { BlockDataOptions, OutputData } from "../types/blockData";
 import { buildInternal } from "../lib/helpers/Editor";
 
 const audioCtx = new AudioContext();
 
 const blockOptions: Array<BlockDataOptions> = [
   {
+    id: "initial-osc-1",
+    x: 100,
+    y: 100,
+    blockType: "OSC",
+    values: [330],
+    type: "square",
+    hasInternal: false,
+    hasInputFrom: [],
+    connected: true,
+    outputs: [
+      {
+        id: 0,
+        isConnectedTo: "initial-gain-1",
+        connectedToType: "GAIN"
+      } as OutputData
+    ],
+    gainInputDOMRect: new DOMRect(0, 0, 0, 0)
+  },
+  {
+    id: "initial-gain-1",
+    x: 300,
+    y: 100,
+    blockType: "GAIN",
+    values: [0.1],
+    hasInternal: false,
+    hasInputFrom: ["initial-osc-1"],
+    connected: true,
+    outputs: [
+      {
+        id: 1,
+        isConnectedTo: "curve-output",
+        connectedToType: "DESTINATION"
+      } as OutputData
+    ],
+    gainInputDOMRect: new DOMRect(0, 0, 0, 0)
+  },
+  {
     id: "curve-output",
-    x: 0,
-    y: 0,
+    x: 500,
+    y: 100,
     blockType: "DESTINATION",
     values: [1],
     hasInternal: false,
@@ -28,6 +65,14 @@ const initialState = {
     {
       ...blockOptions[0],
       internal: buildInternal(blockOptions[0], audioCtx)
+    },
+    {
+      ...blockOptions[1],
+      internal: buildInternal(blockOptions[1], audioCtx)
+    },
+    {
+      ...blockOptions[2],
+      internal: buildInternal(blockOptions[2], audioCtx)
     }
   ],
   audioCtx,
