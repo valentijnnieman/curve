@@ -5,6 +5,7 @@
 .menu-item {
   padding: 1rem;
   border: 2px solid #4b4b4b;
+  border-radius: 8px;
   margin-bottom: 1rem;
 }
 .menu-item:hover {
