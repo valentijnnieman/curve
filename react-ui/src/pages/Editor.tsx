@@ -25,7 +25,7 @@ import { fetchState } from "../actions/state";
 import { LineGrid } from "../components/LineGrid";
 import { fetchUser } from "../actions/user";
 import { BlockGrid } from "../components/BlockGrid";
-import Topbar from "src/components/ui/Topbar";
+import Topbar from "../components/ui/Topbar";
 
 interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
