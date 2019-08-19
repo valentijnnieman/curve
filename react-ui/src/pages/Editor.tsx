@@ -25,6 +25,7 @@ import { fetchState } from "../actions/state";
 import { LineGrid } from "../components/LineGrid";
 import { fetchUser } from "../actions/user";
 import { BlockGrid } from "../components/BlockGrid";
+import Topbar from "src/components/ui/Topbar";
 
 interface EditorProps extends RouteComponentProps<any> {
   blocks: Array<BlockData>;
@@ -243,7 +244,8 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   };
   render() {
     return (
-      <div onMouseMove={e => this.onMouseMove(e)}>
+      <div className="editor-container" onMouseMove={e => this.onMouseMove(e)}>
+        <Topbar />
         <LineGrid
           stopMouseLine={this.stopMouseLine}
           disconnect={this.disconnect}
