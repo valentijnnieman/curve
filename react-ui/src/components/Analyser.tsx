@@ -63,10 +63,11 @@ export class Analyser extends React.Component<AnalyserProps> {
   render() {
     return (
       <canvas
+        className="analyser-canvas"
         ref={canvasElement => {
           this.analyserCanvas = canvasElement as HTMLCanvasElement;
         }}
-        width={132}
+        width={134}
         height={70}
       />
     );

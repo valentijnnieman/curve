@@ -32,9 +32,8 @@
 }
 .speakers-svg {
   opacity: 0.2;
-  margin: 32px;
-  margin-top: 0px;
-  width: 48px;
+  margin: 2rem;
+  width: 3rem;
 }
 
 .connection-line {
