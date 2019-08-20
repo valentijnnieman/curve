@@ -11,12 +11,11 @@
   z-index: 999;
   position: absolute;
   background-color: white;
-  border: 2px solid black;
   border-radius: 8px;
   transition: all 0.6s;
   top: 33vh;
   left: 15vw;
-  width: 26rem;
+  width: 29rem;
   padding: 2rem;
   color: #4b4b4b;
   max-height: 40rem;
