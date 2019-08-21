@@ -26,7 +26,7 @@ export default (props: TextFieldProps) => {
       <input
         name={props.name}
         onChange={props.onChange}
-        value={props.value}
+        value={props.defaultValue || props.value}
         type={props.type}
         step={props.step}
         className={textClass}
