@@ -48,11 +48,11 @@
 }
 
 .topbar-buttons {
-  margin-right: 10rem;
+  margin-right: 140px;
 }
 
 @media screen and (min-width: 800px) {
   .topbar-buttons {
-    margin-right: 20rem;
+    margin-right: 280px;
   }
 }

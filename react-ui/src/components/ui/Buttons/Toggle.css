@@ -1,8 +1,8 @@
 .toggle {
   position: relative;
   display: inline-block;
-  width: 61px;
-  height: 34px;
+  width: 4.5rem;
+  height: 2.5rem;
 }
 
 .toggle input {
@@ -27,10 +27,10 @@
 .toggle-slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
+  height: 2rem;
+  width: 2rem;
+  left: 0.3rem;
+  bottom: 0.3rem;
   background-color: white;
   -webkit-transition: 0.4s;
   transition: 0.4s;
@@ -42,7 +42,7 @@ input:checked + .toggle-slider {
 }
 
 input:checked + .toggle-slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(2rem);
+  -ms-transform: translateX(2rem);
+  transform: translateX(2rem);
 }

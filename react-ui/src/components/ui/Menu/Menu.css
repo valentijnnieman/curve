@@ -1,13 +1,17 @@
 .menu {
   list-style-type: none;
-  padding: 1rem 0;
+  padding: 14px 0;
+}
+.menu-title {
+  font-size: 14px;
 }
 .menu-item {
-  padding: 1rem;
+  padding: 14px;
   border: 2px solid white;
   color: white;
   border-radius: 8px;
-  margin-bottom: 1rem;
+  margin-bottom: 14px;
+  font-size: 14px;
 }
 .menu-item:hover {
   cursor: pointer;
@@ -63,6 +67,3 @@
   border-color: #337ab7;
   color: white;
 }
-            
-            
-            

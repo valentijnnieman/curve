@@ -15,8 +15,6 @@ import { saveState, fetchSynths, updateState } from "../../actions/state";
 import Sidebar from "./Menu/Sidebar";
 import { login, register } from "../../actions/user";
 import { logout } from "../../actions/user";
-import { Login } from "./Login";
-import Register from "./Register";
 
 const CurveSVG = require("../../curve.svg");
 
@@ -62,30 +60,6 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
     };
   }
   render() {
-    const { user } = this.props;
-    let userButton;
-    let registerButton;
-    if (user && user.name) {
-      userButton = <h3 className="topbar-title thin">Welcome, {user.name}!</h3>;
-    } else {
-      userButton = (
-        <Login
-          login={this.props.login}
-          register={this.props.register}
-          error={this.props.error}
-          user={this.props.user}
-        />
-      );
-      registerButton = (
-        <Register
-          register={this.props.register}
-          error={this.props.error}
-          closeLogin={() => {
-            window.console.log("closing login");
-          }}
-        />
-      );
-    }
     return (
       <div className="topbar-container">
         <div className="topbar">
@@ -95,10 +69,10 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
               <i>{this.props.name}</i>
             </h2>
           </div>
-          <div className="topbar-buttons">
+          {/* <div className="topbar-buttons">
             {userButton}
             {registerButton}
-          </div>
+          </div> */}
           {/* <FlatButton
             label="Tour"
             onClick={() => this.setState({ joyrideIsRunning: true })}

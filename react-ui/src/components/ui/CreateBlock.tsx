@@ -38,7 +38,7 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
           onClick={this.handleToggle}
         />
         <Drawer open={this.state.open} right={true} static={true}>
-          <h2>+</h2>
+          <h2 className="menu-title">+</h2>
           <Menu>
             <MenuItem
               className="create-osc-button"

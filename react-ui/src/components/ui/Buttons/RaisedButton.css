@@ -2,19 +2,19 @@
   background-color: #f50057;
   color: white;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 14px;
   font-family: "Roboto Mono", monospace;
 }
 
 .register-button {
-  margin-left: 1rem;
+  margin-left: 14px;
   background-color: white;
   color: #4b4b4b;
 }
 
 .submit-button {
   float: right;
-  margin: 2rem 0.5rem 0;
+  margin: 28px 7px 0;
 }
 .submit-button--register {
   background-color: #f50057;

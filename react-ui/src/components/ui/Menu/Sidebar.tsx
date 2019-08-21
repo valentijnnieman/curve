@@ -10,6 +10,8 @@ import { Code } from "../Code";
 import { SynthMenu } from "../SynthMenu";
 import SidebarButton from "../Buttons/SidebarButton";
 import Menu from "./Menu";
+import { Login } from "../Login";
+import Register from "../Register";
 const CurveSVG = require("../../../curve.svg");
 
 interface SidebarProps {
@@ -34,6 +36,8 @@ interface SidebarProps {
   user: any;
   synths: Array<any>;
   synthId: number;
+  login: (name: string, password: string) => void;
+  register: (name: string, email: string, password: string) => void;
   logout: () => void;
   fetchSynths: (id: number) => void;
 }
@@ -64,6 +68,23 @@ export default class Sidebar extends React.Component<
   render() {
     const { name } = this.props.user;
     let userMenu;
+    let userButton = (
+      <Login
+        login={this.props.login}
+        register={this.props.register}
+        error={this.props.error}
+        user={this.props.user}
+      />
+    );
+    let registerButton = (
+      <Register
+        register={this.props.register}
+        error={this.props.error}
+        closeLogin={() => {
+          window.console.log("closing login");
+        }}
+      />
+    );
     let shareMenu = (
       <>
         Log in to save synth <br /> <br />
@@ -121,6 +142,8 @@ export default class Sidebar extends React.Component<
                 ? `Welcome, ${name}!`
                 : "Please log in to have access to all features."}
             </b>
+            {name ? "" : userButton}
+            {name ? "" : registerButton}
           </p>
           <Menu>
             {shareMenu}

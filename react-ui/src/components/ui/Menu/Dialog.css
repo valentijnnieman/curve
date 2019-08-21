@@ -15,10 +15,10 @@
   transition: all 0.6s;
   top: 33vh;
   left: 15vw;
-  width: 29rem;
-  padding: 2rem;
+  width: 406px;
+  padding: 28px;
   color: #4b4b4b;
-  max-height: 40rem;
+  max-height: 560px;
   overflow-y: scroll;
   box-shadow: 6px 3px 8px 1px #4b4b4b;
 }
@@ -27,11 +27,7 @@
 }
 .dialog-title {
   margin-top: 0;
-  margin-bottom: 2rem;
-}
-
-.code-dialog {
-  min-width: 20rem;
+  margin-bottom: 28px;
 }
 
 @media screen and (min-width: 800px) {
