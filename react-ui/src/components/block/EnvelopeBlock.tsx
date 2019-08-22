@@ -209,7 +209,6 @@ export class EnvelopeBlock extends React.Component<
             label="Trigger"
             primary={true}
             onClick={this.handleTrigger}
-            style={{ fontSize: "12px" }}
           />
           <form onSubmit={e => e.preventDefault()}>
             <TextField

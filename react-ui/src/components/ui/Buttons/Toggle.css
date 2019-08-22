@@ -19,8 +19,8 @@
   right: 0;
   bottom: 0;
   background-color: #f2f2f2;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: transform 0.4s;
+  transition: transform 0.4s;
   border-radius: 34px;
 }
 
@@ -32,8 +32,8 @@
   left: 0.4rem;
   bottom: 0.3rem;
   background-color: white;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: transform 0.4s;
+  transition: transform 0.4s;
   border-radius: 100%;
 }
 

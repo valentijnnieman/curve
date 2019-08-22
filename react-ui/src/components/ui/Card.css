@@ -10,18 +10,19 @@
   visibility: hidden;
   opacity: 0;
   position: absolute;
-  top: -44px;
-  left: 96px;
+  top: -2rem;
+  left: 8rem;
   border: none;
   transition: all 0.2s;
 }
 .card:hover .card-close {
   visibility: visible;
   opacity: 1;
+  cursor: pointer;
 }
-.card-close svg {
-  width: 0.5rem;
-  height: 0.5rem;
+.card-close img {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 .card-content {
   padding-top: 1rem;

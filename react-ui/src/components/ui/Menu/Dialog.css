@@ -21,6 +21,7 @@
   max-height: 560px;
   overflow-y: scroll;
   box-shadow: 6px 3px 8px 1px #4b4b4b;
+  font-size: 14px;
 }
 .dialog--closed {
   top: -999px;
@@ -28,6 +29,7 @@
 .dialog-title {
   margin-top: 0;
   margin-bottom: 28px;
+  font-size: 24px;
 }
 
 @media screen and (min-width: 800px) {

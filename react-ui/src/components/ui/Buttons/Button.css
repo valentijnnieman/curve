@@ -3,6 +3,7 @@
   border-radius: 8px;
   padding: 16px;
   display: inline-block;
+  font-size: 14px;
 }
 
 .button:hover {

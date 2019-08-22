@@ -50,6 +50,8 @@ interface EditorState {
   mouseX?: number;
   mouseY?: number;
   accessModalOpen: boolean;
+  lastScroll: number;
+  fontSize: number;
 }
 
 export class Editor extends React.Component<EditorProps, EditorState> {
@@ -75,6 +77,8 @@ export class Editor extends React.Component<EditorProps, EditorState> {
 
     this.state = {
       wantsToConnect: false,
+      lastScroll: 0,
+      fontSize: 14,
       accessModalOpen: !isRunning
     };
   }
@@ -242,6 +246,23 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     // update redux store -> delete blockData object
     this.props.deleteBlock(id);
   };
+  componentDidMount() {
+    window.addEventListener("wheel", event => {
+      const delta = Math.sign(event.deltaY);
+      window.console.info(delta);
+      if (delta < 0) {
+        this.setState({ fontSize: this.state.fontSize + 1 }, () => {
+          const htmlElement = document.getElementsByTagName("html")[0];
+          htmlElement.style.fontSize = `${this.state.fontSize}px`;
+        });
+      } else {
+        this.setState({ fontSize: this.state.fontSize - 1 }, () => {
+          const htmlElement = document.getElementsByTagName("html")[0];
+          htmlElement.style.fontSize = `${this.state.fontSize}px`;
+        });
+      }
+    });
+  }
   render() {
     return (
       <div className="editor-container" onMouseMove={e => this.onMouseMove(e)}>
@@ -275,7 +296,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           autoScrollBodyContent={true}
           className="code-dialog"
         >
-          <p style={{ marginBottom: "2rem" }}>
+          <p style={{ marginBottom: "28px" }}>
             Web Audio needs to be turned on - some browsers prevent autoplaying
             audio.
           </p>
