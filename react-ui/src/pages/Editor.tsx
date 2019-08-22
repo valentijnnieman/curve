@@ -137,7 +137,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       ...blockWithOutput,
       connected: blockWithOutput.outputs.length > 1 ? true : false,
       outputs: blockWithOutput.outputs.filter(
-        (output, index) => index !== outputIndex
+        (_, index) => index !== outputIndex
       )
     };
     this.props.updateBlock(updatedBlockWithOutput);

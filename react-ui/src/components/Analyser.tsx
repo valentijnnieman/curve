@@ -14,7 +14,7 @@ export class Analyser extends React.Component<AnalyserProps> {
     let width = this.ctx.canvas.width;
     let height = this.ctx.canvas.height;
     let timeData = new Uint8Array(this.props.analyser.frequencyBinCount);
-    let scaling = height / 256;
+    let scaling = (height - 8) / 256;
     let risingEdge = 0;
 
     this.props.analyser.getByteTimeDomainData(timeData);
@@ -31,7 +31,7 @@ export class Analyser extends React.Component<AnalyserProps> {
       x < timeData.length && x - risingEdge < width;
       x++
     ) {
-      this.ctx.lineTo(x, height - timeData[x] * scaling);
+      this.ctx.lineTo(x, height - 4 - timeData[x] * scaling);
     }
 
     this.ctx.stroke();
@@ -68,7 +68,7 @@ export class Analyser extends React.Component<AnalyserProps> {
           this.analyserCanvas = canvasElement as HTMLCanvasElement;
         }}
         width={134}
-        height={70}
+        height={60}
       />
     );
   }
