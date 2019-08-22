@@ -197,9 +197,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       );
     }
   };
-  componentWillReceiveProps(nextProps: EditorProps) {
-    this.lines = drawConnectionLines(nextProps.blocks);
-  }
   onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (this.state.wantsToConnect) {
       this.setState({
@@ -246,10 +243,12 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     // update redux store -> delete blockData object
     this.props.deleteBlock(id);
   };
+  componentWillReceiveProps(nextProps: EditorProps) {
+    this.lines = drawConnectionLines(nextProps.blocks);
+  }
   componentDidMount() {
     window.addEventListener("wheel", event => {
       const delta = Math.sign(event.deltaY);
-      window.console.info(delta);
       if (delta < 0) {
         this.setState({ fontSize: this.state.fontSize + 1 }, () => {
           const htmlElement = document.getElementsByTagName("html")[0];
@@ -261,6 +260,13 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           htmlElement.style.fontSize = `${this.state.fontSize}px`;
         });
       }
+      this.props.blocks.forEach(block => {
+        this.props.updateBlock({
+          ...block,
+          x: block.x + delta * 20,
+          y: block.y + delta * 20
+        });
+      });
     });
   }
   render() {

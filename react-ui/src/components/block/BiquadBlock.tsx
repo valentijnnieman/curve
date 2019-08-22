@@ -141,6 +141,19 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
             onClick={() => this.tryToConnectTo("GAIN")}
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
+              if (this.gainInputElement != null) {
+                const gainInputRect = this.gainInputElement.getBoundingClientRect() as DOMRect;
+                if (
+                  this.props.block.gainInputDOMRect &&
+                  (gainInputRect.x !== this.props.block.gainInputDOMRect.x ||
+                    gainInputRect.y !== this.props.block.gainInputDOMRect.y)
+                ) {
+                  this.props.updateBlock({
+                    ...this.props.block,
+                    gainInputDOMRect: gainInputRect
+                  });
+                }
+              }
             }}
           />
         </IconButton>
@@ -155,6 +168,19 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
             onClick={() => this.tryToConnectTo("FREQ")}
             ref={ref => {
               this.freqInputElement = ref as HTMLDivElement;
+              if (this.freqInputElement != null) {
+                const freqInputRect = this.freqInputElement.getBoundingClientRect() as DOMRect;
+                if (
+                  this.props.block.freqInputDOMRect &&
+                  (freqInputRect.x !== this.props.block.freqInputDOMRect.x ||
+                    freqInputRect.y !== this.props.block.freqInputDOMRect.y)
+                ) {
+                  this.props.updateBlock({
+                    ...this.props.block,
+                    freqInputDOMRect: freqInputRect
+                  });
+                }
+              }
             }}
           />
         </IconButton>
@@ -211,6 +237,19 @@ export class BiquadBlock extends React.Component<BiquadBlockProps> {
             }
             ref={ref => {
               this.outputElement = ref as HTMLDivElement;
+              if (this.outputElement != null) {
+                const outputRect = this.outputElement.getBoundingClientRect() as DOMRect;
+                if (
+                  this.props.block.outputDOMRect &&
+                  (outputRect.x !== this.props.block.outputDOMRect.x ||
+                    outputRect.y !== this.props.block.outputDOMRect.y)
+                ) {
+                  this.props.updateBlock({
+                    ...this.props.block,
+                    outputDOMRect: outputRect
+                  });
+                }
+              }
             }}
           />
         </IconButton>

@@ -37,10 +37,11 @@
 }
 
 .connection-line {
-  transition: all 0.2s;
+  stroke-width: 0.25rem;
+  stroke-dasharray: 0.25rem, 0.25rem;
 }
 .connection-line:hover {
-  stroke-width: 5px;
+  stroke-width: 0.5rem;
   stroke: "orange";
   cursor: pointer;
 }

@@ -25,8 +25,6 @@ export class LineGrid extends React.PureComponent<LineGridProps> {
             x2={line.x2}
             y2={line.y2}
             stroke="#f50057"
-            strokeWidth={4}
-            strokeDasharray="4, 4"
             className="connection-line"
             onClick={e =>
               this.props.disconnect(line.fromBlock, line.toBlock, line.outputId)

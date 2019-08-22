@@ -1,7 +1,7 @@
 .flat-button {
   border: 2px solid black;
   background-color: cyan;
-  padding: 16px;
+  padding: 1rem;
 }
 .flat-button:hover {
   cursor: pointer;
