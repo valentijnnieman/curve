@@ -266,7 +266,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
   render() {
     return (
       <div className="editor-container" onMouseMove={e => this.onMouseMove(e)}>
-        <Topbar />
+        <Topbar zoom={100 + (this.state.fontSize - 14) * 10} />
         <LineGrid
           stopMouseLine={this.stopMouseLine}
           disconnect={this.disconnect}

@@ -3,6 +3,19 @@
   padding: 14px 0;
   font-size: 14px;
 }
+.menu-zoom-level {
+  position: absolute;
+  font-size: 14px;
+  top: 14px;
+  right: 238px;
+  color: #4b4b4b;
+  opacity: 1;
+  transition: all 0.4s;
+}
+.menu-zoom-level--hidden {
+  visibility: hidden;
+  opacity: 0;
+}
 .menu-title {
   font-size: 14px;
 }

@@ -14,19 +14,31 @@ import SidebarButton from "./Buttons/SidebarButton";
 interface CreateBlockProps {
   audioCtx: AudioContext;
   createBlock: (node: BlockData) => void;
+  zoom: number;
 }
 
 export class CreateBlock extends React.Component<CreateBlockProps, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      open: true
+      open: true,
+      displayZoom: false
     };
   }
 
   handleToggle = () => {
     this.setState({ open: !this.state.open });
   };
+
+  componentWillReceiveProps(newProps: any) {
+    if (newProps.zoom !== this.props.zoom) {
+      this.setState({ displayZoom: true }, () => {
+        window.setTimeout(() => {
+          this.setState({ displayZoom: false });
+        }, 1100);
+      });
+    }
+  }
 
   render() {
     return (
@@ -38,6 +50,13 @@ export class CreateBlock extends React.Component<CreateBlockProps, any> {
           onClick={this.handleToggle}
         />
         <Drawer open={this.state.open} right={true} static={true}>
+          <div
+            className={`menu-zoom-level ${
+              this.state.displayZoom ? "" : "menu-zoom-level--hidden"
+            }`}
+          >
+            {this.props.zoom}%
+          </div>
           <h2 className="menu-title">+</h2>
           <Menu>
             <MenuItem
