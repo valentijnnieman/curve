@@ -41,17 +41,20 @@
 }
 
 .tooltip {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-
-  /* Position the tooltip text - see examples below! */
   position: absolute;
-  right: 0;
-  z-index: 999999;
+  opacity: 0.6;
+  width: 6rem;
+  transition: all 0.2s;
+  left: -8rem;
+  background-color: white;
+  border: 1px solid #4b4b4b;
+  border-radius: 4px;
+  padding: 0.5rem;
+  z-index: 9999999;
+}
+.tooltip--hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 form {
