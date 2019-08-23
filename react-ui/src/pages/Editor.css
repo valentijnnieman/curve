@@ -14,6 +14,14 @@
   width: 100%;
   height: 100%;
 }
+.editor-blockgrid {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.editor-container--grab {
+  cursor: grab;
+}
 
 .speakers {
   position: absolute;
@@ -37,10 +45,11 @@
 }
 
 .connection-line {
-  transition: all 0.2s;
+  stroke-width: 0.25rem;
+  stroke-dasharray: 0.25rem, 0.25rem;
 }
 .connection-line:hover {
-  stroke-width: 5px;
+  stroke-width: 0.5rem;
   stroke: "orange";
   cursor: pointer;
 }

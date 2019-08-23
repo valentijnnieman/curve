@@ -57,6 +57,10 @@ describe("<BiquadBlock />", () => {
       stopPropagation: () => undefined,
       target: { value: 999 }
     });
-    expect(mockUpdate.mock.calls[1][0].values).toEqual([999, 10]);
+    const lastMockCall = mockUpdate.mock.calls.length;
+    expect(mockUpdate.mock.calls[lastMockCall - 1][0].values).toEqual([
+      999,
+      10
+    ]);
   });
 });

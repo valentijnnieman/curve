@@ -136,7 +136,7 @@ export default class Sidebar extends React.Component<
             <img src={CurveSVG} width={48} />
             <h1 style={{ textAlign: "center" }}>Curve</h1>
           </div>
-          <p style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center" }}>
             <b>
               {name
                 ? `Welcome, ${name}!`
@@ -144,7 +144,7 @@ export default class Sidebar extends React.Component<
             </b>
             {name ? "" : userButton}
             {name ? "" : registerButton}
-          </p>
+          </div>
           <Menu>
             {shareMenu}
             <Code code={this.code} />

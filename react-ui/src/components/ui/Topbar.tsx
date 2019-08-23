@@ -49,6 +49,7 @@ interface TopbarProps {
   logout: () => void;
   fetchSynths: (id: number) => void;
   synths: Array<any>;
+  zoom: number;
 }
 
 class Topbar extends React.Component<TopbarProps, TopbarState> {
@@ -99,6 +100,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
         <CreateBlock
           audioCtx={this.props.audioCtx}
           createBlock={this.props.createBlock}
+          zoom={this.props.zoom}
         />
       </div>
     );

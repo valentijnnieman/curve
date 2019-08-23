@@ -187,6 +187,19 @@ export class EnvelopeBlock extends React.Component<
             onClick={() => this.tryToConnectTo("GAIN")}
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
+              if (this.gainInputElement != null) {
+                const gainInputRect = this.gainInputElement.getBoundingClientRect() as DOMRect;
+                if (
+                  this.props.block.gainInputDOMRect &&
+                  (gainInputRect.x !== this.props.block.gainInputDOMRect.x ||
+                    gainInputRect.y !== this.props.block.gainInputDOMRect.y)
+                ) {
+                  this.props.updateBlock({
+                    ...this.props.block,
+                    gainInputDOMRect: gainInputRect
+                  });
+                }
+              }
             }}
           />
         </IconButton>
@@ -201,6 +214,21 @@ export class EnvelopeBlock extends React.Component<
             onClick={() => this.tryToConnectTo("TRIGGER")}
             ref={ref => {
               this.triggerInputElement = ref as HTMLDivElement;
+              if (this.triggerInputElement != null) {
+                const triggerInputRect = this.triggerInputElement.getBoundingClientRect() as DOMRect;
+                if (
+                  this.props.block.triggerInputDOMRect &&
+                  (triggerInputRect.x !==
+                    this.props.block.triggerInputDOMRect.x ||
+                    triggerInputRect.y !==
+                      this.props.block.triggerInputDOMRect.y)
+                ) {
+                  this.props.updateBlock({
+                    ...this.props.block,
+                    triggerInputDOMRect: triggerInputRect
+                  });
+                }
+              }
             }}
           />
         </IconButton>
@@ -209,7 +237,6 @@ export class EnvelopeBlock extends React.Component<
             label="Trigger"
             primary={true}
             onClick={this.handleTrigger}
-            style={{ fontSize: "12px" }}
           />
           <form onSubmit={e => e.preventDefault()}>
             <TextField
@@ -274,6 +301,19 @@ export class EnvelopeBlock extends React.Component<
             }
             ref={ref => {
               this.outputElement = ref as HTMLDivElement;
+              if (this.outputElement != null) {
+                const outputRect = this.outputElement.getBoundingClientRect() as DOMRect;
+                if (
+                  this.props.block.outputDOMRect &&
+                  (outputRect.x !== this.props.block.outputDOMRect.x ||
+                    outputRect.y !== this.props.block.outputDOMRect.y)
+                ) {
+                  this.props.updateBlock({
+                    ...this.props.block,
+                    outputDOMRect: outputRect
+                  });
+                }
+              }
             }}
           />
         </IconButton>

@@ -50,6 +50,12 @@ interface EditorState {
   mouseX?: number;
   mouseY?: number;
   accessModalOpen: boolean;
+  zoomLevel: number;
+  scrollX: number;
+  scrollY: number;
+  mouseDown: boolean;
+  ctrlKeyDown: boolean;
+  spacebarDown: boolean;
 }
 
 export class Editor extends React.Component<EditorProps, EditorState> {
@@ -75,7 +81,13 @@ export class Editor extends React.Component<EditorProps, EditorState> {
 
     this.state = {
       wantsToConnect: false,
-      accessModalOpen: !isRunning
+      zoomLevel: 10,
+      scrollX: 0,
+      scrollY: 0,
+      accessModalOpen: !isRunning,
+      mouseDown: false,
+      ctrlKeyDown: false,
+      spacebarDown: false
     };
   }
   testConnect = () => {
@@ -193,9 +205,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
       );
     }
   };
-  componentWillReceiveProps(nextProps: EditorProps) {
-    this.lines = drawConnectionLines(nextProps.blocks);
-  }
   onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (this.state.wantsToConnect) {
       this.setState({
@@ -242,10 +251,69 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     // update redux store -> delete blockData object
     this.props.deleteBlock(id);
   };
+  componentWillReceiveProps(nextProps: EditorProps) {
+    this.lines = drawConnectionLines(nextProps.blocks);
+  }
+  componentDidMount() {
+    window.addEventListener("wheel", event => {
+      const deltaY = Math.sign(event.deltaY);
+      const deltaX = Math.sign(event.deltaX);
+      if (this.state.ctrlKeyDown || event.ctrlKey) {
+        // zoom
+        event.preventDefault();
+        if (deltaY < 0) {
+          this.setState({
+            zoomLevel: Math.min(Math.max(this.state.zoomLevel + 1, 1), 30)
+          });
+        } else {
+          this.setState({
+            zoomLevel: Math.min(Math.max(this.state.zoomLevel - 1, 1), 30)
+          });
+        }
+      } else {
+        // move around grid
+        this.setState({
+          scrollX: this.state.scrollX + deltaX,
+          scrollY: this.state.scrollY + deltaY
+        });
+      }
+    });
+    window.addEventListener("mousedown", () => {
+      this.setState({ mouseDown: true });
+    });
+    window.addEventListener("mouseup", () => {
+      this.setState({ mouseDown: false });
+    });
+    window.addEventListener("mousemove", event => {
+      if (this.state.spacebarDown && this.state.mouseDown) {
+        this.setState({
+          scrollX: this.state.scrollX + event.movementX,
+          scrollY: this.state.scrollY + event.movementY
+        });
+      }
+    });
+    window.addEventListener("keydown", event => {
+      if (event.ctrlKey) {
+        this.setState({ ctrlKeyDown: true });
+      }
+      if (event.keyCode === 32) {
+        // spacebar
+        this.setState({ spacebarDown: true });
+      }
+    });
+    window.addEventListener("keyup", () => {
+      this.setState({ ctrlKeyDown: false, spacebarDown: false });
+    });
+  }
   render() {
     return (
-      <div className="editor-container" onMouseMove={e => this.onMouseMove(e)}>
-        <Topbar />
+      <div
+        className={`editor-container ${
+          this.state.spacebarDown ? "editor-container--grab" : ""
+        }`}
+        onMouseMove={e => this.onMouseMove(e)}
+      >
+        <Topbar zoom={this.state.zoomLevel * 10} />
         <LineGrid
           stopMouseLine={this.stopMouseLine}
           disconnect={this.disconnect}
@@ -255,18 +323,28 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           mouseX={this.state.mouseX}
           mouseY={this.state.mouseY}
         />
-        <BlockGrid
-          blocks={this.props.blocks}
-          tryToConnect={this.tryToConnect}
-          tryToConnectTo={this.tryToConnectTo}
-          wantsToConnect={this.state.wantsToConnect}
-          updateBlock={this.props.updateBlock}
-          deleteAndDisconnect={this.deleteAndDisconnect}
-          audioCtx={this.props.audioCtx}
-          dragging={this.props.dragging}
-          startDragging={this.props.startDragging}
-          stopDragging={this.props.stopDragging}
-        />
+        <div
+          className="editor-blockgrid"
+          style={{
+            transform: `scale(${this.state.zoomLevel / 10})`,
+            left: this.state.scrollX,
+            top: this.state.scrollY
+          }}
+          onClick={e => e.preventDefault}
+        >
+          <BlockGrid
+            blocks={this.props.blocks}
+            tryToConnect={this.tryToConnect}
+            tryToConnectTo={this.tryToConnectTo}
+            wantsToConnect={this.state.wantsToConnect}
+            updateBlock={this.props.updateBlock}
+            deleteAndDisconnect={this.deleteAndDisconnect}
+            audioCtx={this.props.audioCtx}
+            dragging={this.props.dragging}
+            startDragging={this.props.startDragging}
+            stopDragging={this.props.stopDragging}
+          />
+        </div>
         <Dialog
           title="Allow Web Audio access"
           modal={true}
@@ -275,7 +353,7 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           autoScrollBodyContent={true}
           className="code-dialog"
         >
-          <p style={{ marginBottom: "2rem" }}>
+          <p style={{ marginBottom: "28px" }}>
             Web Audio needs to be turned on - some browsers prevent autoplaying
             audio.
           </p>

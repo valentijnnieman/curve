@@ -64,7 +64,14 @@ describe("<EnvelopeBlock />", () => {
       },
       0
     );
-    expect(mockUpdate.mock.calls[1][0].values).toEqual([0.1, 0.5, 0.5, 0.4]);
+    const lastMockCall = mockUpdate.mock.calls.length;
+
+    expect(mockUpdate.mock.calls[lastMockCall - 1][0].values).toEqual([
+      0.1,
+      0.5,
+      0.5,
+      0.4
+    ]);
   });
   test("handleChange() decay", () => {
     instance.handleChange(
@@ -75,7 +82,13 @@ describe("<EnvelopeBlock />", () => {
       },
       1
     );
-    expect(mockUpdate.mock.calls[1][0].values).toEqual([0, 0.1, 0.5, 0.4]);
+    const lastMockCall = mockUpdate.mock.calls.length;
+    expect(mockUpdate.mock.calls[lastMockCall - 1][0].values).toEqual([
+      0,
+      0.1,
+      0.5,
+      0.4
+    ]);
   });
   test("handleChange() sustain", () => {
     instance.handleChange(
@@ -86,7 +99,13 @@ describe("<EnvelopeBlock />", () => {
       },
       2
     );
-    expect(mockUpdate.mock.calls[1][0].values).toEqual([0, 0.5, 0.1, 0.4]);
+    const lastMockCall = mockUpdate.mock.calls.length;
+    expect(mockUpdate.mock.calls[lastMockCall - 1][0].values).toEqual([
+      0,
+      0.5,
+      0.1,
+      0.4
+    ]);
   });
   test("handleChange() release", () => {
     instance.handleChange(
@@ -97,7 +116,13 @@ describe("<EnvelopeBlock />", () => {
       },
       3
     );
-    expect(mockUpdate.mock.calls[1][0].values).toEqual([0, 0.5, 0.5, 0.1]);
+    const lastMockCall = mockUpdate.mock.calls.length;
+    expect(mockUpdate.mock.calls[lastMockCall - 1][0].values).toEqual([
+      0,
+      0.5,
+      0.5,
+      0.1
+    ]);
   });
   test("handleTrigger()", () => {
     expect(instance.handleTrigger).toBeDefined();

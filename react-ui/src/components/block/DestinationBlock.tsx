@@ -88,6 +88,19 @@ export class DestinationBlock extends React.Component<DestinationBlockProps> {
             id="destination"
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
+              if (this.gainInputElement != null) {
+                const gainInputRect = this.gainInputElement.getBoundingClientRect() as DOMRect;
+                if (
+                  this.props.block.gainInputDOMRect &&
+                  (gainInputRect.x !== this.props.block.gainInputDOMRect.x ||
+                    gainInputRect.y !== this.props.block.gainInputDOMRect.y)
+                ) {
+                  this.props.updateBlock({
+                    ...this.props.block,
+                    gainInputDOMRect: gainInputRect
+                  });
+                }
+              }
             }}
           />
         </IconButton>

@@ -90,6 +90,19 @@ export class GainBlock extends React.Component<GainBlockProps> {
             onClick={this.tryToConnectTo}
             ref={ref => {
               this.gainInputElement = ref as HTMLDivElement;
+              if (this.gainInputElement != null) {
+                const gainInputRect = this.gainInputElement.getBoundingClientRect() as DOMRect;
+                if (
+                  this.props.block.gainInputDOMRect &&
+                  (gainInputRect.x !== this.props.block.gainInputDOMRect.x ||
+                    gainInputRect.y !== this.props.block.gainInputDOMRect.y)
+                ) {
+                  this.props.updateBlock({
+                    ...this.props.block,
+                    gainInputDOMRect: gainInputRect
+                  });
+                }
+              }
             }}
           />
         </IconButton>
@@ -129,6 +142,19 @@ export class GainBlock extends React.Component<GainBlockProps> {
             }
             ref={ref => {
               this.outputElement = ref as HTMLDivElement;
+              if (this.outputElement != null) {
+                const outputRect = this.outputElement.getBoundingClientRect() as DOMRect;
+                if (
+                  this.props.block.outputDOMRect &&
+                  (outputRect.x !== this.props.block.outputDOMRect.x ||
+                    outputRect.y !== this.props.block.outputDOMRect.y)
+                ) {
+                  this.props.updateBlock({
+                    ...this.props.block,
+                    outputDOMRect: outputRect
+                  });
+                }
+              }
             }}
           />
         </IconButton>

@@ -95,7 +95,6 @@ export const drawConnectionLines = (blocks: Array<BlockData>) => {
             toBlock: output.isConnectedTo,
             outputId: output.id
           };
-          window.console.log(newLineCoords);
           allNewLines.push(newLineCoords);
         }
       });
