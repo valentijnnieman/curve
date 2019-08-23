@@ -6,6 +6,7 @@
   left: 0;
   background-color: black;
   opacity: 0.2;
+  z-index: 100;
 }
 .drawer {
   position: absolute;

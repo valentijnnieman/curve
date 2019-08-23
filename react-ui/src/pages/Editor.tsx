@@ -330,7 +330,6 @@ export class Editor extends React.Component<EditorProps, EditorState> {
             left: this.state.scrollX,
             top: this.state.scrollY
           }}
-          onClick={e => e.preventDefault}
         >
           <BlockGrid
             blocks={this.props.blocks}
