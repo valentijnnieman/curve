@@ -14,6 +14,14 @@
   width: 100%;
   height: 100%;
 }
+.editor-blockgrid {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.editor-container--grab {
+  cursor: grab;
+}
 
 .speakers {
   position: absolute;

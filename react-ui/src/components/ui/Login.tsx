@@ -41,7 +41,6 @@ export class Login extends React.Component<LoginProps, any> {
     });
   };
   handleFormSubmit = (e: any) => {
-    window.console.log("SUBMITTING");
     e.preventDefault();
     this.props.login(this.state.name, this.state.password);
   };
