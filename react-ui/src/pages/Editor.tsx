@@ -312,6 +312,10 @@ export class Editor extends React.Component<EditorProps, EditorState> {
           this.state.spacebarDown ? "editor-container--grab" : ""
         }`}
         onMouseMove={e => this.onMouseMove(e)}
+        style={{
+          backgroundPositionX: this.state.scrollX,
+          backgroundPositionY: this.state.scrollY
+        }}
       >
         <Topbar zoom={this.state.zoomLevel * 10} />
         <LineGrid
