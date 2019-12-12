@@ -12,9 +12,6 @@ interface LineGridProps {
 }
 
 export class LineGrid extends React.PureComponent<LineGridProps> {
-  constructor(props: LineGridProps) {
-    super(props);
-  }
   createLineElements = () => {
     return this.props.lines.map((line, index) => {
       return (

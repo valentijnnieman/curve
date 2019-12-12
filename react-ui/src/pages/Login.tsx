@@ -1,9 +1,9 @@
 import * as React from "react";
 import TextField from "../components/ui/Forms/TextField";
 import RaisedButton from "../components/ui/Buttons/RaisedButton";
-import { login } from "src/actions/user";
+import { login } from "../actions/user";
 import { connect } from "react-redux";
-import { StoreState } from "src/types/storeState";
+import { StoreState } from "../types/storeState";
 import { Redirect } from "react-router";
 
 export class Login extends React.Component<any, any> {
@@ -80,7 +80,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

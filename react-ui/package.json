@@ -20,7 +20,7 @@
     "concurrently": "^3.5.1",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
-    "nyc": "^13.3.0",
+    "nyc": "^14.1.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-draggable": "^3.0.5",
@@ -29,7 +29,7 @@
     "react-redux": "^7.0.2",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts-ts": "^4.0.8",
+    "react-scripts": "^3.3.0",
     "react-svg-pathline": "^0.5.0",
     "react-syntax-highlighter": "^7.0.2",
     "react-test-renderer": "^16.3.1",
@@ -41,10 +41,10 @@
     "web-audio-test-api": "^0.5.2"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
     "standard": "standard index.js"
   },
   "proxy": "http://localhost:5000",

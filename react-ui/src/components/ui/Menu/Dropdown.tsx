@@ -28,7 +28,7 @@ export default class Dropdown extends React.Component<DropdownProps, any> {
     } else {
       kids = this.props.children;
     }
-    const childrenWithClick = kids.map(child => {
+    const childrenWithClick = kids.map((child: any) => {
       return React.cloneElement(child, { onClick: this.handleItemClick });
     });
     return (

@@ -138,7 +138,7 @@ export class EnvelopeBlock extends React.Component<
   }
   componentWillReceiveProps(newProps: EnvelopeBlockProps) {
     if (newProps.block.hasInputFrom.length > 0) {
-      for (var i = 0; i < this.props.block.hasInputFrom.length; i++) {
+      for (let i = 0; i < this.props.block.hasInputFrom.length; i++) {
         const blockConnectedToThis = this.props.allBlocks.find(
           block => block.id === this.props.block.hasInputFrom[i]
         );

@@ -1,11 +1,11 @@
 import * as React from "react";
-import { BlockData } from "src/types/blockData";
+import { BlockData } from "../types/blockData";
 import OscBlock from "../components/block/OscBlock";
 import GainBlock from "../components/block/GainBlock";
 import BiquadBlock from "../components/block/BiquadBlock";
 import EnvelopeBlock from "../components/block/EnvelopeBlock";
 import DestinationBlock from "../components/block/DestinationBlock";
-import { InternalData } from "src/types/internalData";
+import { InternalData } from "../types/internalData";
 
 interface BlockGridProps {
   blocks: Array<BlockData>;
@@ -21,9 +21,6 @@ interface BlockGridProps {
 }
 
 export class BlockGrid extends React.Component<BlockGridProps> {
-  constructor(props: BlockGridProps) {
-    super(props);
-  }
   shouldComponentUpdate(nextProps: BlockGridProps) {
     if (nextProps.dragging) {
       // Only update if something besides the x-y coords have changed

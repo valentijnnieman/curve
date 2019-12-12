@@ -61,7 +61,7 @@ export const buildInternal = (
 // draws lines between connected blocks
 export const drawConnectionLines = (blocks: Array<BlockData>) => {
   let allNewLines: Array<Line> = [];
-  blocks.map(block => {
+  blocks.forEach(block => {
     if (block.connected) {
       block.outputs.forEach(output => {
         let inputDOMRect;
@@ -108,7 +108,7 @@ export const genWACode = (blocks: Array<BlockData>) => {
   let jsString: string =
       "const audioCtx = new AudioContext(); // define audio context\n\n",
     connects: string = "";
-  blocks.map((block, index) => {
+  blocks.forEach((block, index) => {
     // get blocks object for more info like output
     const internal = block.internal;
     if (block && block.blockType === "OSC") {
@@ -130,32 +130,24 @@ osc${index}.start();`;
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
-          block.outputs.map(output => {
+          block.outputs.forEach(output => {
             if (output.connectedToType === "GAIN" && output.isConnectedTo) {
               // get block it's connected to
               const blockConnectedTo = blocks.find(
                 b => b.id === output.isConnectedTo
               ) as BlockData;
               if (blockConnectedTo && blockConnectedTo.blockType === "BIQUAD") {
-                connects += `gain${index}.connect(filter${
-                  output.isConnectedTo
-                });\n`;
+                connects += `gain${index}.connect(filter${output.isConnectedTo});\n`;
               } else if (
                 blockConnectedTo &&
                 blockConnectedTo.blockType === "GAIN"
               ) {
-                connects += `gain${index}.connect(gain${
-                  output.isConnectedTo
-                });\n`;
+                connects += `gain${index}.connect(gain${output.isConnectedTo});\n`;
               } else {
-                connects += `gain${index}.connect(gain${
-                  output.isConnectedTo
-                }.gain);\n`;
+                connects += `gain${index}.connect(gain${output.isConnectedTo}.gain);\n`;
               }
             } else if (output.connectedToType === "FREQ") {
-              connects += `gain${index}.connect(osc${
-                output.isConnectedTo
-              }.frequency);\n`;
+              connects += `gain${index}.connect(osc${output.isConnectedTo}.frequency);\n`;
             }
           });
         }
@@ -173,7 +165,7 @@ gain${index}.gain.value = ${block.values[0]};`;
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
-          block.outputs.map(output => {
+          block.outputs.forEach(output => {
             // get block it's connected to
             const blockConnectedTo = blocks.find(
               b => b.id === output.isConnectedTo
@@ -184,22 +176,14 @@ gain${index}.gain.value = ${block.values[0]};`;
               output.isConnectedTo
             ) {
               if (blockConnectedTo.blockType === "BIQUAD") {
-                connects += `gain${index}.connect(filter${
-                  output.isConnectedTo
-                });\n`;
+                connects += `gain${index}.connect(filter${output.isConnectedTo});\n`;
               } else if (blockConnectedTo.blockType === "GAIN") {
-                connects += `gain${index}.connect(gain${
-                  output.isConnectedTo
-                });\n`;
+                connects += `gain${index}.connect(gain${output.isConnectedTo});\n`;
               } else {
-                connects += `gain${index}.connect(gain${
-                  output.isConnectedTo
-                }.gain);\n`;
+                connects += `gain${index}.connect(gain${output.isConnectedTo}.gain);\n`;
               }
             } else if (output.connectedToType === "FREQ") {
-              connects += `gain${index}.connect(osc${
-                output.isConnectedTo
-              }.frequency);\n`;
+              connects += `gain${index}.connect(osc${output.isConnectedTo}.frequency);\n`;
             }
           });
         }
@@ -226,7 +210,7 @@ filter${index}.connect(gain${index});`;
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
-          block.outputs.map(output => {
+          block.outputs.forEach(output => {
             // get block it's connected to
             const blockConnectedTo = blocks.find(
               b => b.id === output.isConnectedTo
@@ -237,22 +221,14 @@ filter${index}.connect(gain${index});`;
               output.isConnectedTo
             ) {
               if (blockConnectedTo.blockType === "BIQUAD") {
-                connects += `gain${index}.connect(filter${
-                  output.isConnectedTo
-                });\n`;
+                connects += `gain${index}.connect(filter${output.isConnectedTo});\n`;
               } else if (blockConnectedTo.blockType === "GAIN") {
-                connects += `gain${index}.connect(gain${
-                  output.isConnectedTo
-                });\n`;
+                connects += `gain${index}.connect(gain${output.isConnectedTo});\n`;
               } else {
-                connects += `gain${index}.connect(gain${
-                  output.isConnectedTo
-                }.gain);\n`;
+                connects += `gain${index}.connect(gain${output.isConnectedTo}.gain);\n`;
               }
             } else if (output.connectedToType === "FREQ") {
-              connects += `gain${index}.connect(osc${
-                output.isConnectedTo
-              }.frequency);\n`;
+              connects += `gain${index}.connect(osc${output.isConnectedTo}.frequency);\n`;
             }
           });
         }
@@ -290,7 +266,7 @@ envelope${index}.trigger = function() {
           // connected to speakers
           connects += `gain${index}.connect(audioCtx.destination);\n`;
         } else {
-          block.outputs.map(output => {
+          block.outputs.forEach(output => {
             // get block it's connected to
             const blockConnectedTo = blocks.find(
               b => b.id === output.isConnectedTo
@@ -301,22 +277,14 @@ envelope${index}.trigger = function() {
               output.isConnectedTo
             ) {
               if (blockConnectedTo.blockType === "BIQUAD") {
-                connects += `gain${index}.connect(filter${
-                  output.isConnectedTo
-                });\n`;
+                connects += `gain${index}.connect(filter${output.isConnectedTo});\n`;
               } else if (blockConnectedTo.blockType === "GAIN") {
-                connects += `gain${index}.connect(gain${
-                  output.isConnectedTo
-                });\n`;
+                connects += `gain${index}.connect(gain${output.isConnectedTo});\n`;
               } else {
-                connects += `gain${index}.connect(gain${
-                  output.isConnectedTo
-                }.gain);\n`;
+                connects += `gain${index}.connect(gain${output.isConnectedTo}.gain);\n`;
               }
             } else if (output.connectedToType === "FREQ") {
-              connects += `gain${index}.connect(osc${
-                output.isConnectedTo
-              }.frequency);\n`;
+              connects += `gain${index}.connect(osc${output.isConnectedTo}.frequency);\n`;
             }
           });
         }

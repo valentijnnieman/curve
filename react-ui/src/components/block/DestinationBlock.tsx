@@ -1,6 +1,5 @@
 import * as React from "react";
 // import { Button, ButtonToolbar } from "react-bootstrap";
-const SpeakerSVG = require("../../speakers.svg");
 
 import "../ui/Card.css";
 import "./Block.css";
@@ -14,6 +13,8 @@ import IconButton from "../ui/Buttons/IconButton";
 
 import Card from "../ui/Card";
 import { DraggableData } from "react-draggable";
+
+const SpeakerSVG = require("../../speakers.svg");
 
 export class DestinationBlock extends React.Component<DestinationBlockProps> {
   analyser: AnalyserNode;
@@ -105,7 +106,12 @@ export class DestinationBlock extends React.Component<DestinationBlockProps> {
           />
         </IconButton>
         <div className="card-content">
-          <img className="speakers-svg" src={SpeakerSVG} width={100} />
+          <img
+            alt="spearkers"
+            className="speakers-svg"
+            src={SpeakerSVG}
+            width={100}
+          />
           <Analyser
             analyser={this.props.block.internal.analyser as AnalyserNode}
             backgroundColor="#e91e63"

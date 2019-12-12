@@ -143,6 +143,7 @@ export function fetchUser() {
       .then(json => {
         dispatch(fetchSynths(json.id));
         dispatch(userLogin(json.name, json.id));
-      });
+      })
+      .catch(error => window.console.error(error));
   };
 }

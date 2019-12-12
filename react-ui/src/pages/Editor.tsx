@@ -239,9 +239,9 @@ export class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     // disconnect blocks connected to the block we're deleting
-    this.props.blocks.map(block => {
+    this.props.blocks.forEach(block => {
       if (block.connected) {
-        block.outputs.map(out => {
+        block.outputs.forEach(out => {
           if (out.isConnectedTo === blockToDelete.id) {
             this.disconnect(block.id, blockToDelete.id, out.id);
           }
@@ -397,7 +397,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Editor);
+export default connect(mapStateToProps, mapDispatchToProps)(Editor);

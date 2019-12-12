@@ -65,7 +65,7 @@ class Topbar extends React.Component<TopbarProps, TopbarState> {
       <div className="topbar-container">
         <div className="topbar">
           <div className="topbar-title-container">
-            <img src={CurveSVG} width={48} className="logo" />
+            <img alt="Curve" src={CurveSVG} width={48} className="logo" />
             <h2 className="topbar-title thin">
               <i>{this.props.name}</i>
             </h2>
@@ -163,7 +163,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Topbar);
+export default connect(mapStateToProps, mapDispatchToProps)(Topbar);

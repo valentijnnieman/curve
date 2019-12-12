@@ -1,8 +1,9 @@
 import * as React from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-const ClearSVG = require("../ui/Icons/clear.svg");
 import "../ui/Card.css";
 import { BlockData } from "../../types/blockData";
+
+const ClearSVG = require("../ui/Icons/clear.svg");
 
 interface CardProps {
   block: BlockData;
@@ -14,9 +15,6 @@ interface CardProps {
 }
 
 export default class Card extends React.Component<CardProps> {
-  constructor(props: CardProps) {
-    super(props);
-  }
   render() {
     return (
       <Draggable
@@ -36,7 +34,7 @@ export default class Card extends React.Component<CardProps> {
       >
         <div className="card">
           <div className="card-close" onClick={this.props.removeBlock}>
-            <img src={ClearSVG} />
+            <img alt="x" src={ClearSVG} />
             {/* <ClearIcon /> */}
           </div>
           {this.props.children}

@@ -27,9 +27,6 @@ export class OscBlock extends React.Component<OscBlockProps> {
   freqInputElement: HTMLDivElement;
   outputElement: HTMLDivElement;
 
-  constructor(props: OscBlockProps) {
-    super(props);
-  }
   toggleOsc = () => {
     const internal = this.props.block.internal;
     if (!this.props.block.running) {
@@ -116,8 +113,9 @@ export class OscBlock extends React.Component<OscBlockProps> {
     this.props.updateBlock(updatedBlock);
   }
   componentWillReceiveProps(nextProps: OscBlockProps) {
-    (nextProps.block.internal as InternalOscData).oscillator.connect(nextProps
-      .block.internal.gain as GainNode);
+    (nextProps.block.internal as InternalOscData).oscillator.connect(
+      nextProps.block.internal.gain as GainNode
+    );
   }
 
   render() {

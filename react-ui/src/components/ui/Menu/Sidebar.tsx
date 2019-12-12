@@ -4,7 +4,7 @@ import MenuItem from "./MenuItem";
 // import ContentAdd from "../ui/Icons/add.svg";
 import { ShareMenu } from "../ShareMenu";
 import "./Sidebar.css";
-import { BlockDataOptions, BlockData } from "src/types/blockData";
+import { BlockDataOptions, BlockData } from "../../../types/blockData";
 import { genWACode } from "../../../lib/helpers/Editor";
 import { Code } from "../Code";
 import { SynthMenu } from "../SynthMenu";
@@ -133,7 +133,7 @@ export default class Sidebar extends React.Component<
           onRequestChange={open => this.setState({ open })}
         >
           <div className="sidebar-header">
-            <img src={CurveSVG} width={48} />
+            <img alt="Curve" src={CurveSVG} width={48} />
             <h1 style={{ textAlign: "center" }}>Curve</h1>
           </div>
           <div style={{ textAlign: "center" }}>

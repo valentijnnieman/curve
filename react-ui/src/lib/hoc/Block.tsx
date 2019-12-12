@@ -8,12 +8,9 @@ import { DraggableData } from "react-draggable";
 export const composedBlock = (
   BlockToCompose: React.ComponentClass<BlockProps>
 ) => {
-  return class extends React.Component<ComposedBlockProps> {
+  return class extends React.PureComponent<ComposedBlockProps> {
     position: HTMLDivElement;
 
-    constructor(props: ComposedBlockProps) {
-      super(props);
-    }
     connectToAnalyser = () => {
       this.props.block.internal.gain.connect(
         this.props.block.internal.analyser
@@ -23,7 +20,7 @@ export const composedBlock = (
       const { block } = this.props;
       block.internal.gain.disconnect();
       this.connectToAnalyser();
-      block.outputs.map(output => {
+      block.outputs.forEach(output => {
         if (output !== undefined) {
           // check which block it's connected to & to witch input type
           const blockToConnectTo = this.props.allBlocks.find(
@@ -139,7 +136,7 @@ export const composedBlock = (
         if (inputFromBlock) {
           inputFromBlock.outputs
             .filter(output => output.connectedToType === outputType)
-            .map(output => {
+            .forEach(output => {
               allInputTypes.push(output.connectedToType as string);
             });
         }
@@ -150,13 +147,11 @@ export const composedBlock = (
         return "io-element";
       }
     };
-    componentWillReceiveProps(nextProps: ComposedBlockProps) {
-      this.connectInternal();
-    }
     render() {
+      this.connectInternal();
       return (
         <BlockToCompose
-          {...this.props as ComposedBlockProps}
+          {...(this.props as ComposedBlockProps)}
           connectToAnalyser={this.connectToAnalyser}
           connectInternal={this.connectInternal}
           tryToConnect={this.tryToConnect}
