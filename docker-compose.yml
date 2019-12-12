@@ -9,6 +9,7 @@ services:
       - db
     volumes:
       - ./webapp:/opt/webapp
+    command: "npm start"
   db:
     image: postgres:latest
     ports:

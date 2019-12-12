@@ -28,10 +28,11 @@ Install the server:
 
 Setting up the database:
 
-- Create a development database using `createdb curve-dev`. The `createdb` command comes from the `pg` package installed by npm.
 - Enter your development database credentials in `server/config/config.json`, under `development`
+- Create a development database using `createdb curve-dev`. The `createdb` command comes from the `pg` package installed by npm.
 - Create a `.env.local` file that'll hold some ENV keys we'll need. In the file, set `curve_session_key=my_custom_key`.
-- Run migrations using `sequelize db:migrate`
+- Run migrations using `npm run db-migrate`
+- if migrations fail, make sure you have set the correct permissions for your postgresql database user, refer to https://stackoverflow.com/questions/7695962/postgresql-password-authentication-failed-for-user-postgres for more information.
 
 Run the server:
 

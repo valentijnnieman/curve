@@ -14,5 +14,3 @@ RUN npm build
 RUN cd ../
 
 EXPOSE 5000
-
-CMD ["npm", "run dev"]

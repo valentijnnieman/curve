@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "vaal",
+    "username": "postgres",
     "password": "test",
     "database": "curve-dev",
     "host": "127.0.0.1",
