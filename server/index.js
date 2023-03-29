@@ -5,7 +5,7 @@ const path = require("path");
 const cluster = require("cluster");
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
-const { check } = require("express-validator/check");
+const { check } = require("express-validator");
 
 const User = require("./models").User;
 
@@ -27,9 +27,7 @@ if (cluster.isMaster) {
 
   cluster.on("exit", (worker, code, signal) => {
     console.error(
-      `Node cluster worker ${
-        worker.process.pid
-      } exited: code ${code}, signal ${signal}`
+      `Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`
     );
   });
 } else {
@@ -46,7 +44,7 @@ if (cluster.isMaster) {
     cookieSession({
       name: "session",
       keys: [session_key],
-      maxAge: 24 * 60 * 60 * 1000 // 24hours
+      maxAge: 24 * 60 * 60 * 1000, // 24hours
     })
   );
   app.use(passport.initialize());
@@ -73,7 +71,7 @@ if (cluster.isMaster) {
 
   passport.deserializeUser((id, done) => {
     User.findByPk(id)
-      .then(function(user) {
+      .then(function (user) {
         done(null, user);
       })
       .catch(done);
@@ -82,7 +80,7 @@ if (cluster.isMaster) {
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, "../react-ui/build")));
 
-  app.get("/health", function(req, res) {
+  app.get("/health", function (req, res) {
     res.status(200).send("All systems operational!");
   });
 
@@ -91,19 +89,13 @@ if (cluster.isMaster) {
   app.post(
     "/api/register",
     [
-      check("name")
-        .isLength({ min: 3 })
-        .trim()
-        .escape(),
-      check("password")
-        .isLength({ min: 8 })
-        .trim()
-        .escape()
+      check("name").isLength({ min: 3 }).trim().escape(),
+      check("password").isLength({ min: 8 }).trim().escape(),
     ],
     UserController.create
   );
 
-  app.get("/api/logout", function(req, res) {
+  app.get("/api/logout", function (req, res) {
     req.logout();
     res.redirect("/");
   });
@@ -114,11 +106,7 @@ if (cluster.isMaster) {
   app.post(
     "/api/synth/create",
     ensureAuthenticated,
-    [
-      check("name")
-        .trim()
-        .escape()
-    ],
+    [check("name").trim().escape()],
     SynthController.create
   );
 
@@ -138,7 +126,7 @@ if (cluster.isMaster) {
     );
   });
 
-  app.listen(PORT, function() {
+  app.listen(PORT, function () {
     console.error(
       `Node cluster worker ${process.pid}: listening on port ${PORT}`
     );
