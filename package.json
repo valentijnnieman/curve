@@ -5,11 +5,11 @@
     "db-migrate": "sequelize db:migrate",
     "start": "NODE_ENV=production nodemon server",
     "dev": "NODE_ENV=development nodemon server",
-    "test": "npm run test.backend",
+    "test": "yarn test.backend",
     "test.backend": "NODE_ENV=test mocha --exit",
     "test.backend.watch": "NODE_ENV=test mocha --watch",
-    "test.frontend": "cd react-ui/ && npm run test",
-    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "test.frontend": "cd react-ui/ && yarn test",
+    "heroku-postbuild": "cd react-ui/ && yarn && yarn build"
   },
   "cacheDirectories": [
     "node_modules",
