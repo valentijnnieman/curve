@@ -11,10 +11,6 @@
     "test.frontend": "cd react-ui/ && yarn test",
     "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
-  "cacheDirectories": [
-    "node_modules",
-    "react-ui/node_modules"
-  ],
   "dependencies": {
     "@types/jest": "^29.5.0",
     "bcrypt": "^5.1.0",
